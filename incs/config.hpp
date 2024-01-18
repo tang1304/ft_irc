@@ -6,7 +6,7 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/17 15:45:59 by tgellon           #+#    #+#             */
-/*   Updated: 2024/01/18 10:41:42 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/01/18 14:01:07 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # include <iostream>
 # include <sstream>
 # include <sys/socket.h>
+# include <netinet/in.h>
 
 # define DEFAULT "\033[0m"
 # define RED "\033[31m"
