@@ -6,7 +6,7 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/17 15:45:40 by tgellon           #+#    #+#             */
-/*   Updated: 2024/01/18 14:01:14 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/01/19 14:32:52 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,8 @@ int	main(int argc, char **argv){
 	}
 	try{
 		int	port = checkArgs(argv[1], argv[2]);
-		Server(port, argv[2]);
+		Server serv(port, argv[2]);
+		serv.runningLoop();
 	}
 	catch(std::exception &e){
 		std::cerr << RED << e.what() << DEFAULT << std::endl;
