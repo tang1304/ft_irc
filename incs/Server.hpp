@@ -6,7 +6,7 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:03:20 by tgellon           #+#    #+#             */
-/*   Updated: 2024/01/18 16:28:34 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/01/19 13:19:48 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,11 @@
 # define SERVER_HPP
 
 # include "irc.hpp"
+# include "Channel.hpp"
+# include "Client.hpp"
+
+class Channel;
+class Client;
 
 class Server{
 private:
@@ -29,9 +34,9 @@ public:
 	~Server();
 	Server(const int &port, const std::string &password);
 	Server(const Server &other);
-	Server &operator=(const Server &other);
+	Server	&operator=(const Server &other);
 
-	void	socketInit();
+	void	runningLoop();
 };
 
 #endif
