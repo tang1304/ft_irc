@@ -6,7 +6,7 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:14:10 by tgellon           #+#    #+#             */
-/*   Updated: 2024/01/22 11:48:56 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/01/22 14:15:34 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,6 @@ public:
 
 	void		setNickName(std::string &nickName);
 	void		setRealName(std::string &realName);
-
 };
 
 #endif
