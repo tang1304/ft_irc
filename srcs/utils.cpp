@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "irc.hpp"
+# include "../incs/irc.hpp"
 
 int	checkArgs(const std::string &port, const std::string &password){
 	int	portValue = 0;

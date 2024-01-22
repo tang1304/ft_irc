@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "irc.hpp"
+#include "../incs/irc.hpp"
 
 int	main(int argc, char **argv){
 	if (argc != 3){
