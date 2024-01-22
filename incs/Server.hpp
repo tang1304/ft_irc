@@ -6,7 +6,7 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:03:20 by tgellon           #+#    #+#             */
-/*   Updated: 2024/01/19 13:19:48 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/01/22 13:14:04 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,10 +23,11 @@ class Client;
 class Server{
 private:
 
-	int					_port;
-	std::string			_password;
-	int					_socketFd;
-	std::vector<pollfd>	_pollFds; // To use poll(), keeps track of fds for multiple clients
+	int						_port;
+	std::string				_password;
+	int						_socketFd;
+	std::vector<pollfd>		_pollFds; // To use poll(), keeps track of fds for multiple clients
+	std::map<int, Client>	_clients;
 	Server();
 
 public:
@@ -37,6 +38,9 @@ public:
 	Server	&operator=(const Server &other);
 
 	void	runningLoop();
+	void	clientConnexion();
+	void	clientDisconnection(int fd);
+	void	clientHandle(int fd);
 };
 
 #endif

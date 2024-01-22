@@ -6,7 +6,7 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 10:16:34 by tgellon           #+#    #+#             */
-/*   Updated: 2024/01/18 11:05:22 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/01/22 13:59:13 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,4 +23,5 @@ int	checkArgs(const std::string &port, const std::string &password){
 	issPort >> portValue;
 	if (issPort.fail() || portValue < 1024 || portValue > 65535)
 		throw (std::invalid_argument("Error: Port number must be between 1024 and 65535"));
+	return (portValue);
 }
