@@ -6,7 +6,7 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:03:01 by tgellon           #+#    #+#             */
-/*   Updated: 2024/01/22 14:15:00 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/01/22 17:02:50 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,25 +58,21 @@ void	signalHandler(int signal)
 }
 
 void	Server::runningLoop(){
-	signal(SIGINT, signalHandler);
-	signal(SIGTSTP, signalHandler);
-	while (true)
+	// signal(SIGINT, signalHandler);
+	// signal(SIGTSTP, signalHandler);
+	while (1)
 	{
 		if (poll(this->_pollFds.data(), this->_pollFds.size(), -1) == -1)
 			throw (std::runtime_error("Error: poll() failed"));
-		std::vector<pollfd>::iterator	it = _pollFds.begin();
-std::cout << "here" << std::endl;
-		while (it != _pollFds.end()){
-			if (it->revents && POLLIN){ //there is data to read
-				if (it->fd == _pollFds[0].fd){ // or it->fd == _socketFd ? // socket fd -> means a new connection
+		for (size_t i = 0; i < _pollFds.size(); ++i){
+			if (_pollFds[i].revents & POLLIN){ //there is data to read
+				if (_pollFds[i].fd == _pollFds[0].fd){ // or it->fd == _socketFd ? // socket fd -> means a new connection
 					clientConnexion();
-					continue ;
 				}
 				else{ // means you're on an existing client -> handle client data
-					clientHandle(it->fd);
+					clientHandle(_pollFds[i].fd);
 				}
 			}
-			it++;
 		}
 	}
 }
@@ -108,7 +104,8 @@ void	Server::clientHandle(int fd){
 	char	buffer[BUFFER_SIZE];
 	int		bytesRead = 0;
 
-	if ((bytesRead = recv(fd, buffer, BUFFER_SIZE, 0)) < 0)
+	bytesRead = recv(fd, buffer, BUFFER_SIZE, 0);
+	if (bytesRead <= 0)
 		clientDisconnection(fd);
 	else{
 		send(_clients[fd]._clientFd, buffer, bytesRead, 0);
