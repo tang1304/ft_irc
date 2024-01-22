@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: rrebois <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:03:01 by tgellon           #+#    #+#             */
-/*   Updated: 2024/01/19 15:38:59 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/01/22 13:37:23 by rrebois          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "Server.hpp"
+#include "../incs/Server.hpp"
 
 Server::~Server(){
 }
@@ -48,19 +48,27 @@ Server	&Server::operator=(const Server &other){
 	return (*this);
 }
 
+void	signalHandler(int signal)
+{
+	std::cout << signal << std::endl;
+}
+
 void	Server::runningLoop(){
-	while (1){
+	signal(SIGINT, signalHandler);
+	signal(SIGTSTP, signalHandler);
+	while (true)
+	{
 		if (poll(this->_pollFds.data(), this->_pollFds.size(), -1) == -1)
 			throw (std::runtime_error("Error: poll() failed"));
 		std::vector<pollfd>::iterator	it = _pollFds.begin();
 		while (it != _pollFds.end()){
 			if (it->revents & POLLIN){ //there is data to read
 				if (it->fd == _pollFds[0].fd){ // socket fd -> means a new connection
-					clientConnexion();
+//					clientConnexion();
 					continue ;
 				}
 				else{ // means you're on an existing client -> handle client data
-					clientHandle();
+//					clientHandle();
 				}
 			}
 		}

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   config.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: rrebois <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/17 15:45:59 by tgellon           #+#    #+#             */
-/*   Updated: 2024/01/18 16:27:55 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/01/22 11:50:27 by rrebois          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,9 @@
 # include <sys/socket.h>
 # include <netinet/in.h>
 # include <poll.h>
+# include <csignal>
+# include <map>
+# include <list>
 
 # define DEFAULT "\033[0m"
 # define RED "\033[31m"
