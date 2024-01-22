@@ -3,13 +3,13 @@
 CC = c++
 CFLAGS = -Wall -Wextra -Werror -std=c++98 -g3# -fsanitize=address
 SRCS_DIR = ./srcs/
-SRCS = main.cpp Server.cpp Client.cpp Channel.cpp 
+SRCS = main.cpp Server.cpp Client.cpp Channel.cpp utils.cpp
 OBJ_DIR = objs/
 OBJ = ${SRCS:%.cpp=${OBJ_DIR}%.o}
 NAME = ircserv
 RM = rm -f
 HEADERS_DIR = ./incs/
-HEADERS_FILES = Server.hpp Client.hpp Channel.hpp 
+HEADERS_FILES = Server.hpp Client.hpp Channel.hpp irc.hpp config.hpp
 HEADERS = $(addprefix ${HEADERS_DIR}/, ${HEADERS_FILES})
 
 # --- COLORS --- #
@@ -26,7 +26,7 @@ ${NAME} :	${OBJ}
 
 ${OBJ}: ${OBJ_DIR}%.o :	${SRCS_DIR}%.cpp ${HEADERS} 
 		@mkdir -p objs
-		${CC} ${CFLAGS} -I/usr/include -c $< -o $@
+		${CC} ${CFLAGS} -I/usr/include -I ${HEADERS_DIR} -c $< -o $@
 
 all :	${NAME}
 
