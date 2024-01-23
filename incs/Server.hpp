@@ -6,7 +6,7 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:03:20 by tgellon           #+#    #+#             */
-/*   Updated: 2024/01/22 14:15:21 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/01/23 10:13:56 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@
 
 class Channel;
 class Client;
+
+extern int	signalStatus;
 
 class Server{
 private:
@@ -41,6 +43,7 @@ public:
 	void	clientConnexion();
 	void	clientDisconnection(int fd);
 	void	clientHandle(int fd);
+	static void	signalHandler(int signal); //static because of signal() that can' t accept member function
 };
 
 #endif

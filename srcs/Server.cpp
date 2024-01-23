@@ -6,7 +6,7 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:03:01 by tgellon           #+#    #+#             */
-/*   Updated: 2024/01/22 17:02:50 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/01/23 11:04:53 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,11 +18,12 @@ Server::~Server(){
 Server::Server(const int &port, const std::string &password): _port(port), _password(password){
 	// socket initiation;
 	struct sockaddr_in	servAddr;
-	
+
 	_socketFd = socket(AF_INET, SOCK_STREAM, 0);
 	if (_socketFd < 0)
 		throw (std::runtime_error("Error: Socket creation failed"));
-	int	opt = setsockopt(_socketFd, SOL_SOCKET, SO_REUSEADDR, (char *)&opt, sizeof(opt));
+	int	opt = 0;
+	opt = setsockopt(_socketFd, SOL_SOCKET, SO_REUSEADDR, (char *)&opt, sizeof(opt));
 	if (opt < 0)
 		throw (std::runtime_error("Error: setsokopt() failed"));
 	servAddr.sin_family = AF_INET;
@@ -52,17 +53,21 @@ Server	&Server::operator=(const Server &other){
 	return (*this);
 }
 
-void	signalHandler(int signal)
+void	Server::signalHandler(int signal)
 {
-	std::cout << signal << std::endl;
+	std::cout << std::endl << YELLOW << "Signal received: " << signal << DEFAULT << std::endl;
+	if (signal == SIGINT){
+		std::cout << "Shutting down the server. Bye !" << std::endl;
+		signalStatus = SIGINT;
+	}
+	return ;
 }
 
 void	Server::runningLoop(){
-	// signal(SIGINT, signalHandler);
-	// signal(SIGTSTP, signalHandler);
-	while (1)
+	signal(SIGINT, Server::signalHandler);
+	while (signalStatus == 0)
 	{
-		if (poll(this->_pollFds.data(), this->_pollFds.size(), -1) == -1)
+		if (poll(this->_pollFds.data(), this->_pollFds.size(), -1) == -1 && !signalStatus)
 			throw (std::runtime_error("Error: poll() failed"));
 		for (size_t i = 0; i < _pollFds.size(); ++i){
 			if (_pollFds[i].revents & POLLIN){ //there is data to read
