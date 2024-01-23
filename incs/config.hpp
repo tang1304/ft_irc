@@ -6,7 +6,7 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/17 15:45:59 by tgellon           #+#    #+#             */
-/*   Updated: 2024/01/22 14:15:30 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/01/23 09:35:28 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 # include <netinet/in.h>
 # include <poll.h>
 # include <unistd.h>
+# include <csignal>
 
 # define DEFAULT "\033[0m"
 # define RED "\033[31m"

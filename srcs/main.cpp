@@ -6,11 +6,13 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/17 15:45:40 by tgellon           #+#    #+#             */
-/*   Updated: 2024/01/19 14:32:52 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/01/23 11:04:50 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../incs/irc.hpp"
+
+int	signalStatus = 0;
 
 int	main(int argc, char **argv){
 	if (argc != 3){
