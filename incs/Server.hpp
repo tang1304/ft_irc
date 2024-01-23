@@ -6,7 +6,7 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:03:20 by tgellon           #+#    #+#             */
-/*   Updated: 2024/01/23 10:13:56 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/01/23 16:24:50 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,12 +37,13 @@ public:
 	~Server();
 	Server(const int &port, const std::string &password);
 	Server(const Server &other);
-	Server	&operator=(const Server &other);
+	Server		&operator=(const Server &other);
 
-	void	runningLoop();
-	void	clientConnexion();
-	void	clientDisconnection(int fd);
-	void	clientHandle(int fd);
+	void		runningLoop();
+	void		clientConnexion();
+	void		clientDisconnection(int fd);
+	void		clientHandle(int fd);
+	void		parseInput(int fd, std::string input);
 	static void	signalHandler(int signal); //static because of signal() that can' t accept member function
 };
 

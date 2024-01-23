@@ -6,7 +6,7 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:03:01 by tgellon           #+#    #+#             */
-/*   Updated: 2024/01/23 11:04:53 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/01/23 16:33:58 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,9 +110,23 @@ void	Server::clientHandle(int fd){
 	int		bytesRead = 0;
 
 	bytesRead = recv(fd, buffer, BUFFER_SIZE, 0);
-	if (bytesRead <= 0)
+	if (bytesRead == -1){
+		std::cerr << RED << "Error: recv() failed" << DEFAULT << std::endl;
+		clientDisconnection(fd);
+	}
+	else if (bytesRead == 0)
 		clientDisconnection(fd);
 	else{
-		send(_clients[fd]._clientFd, buffer, bytesRead, 0);
+std::cout << "buffer: " << buffer << std::endl;
+		_clients[fd].setBufferRead(std::string(buffer));
+		if (_clients[fd].getBufferRead().find("\r\n") != std::string::npos){
+			parseInput((fd), _clients[fd].getBufferRead());
+			_clients[fd].getBufferRead().clear();
+		}
+		// send(_clients[fd]._clientFd, buffer, bytesRead, 0);
 	}
+}
+
+void	Server::parseInput(int fd, std::string input){
+	;
 }
