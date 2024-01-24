@@ -6,7 +6,7 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:14:10 by tgellon           #+#    #+#             */
-/*   Updated: 2024/01/23 14:18:44 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/01/24 10:59:42 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ public:
 
 	void		setNickName(const std::string &nickName);
 	void		setRealName(const std::string &realName);
-	void		setBufferRead(const std::string &read);
+	void		setBufferRead(const std::string &read, int n);
 };
 
 #endif

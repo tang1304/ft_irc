@@ -6,7 +6,7 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/17 15:45:59 by tgellon           #+#    #+#             */
-/*   Updated: 2024/01/23 09:35:28 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/01/24 16:05:34 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@
 # include <poll.h>
 # include <unistd.h>
 # include <csignal>
+# include <cstring>
 
 # define DEFAULT "\033[0m"
 # define RED "\033[31m"
@@ -34,5 +35,11 @@
 # define BUFFER_SIZE 1000
 
 # define USAGE "Error\nThere must be 2 arguments : ./ircserv <port> <password>"
+
+typedef std::vector<std::string>					vecStr;
+typedef std::vector<std::string>::iterator			itVecStr;
+typedef void (*fctPointer)(int, vecStr, Server);
+typedef std::map<std::string, fctPointer>			mapCmds;
+typedef std::map<std::string, fctPointer>::iterator	itMapCmds;
 
 #endif

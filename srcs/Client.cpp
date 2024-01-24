@@ -6,7 +6,7 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 12:49:59 by tgellon           #+#    #+#             */
-/*   Updated: 2024/01/23 15:50:06 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/01/24 16:30:54 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,9 @@ void	Client::setRealName(const std::string &realName){
 	_realName = realName;
 }
 
-void	Client::setBufferRead(const std::string &read){
-	_bufferRead += read;
+void	Client::setBufferRead(const std::string &read, int n){
+	if (n == 0)
+		_bufferRead = "";
+	else
+		_bufferRead += read;
 }

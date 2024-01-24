@@ -6,7 +6,7 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:03:01 by tgellon           #+#    #+#             */
-/*   Updated: 2024/01/23 16:33:58 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/01/24 16:30:24 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,19 +38,22 @@ Server::Server(const int &port, const std::string &password): _port(port), _pass
 	tmp.events = POLLIN;
 	tmp.revents = 0;
 	_pollFds.push_back(tmp);
+	cmdInit();
 }
 
-Server::Server(const Server &other){
-	*this = other;
-}
-
-Server	&Server::operator=(const Server &other){
-	if (this != &other){
-		_port = other._port;
-		_password = other._password;
-		_socketFd = other._socketFd;
-	}
-	return (*this);
+void	Server::cmdInit(){
+	_commandsList["PASS"] = &pass;
+	_commandsList["USER"] = &user;
+	_commandsList["NICK"] = &nick;
+	_commandsList["PING"] = &ping;
+	_commandsList["QUIT"] = &quit;
+	_commandsList["PRIVMSG"] = &privmsg;
+	_commandsList["JOIN"] = &join;
+	_commandsList["PART"] = &part;
+	_commandsList["TOPIC"] = &topic;
+	_commandsList["KICK"] = &kick;
+	_commandsList["INVITE"] = &invite;
+	_commandsList["LIST"] = &list;
 }
 
 void	Server::signalHandler(int signal)
@@ -99,16 +102,17 @@ void	Server::clientConnexion(){
 	std::cout << GREEN << "New client succesfully connected" << DEFAULT << std::endl;
 }
 
-void	Server::clientDisconnection(int fd){
+void	Server::clientDisconnection(const int &fd){
 	std::cout << YELLOW << _clients[fd]._clientFd << " disconnected from the server" << DEFAULT << std::endl;
 	close(fd);
 	_clients.erase(fd);
 }
 
-void	Server::clientHandle(int fd){
+void	Server::clientHandle(const int &fd){
 	char	buffer[BUFFER_SIZE];
 	int		bytesRead = 0;
 
+	memset(buffer, 0, BUFFER_SIZE);
 	bytesRead = recv(fd, buffer, BUFFER_SIZE, 0);
 	if (bytesRead == -1){
 		std::cerr << RED << "Error: recv() failed" << DEFAULT << std::endl;
@@ -118,15 +122,28 @@ void	Server::clientHandle(int fd){
 		clientDisconnection(fd);
 	else{
 std::cout << "buffer: " << buffer << std::endl;
-		_clients[fd].setBufferRead(std::string(buffer));
-		if (_clients[fd].getBufferRead().find("\r\n") != std::string::npos){
-			parseInput((fd), _clients[fd].getBufferRead());
-			_clients[fd].getBufferRead().clear();
+		_clients[fd].setBufferRead(std::string(buffer), 1);
+		size_t pos = _clients[fd].getBufferRead().find("\r\n");
+		if (pos != std::string::npos){
+			parseInput((fd), buffer);
+			_clients[fd].setBufferRead("", 0);
 		}
-		// send(_clients[fd]._clientFd, buffer, bytesRead, 0);
+		// send(_clients[fd]._clientFd, _bufferSend, bytesRead, 0);
 	}
 }
 
-void	Server::parseInput(int fd, std::string input){
-	;
+void	Server::parseInput(const int &fd, const std::string &input){
+	vecStr	command;
+(void)fd;
+
+	command = splitCmd(input, " ");
+	itMapCmds	it = _commandsList.begin();
+	for (; it != _commandsList.end(); it++){
+		if (it->first.find(command[0])){
+			it->second(fd, command, *this);
+		}
+	}
+	if (it == _commandsList.end()){
+		std::cerr << "Invalid command: " << command[0] << std::endl;
+	}
 }
