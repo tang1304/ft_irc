@@ -6,7 +6,7 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:03:20 by tgellon           #+#    #+#             */
-/*   Updated: 2024/01/23 16:24:50 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/01/24 14:57:30 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,21 +30,22 @@ private:
 	int						_socketFd;
 	std::vector<pollfd>		_pollFds; // To use poll(), keeps track of fds for multiple clients
 	std::map<int, Client>	_clients;
+	mapCmds					_commandsList;
 	Server();
 
 public:
 
 	~Server();
 	Server(const int &port, const std::string &password);
-	Server(const Server &other);
-	Server		&operator=(const Server &other);
 
+	void		cmdInit();
+	static void	signalHandler(int signal); //static because of signal() that can' t accept member function
 	void		runningLoop();
 	void		clientConnexion();
-	void		clientDisconnection(int fd);
-	void		clientHandle(int fd);
-	void		parseInput(int fd, std::string input);
-	static void	signalHandler(int signal); //static because of signal() that can' t accept member function
+	void		clientDisconnection(const int &fd);
+	void		clientHandle(const int &fd);
+	void		parseInput(const int &fd, const std::string &input);
+	void		msgToClient(const int &fd, const std::string &msg);
 };
 
 #endif
