@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: rrebois <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:03:01 by tgellon           #+#    #+#             */
-/*   Updated: 2024/01/23 16:33:58 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/01/24 17:32:58 by rrebois          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,8 +49,20 @@ Server	&Server::operator=(const Server &other){
 		_port = other._port;
 		_password = other._password;
 		_socketFd = other._socketFd;
+		_pollFds = other._pollFds;
+		_clients = other._clients;
 	}
 	return (*this);
+}
+
+std::string	Server::getPassword() const
+{
+	return (_password);
+}
+
+ClientMap Server::getClientMap() const
+{
+	return (_clients);
 }
 
 void	Server::signalHandler(int signal)
@@ -118,15 +130,27 @@ void	Server::clientHandle(int fd){
 		clientDisconnection(fd);
 	else{
 std::cout << "buffer: " << buffer << std::endl;
-		_clients[fd].setBufferRead(std::string(buffer));
+		_clients[fd].setBufferRead(std::string(buffer), 1);
 		if (_clients[fd].getBufferRead().find("\r\n") != std::string::npos){
-			parseInput((fd), _clients[fd].getBufferRead());
-			_clients[fd].getBufferRead().clear();
+			parseInput(fd, _clients[fd].getBufferRead());
+			_clients[fd].setBufferRead("", 0);
 		}
-		// send(_clients[fd]._clientFd, buffer, bytesRead, 0);
+		send(_clients[fd]._clientFd, _clients[fd].getBufferSend().c_str(), _clients[fd].getBufferSend().length(), 0);
+		std::cout << "buf send: " << _clients[fd].getBufferSend().c_str() << std::endl;
+		_clients[fd].setBufferSend("");
+//		send(_clients[fd]._clientFd, "hello", 5, 0);
 	}
 }
 
-void	Server::parseInput(int fd, std::string input){
-	;
+void	Server::parseInput(int fd, std::string input)
+{
+	vecstr command;
+	(void) input;
+
+	command.push_back("PASS");
+//	command.push_back("b");
+//	command.push_back("c");
+//_clients[fd]._registered = true;
+	if (command[0] == "PASS")
+		pass_cmd(fd, command, *this);
 }

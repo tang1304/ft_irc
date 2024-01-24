@@ -3,14 +3,23 @@
 /*                                                        :::      ::::::::   */
 /*   utils.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: rrebois <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 10:16:34 by tgellon           #+#    #+#             */
-/*   Updated: 2024/01/22 13:59:13 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/01/24 14:54:24 by rrebois          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 # include "../incs/irc.hpp"
+
+std::size_t	len(std::string s)
+{
+	std::size_t i;
+
+	for (i = 0; i < s.length(); i++)
+		;
+	return (i);
+}
 
 int	checkArgs(const std::string &port, const std::string &password){
 	int	portValue = 0;
