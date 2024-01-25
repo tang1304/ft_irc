@@ -6,7 +6,7 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 11:49:57 by rrebois           #+#    #+#             */
-/*   Updated: 2024/01/25 10:50:48 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/01/25 13:46:57 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ std::cout << i << std::endl;
 	{
 		case (0):
 		{
-			serv.getClientMap()[fd].setBufferSend(ERR_NEEDMOREPARAMS(ERR, cmd[0]));
+			serv.getClientMap()[fd].setBufferSend(ERR_NEEDMOREPARAMS(ERR, cmd[0]), 1);
 //			std::cout << "test: " << ERR_NEEDMOREPARAMS(ERR, cmd[0]) << std::endl;
 			std::cout << "buf send: " << serv.getClientMap()[fd].getBufferSend() << std::endl;
 			return ;

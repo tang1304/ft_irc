@@ -6,7 +6,7 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 12:49:59 by tgellon           #+#    #+#             */
-/*   Updated: 2024/01/25 11:38:35 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/01/25 13:45:24 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,9 +63,12 @@ void	Client::setBufferRead(const std::string &read, int i){
 		_bufferRead = read;
 }
 
-void	Client::setBufferSend(const std::string& msg)
+void	Client::setBufferSend(const std::string& msg, int i)
 {
-	_bufferSend += msg;
+	if (i)
+		_bufferSend += msg;
+	else
+		_bufferSend.clear();
 }
 
 bool	Client::getPass() const

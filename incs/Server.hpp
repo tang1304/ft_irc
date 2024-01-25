@@ -6,7 +6,7 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:03:20 by tgellon           #+#    #+#             */
-/*   Updated: 2024/01/25 10:34:41 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/01/25 13:20:34 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ public:
 	void		clientConnexion();
 	void		clientDisconnection(const int &fd);
 	void		clientHandle(const int &fd);
-	void		parseInput(const int &fd, const std::string &input);
+	void		parseInput(const int &fd, std::string &input);
 	void		msgToClient(const int &fd, const std::string &msg);
 };
 

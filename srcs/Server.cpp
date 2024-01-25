@@ -6,7 +6,7 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:03:01 by tgellon           #+#    #+#             */
-/*   Updated: 2024/01/25 11:35:53 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/01/25 14:19:02 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,21 +132,26 @@ void	Server::clientHandle(const int &fd){
 		clientDisconnection(fd);
 	else{
 std::cout << "buffer: " << buffer << std::endl;
-		_clients[fd].setBufferRead(std::string(buffer), 1);
+		std::string	buf(buffer);
+		if (buf.empty() || buf == "\r\n")
+			return ;
+		_clients[fd].setBufferRead(std::string(buf), 1);
 		size_t pos = _clients[fd].getBufferRead().find("\r\n");
 		if (pos != std::string::npos){
-			parseInput((fd), buffer);
+			parseInput((fd), buf);
 			_clients[fd].setBufferRead("", 0);
 		}
 		send(_clients[fd]._clientFd, _clients[fd].getBufferSend().c_str(), _clients[fd].getBufferSend().length(), 0);
+		_clients[fd].setBufferSend("", 0);
 	}
 }
 
-void	Server::parseInput(const int &fd, const std::string &input){
+void	Server::parseInput(const int &fd, std::string &input){
 	vecStr	command;
-(void)fd;
 
 	command = splitCmd(input, " ");
+	if (command.empty())
+		return ;
 	itMapCmds	it = _commandsList.begin();
 	for (; it != _commandsList.end(); it++){
 		if (it->first.find(command[0])){
@@ -154,6 +159,6 @@ void	Server::parseInput(const int &fd, const std::string &input){
 		}
 	}
 	if (it == _commandsList.end()){
-		_clients[fd].setBufferSend(ERR_UNKNOWNCOMMAND(_clients[fd].getNickName(), command[0]));
+		_clients[fd].setBufferSend(ERR_UNKNOWNCOMMAND(_clients[fd].getNickName(), command[0]), 1);
 	}
 }
