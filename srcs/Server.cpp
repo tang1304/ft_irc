@@ -6,7 +6,7 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:03:01 by tgellon           #+#    #+#             */
-/*   Updated: 2024/01/25 09:01:08 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/01/25 11:35:53 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,30 +38,30 @@ Server::Server(const int &port, const std::string &password): _port(port), _pass
 	tmp.events = POLLIN;
 	tmp.revents = 0;
 	_pollFds.push_back(tmp);
-	// cmdInit();
+	cmdInit();
 }
 
-// void	Server::cmdInit(){
-// 	_commandsList["PASS"] = &pass;
-// 	_commandsList["USER"] = &user;
-// 	_commandsList["NICK"] = &nick;
-// 	_commandsList["PING"] = &ping;
-// 	_commandsList["QUIT"] = &quit;
-// 	_commandsList["PRIVMSG"] = &privmsg;
-// 	_commandsList["JOIN"] = &join;
-// 	_commandsList["PART"] = &part;
-// 	_commandsList["TOPIC"] = &topic;
-// 	_commandsList["KICK"] = &kick;
-// 	_commandsList["INVITE"] = &invite;
-// 	_commandsList["LIST"] = &list;
-// }
+void	Server::cmdInit(){
+	_commandsList["PASS"] = &pass_cmd;
+	// _commandsList["USER"] = &user;
+	// _commandsList["NICK"] = &nick;
+	// _commandsList["PING"] = &ping;
+	// _commandsList["QUIT"] = &quit;
+	// _commandsList["PRIVMSG"] = &privmsg;
+	// _commandsList["JOIN"] = &join;
+	// _commandsList["PART"] = &part;
+	// _commandsList["TOPIC"] = &topic;
+	// _commandsList["KICK"] = &kick;
+	// _commandsList["INVITE"] = &invite;
+	// _commandsList["LIST"] = &list;
+}
 
 std::string	Server::getPassword() const
 {
 	return (_password);
 }
 
-ClientMap Server::getClientMap() const
+ClientMap &Server::getClientMap()
 {
 	return (_clients);
 }
@@ -138,7 +138,7 @@ std::cout << "buffer: " << buffer << std::endl;
 			parseInput((fd), buffer);
 			_clients[fd].setBufferRead("", 0);
 		}
-		// send(_clients[fd]._clientFd, _bufferSend, bytesRead, 0);
+		send(_clients[fd]._clientFd, _clients[fd].getBufferSend().c_str(), _clients[fd].getBufferSend().length(), 0);
 	}
 }
 
@@ -154,6 +154,6 @@ void	Server::parseInput(const int &fd, const std::string &input){
 		}
 	}
 	if (it == _commandsList.end()){
-		std::cerr << "Invalid command: " << command[0] << std::endl;
+		_clients[fd].setBufferSend(ERR_UNKNOWNCOMMAND(_clients[fd].getNickName(), command[0]));
 	}
 }

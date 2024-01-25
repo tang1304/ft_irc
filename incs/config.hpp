@@ -6,7 +6,7 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/17 15:45:59 by tgellon           #+#    #+#             */
-/*   Updated: 2024/01/25 09:06:09 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/01/25 10:47:59 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ class Server;
 
 typedef std::vector<std::string>					vecStr;
 typedef std::vector<std::string>::iterator			itVecStr;
-typedef void (*fctPointer)(int, vecStr, Server);
+typedef void (*fctPointer)(int, vecStr &, Server &);
 typedef std::map<std::string, fctPointer>			mapCmds;
 typedef std::map<std::string, fctPointer>::iterator	itMapCmds;
 

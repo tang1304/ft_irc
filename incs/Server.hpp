@@ -6,7 +6,7 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:03:20 by tgellon           #+#    #+#             */
-/*   Updated: 2024/01/25 09:03:33 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/01/25 10:34:41 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ public:
 	Server(const int &port, const std::string &password);
 
 	std::string	getPassword() const;
-	ClientMap	getClientMap() const;
+	ClientMap	&getClientMap();
 	void		cmdInit();
 	static void	signalHandler(int signal); //static because of signal() that can' t accept member function
 	void		runningLoop();
