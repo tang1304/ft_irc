@@ -6,7 +6,7 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:03:01 by tgellon           #+#    #+#             */
-/*   Updated: 2024/01/25 14:19:02 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/01/25 15:29:17 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,7 +109,7 @@ void	Server::clientConnexion(){
 	_pollFds.push_back(tmp);
 	_clients[clientSocket] = Client();
 	_clients[clientSocket]._clientFd = clientSocket;
-	std::cout << GREEN << "New client succesfully connected" << DEFAULT << std::endl;
+	std::cout << GREEN << "New client succesfully connected on socket " << clientSocket << DEFAULT << std::endl;
 }
 
 void	Server::clientDisconnection(const int &fd){
@@ -123,9 +123,10 @@ void	Server::clientHandle(const int &fd){
 	int		bytesRead = 0;
 
 	memset(buffer, 0, BUFFER_SIZE);
+std::cout << "fd" << _clients[fd]._clientFd << std::endl;
 	bytesRead = recv(fd, buffer, BUFFER_SIZE, 0);
 	if (bytesRead == -1){
-		std::cerr << RED << "Error: recv() failed" << DEFAULT << std::endl;
+		std::cerr << RED << "Error: recv() failed: " << strerror(errno) << DEFAULT << std::endl;
 		clientDisconnection(fd);
 	}
 	else if (bytesRead == 0)
