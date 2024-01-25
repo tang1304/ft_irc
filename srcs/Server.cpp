@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rrebois <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:03:01 by tgellon           #+#    #+#             */
-/*   Updated: 2024/01/24 17:32:58 by rrebois          ###   ########.fr       */
+/*   Updated: 2024/01/25 09:01:08 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,22 +38,23 @@ Server::Server(const int &port, const std::string &password): _port(port), _pass
 	tmp.events = POLLIN;
 	tmp.revents = 0;
 	_pollFds.push_back(tmp);
+	// cmdInit();
 }
 
-Server::Server(const Server &other){
-	*this = other;
-}
-
-Server	&Server::operator=(const Server &other){
-	if (this != &other){
-		_port = other._port;
-		_password = other._password;
-		_socketFd = other._socketFd;
-		_pollFds = other._pollFds;
-		_clients = other._clients;
-	}
-	return (*this);
-}
+// void	Server::cmdInit(){
+// 	_commandsList["PASS"] = &pass;
+// 	_commandsList["USER"] = &user;
+// 	_commandsList["NICK"] = &nick;
+// 	_commandsList["PING"] = &ping;
+// 	_commandsList["QUIT"] = &quit;
+// 	_commandsList["PRIVMSG"] = &privmsg;
+// 	_commandsList["JOIN"] = &join;
+// 	_commandsList["PART"] = &part;
+// 	_commandsList["TOPIC"] = &topic;
+// 	_commandsList["KICK"] = &kick;
+// 	_commandsList["INVITE"] = &invite;
+// 	_commandsList["LIST"] = &list;
+// }
 
 std::string	Server::getPassword() const
 {
@@ -111,16 +112,17 @@ void	Server::clientConnexion(){
 	std::cout << GREEN << "New client succesfully connected" << DEFAULT << std::endl;
 }
 
-void	Server::clientDisconnection(int fd){
+void	Server::clientDisconnection(const int &fd){
 	std::cout << YELLOW << _clients[fd]._clientFd << " disconnected from the server" << DEFAULT << std::endl;
 	close(fd);
 	_clients.erase(fd);
 }
 
-void	Server::clientHandle(int fd){
+void	Server::clientHandle(const int &fd){
 	char	buffer[BUFFER_SIZE];
 	int		bytesRead = 0;
 
+	memset(buffer, 0, BUFFER_SIZE);
 	bytesRead = recv(fd, buffer, BUFFER_SIZE, 0);
 	if (bytesRead == -1){
 		std::cerr << RED << "Error: recv() failed" << DEFAULT << std::endl;
@@ -131,26 +133,27 @@ void	Server::clientHandle(int fd){
 	else{
 std::cout << "buffer: " << buffer << std::endl;
 		_clients[fd].setBufferRead(std::string(buffer), 1);
-		if (_clients[fd].getBufferRead().find("\r\n") != std::string::npos){
-			parseInput(fd, _clients[fd].getBufferRead());
+		size_t pos = _clients[fd].getBufferRead().find("\r\n");
+		if (pos != std::string::npos){
+			parseInput((fd), buffer);
 			_clients[fd].setBufferRead("", 0);
 		}
-		send(_clients[fd]._clientFd, _clients[fd].getBufferSend().c_str(), _clients[fd].getBufferSend().length(), 0);
-		std::cout << "buf send: " << _clients[fd].getBufferSend().c_str() << std::endl;
-		_clients[fd].setBufferSend("");
-//		send(_clients[fd]._clientFd, "hello", 5, 0);
+		// send(_clients[fd]._clientFd, _bufferSend, bytesRead, 0);
 	}
 }
 
-void	Server::parseInput(int fd, std::string input)
-{
-	vecstr command;
-	(void) input;
+void	Server::parseInput(const int &fd, const std::string &input){
+	vecStr	command;
+(void)fd;
 
-	command.push_back("PASS");
-//	command.push_back("b");
-//	command.push_back("c");
-//_clients[fd]._registered = true;
-	if (command[0] == "PASS")
-		pass_cmd(fd, command, *this);
+	command = splitCmd(input, " ");
+	itMapCmds	it = _commandsList.begin();
+	for (; it != _commandsList.end(); it++){
+		if (it->first.find(command[0])){
+			it->second(fd, command, *this);
+		}
+	}
+	if (it == _commandsList.end()){
+		std::cerr << "Invalid command: " << command[0] << std::endl;
+	}
 }
