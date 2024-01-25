@@ -3,7 +3,14 @@
 CC = c++
 CFLAGS = -Wall -Wextra -Werror -std=c++98 -g3# -fsanitize=address
 SRCS_DIR = ./srcs/
-SRCS = main.cpp Server.cpp Client.cpp Channel.cpp utils.cpp pass.cpp
+SRCS =	main.cpp \
+		Server.cpp \
+		Client.cpp \
+		Channel.cpp \
+		utils.cpp \
+		pass.cpp \
+		nick.cpp \
+		user.cpp
 OBJ_DIR = objs/
 OBJ = ${SRCS:%.cpp=${OBJ_DIR}%.o}
 NAME = ircserv

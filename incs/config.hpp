@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   config.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: rrebois <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/17 15:45:59 by tgellon           #+#    #+#             */
-/*   Updated: 2024/01/25 09:06:09 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/01/25 15:06:06 by rrebois          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@
 # define CYAN "\033[36m"
 
 # define BUFFER_SIZE 1000
+# define USERLEN 12
 
 # define USAGE "Error\nThere must be 2 arguments : ./ircserv <port> <password>"
 

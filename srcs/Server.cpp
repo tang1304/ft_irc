@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: rrebois <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:03:01 by tgellon           #+#    #+#             */
-/*   Updated: 2024/01/25 09:01:08 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/01/25 14:59:58 by rrebois          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ std::string	Server::getPassword() const
 	return (_password);
 }
 
-ClientMap Server::getClientMap() const
+ClientMap &Server::getClientMap()
 {
 	return (_clients);
 }
@@ -118,11 +118,50 @@ void	Server::clientDisconnection(const int &fd){
 	_clients.erase(fd);
 }
 
+//void	Server::clientHandle(const int &fd){
+//	char	buffer[BUFFER_SIZE];
+//	int		bytesRead = 0;
+//
+//	memset(buffer, 0, BUFFER_SIZE);
+//	bytesRead = recv(fd, buffer, BUFFER_SIZE, 0);
+//	if (bytesRead == -1){
+//		std::cerr << RED << "Error: recv() failed" << DEFAULT << std::endl;
+//		clientDisconnection(fd);
+//	}
+//	else if (bytesRead == 0)
+//		clientDisconnection(fd);
+//	else{
+//std::cout << "buffer: " << buffer << std::endl;
+//		_clients[fd].setBufferRead(std::string(buffer), 1);
+//		size_t pos = _clients[fd].getBufferRead().find("\r\n");
+//		if (pos != std::string::npos){
+//			parseInput((fd), buffer);
+//			_clients[fd].setBufferRead("", 0);
+//		}
+//		// send(_clients[fd]._clientFd, _bufferSend, bytesRead, 0);
+//	}
+//}
+//
+//void	Server::parseInput(const int &fd, const std::string &input){
+//	vecStr	command;
+//(void)fd;
+//
+//	command = splitCmd(input, " ");
+//	itMapCmds	it = _commandsList.begin();
+//	for (; it != _commandsList.end(); it++){
+//		if (it->first.find(command[0])){
+//			it->second(fd, command, *this);
+//		}
+//	}
+//	if (it == _commandsList.end()){
+//		std::cerr << "Invalid command: " << command[0] << std::endl;
+//	}
+//}
+
 void	Server::clientHandle(const int &fd){
 	char	buffer[BUFFER_SIZE];
 	int		bytesRead = 0;
 
-	memset(buffer, 0, BUFFER_SIZE);
 	bytesRead = recv(fd, buffer, BUFFER_SIZE, 0);
 	if (bytesRead == -1){
 		std::cerr << RED << "Error: recv() failed" << DEFAULT << std::endl;
@@ -131,29 +170,33 @@ void	Server::clientHandle(const int &fd){
 	else if (bytesRead == 0)
 		clientDisconnection(fd);
 	else{
-std::cout << "buffer: " << buffer << std::endl;
+		std::cout << "buffer: " << buffer << std::endl;
 		_clients[fd].setBufferRead(std::string(buffer), 1);
-		size_t pos = _clients[fd].getBufferRead().find("\r\n");
-		if (pos != std::string::npos){
-			parseInput((fd), buffer);
+		if (_clients[fd].getBufferRead().find("\r\n") != std::string::npos){
+			parseInput(fd, _clients[fd].getBufferRead());
 			_clients[fd].setBufferRead("", 0);
 		}
-		// send(_clients[fd]._clientFd, _bufferSend, bytesRead, 0);
+		send(_clients[fd]._clientFd, _clients[fd].getBufferSend().c_str(), _clients[fd].getBufferSend().length(), 0);
+		_clients[fd].setBufferSend("");
+		if (_clients[fd].getDisconnect())
+			clientDisconnection(fd);
 	}
 }
 
-void	Server::parseInput(const int &fd, const std::string &input){
-	vecStr	command;
-(void)fd;
+void	Server::parseInput(const int &fd, const std::string &input)
+{
+	vecstr command;
+	(void) input;
 
-	command = splitCmd(input, " ");
-	itMapCmds	it = _commandsList.begin();
-	for (; it != _commandsList.end(); it++){
-		if (it->first.find(command[0])){
-			it->second(fd, command, *this);
-		}
-	}
-	if (it == _commandsList.end()){
-		std::cerr << "Invalid command: " << command[0] << std::endl;
-	}
+	command.push_back("USER");
+	command.push_back("1");
+	command.push_back("0");
+	command.push_back("*");
+	command.push_back("");
+//_clients[fd]._registered = true;
+_clients[fd].setPass();
+_clients[fd].setNickName("TOTO");
+	if (command[0] == "USER" || command[1] == "USER")
+		user_cmd(fd, command, *this);
+	std::cout << _clients[fd].getNickName() << std::endl;
 }
