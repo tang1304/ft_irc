@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: rrebois <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:03:20 by tgellon           #+#    #+#             */
-/*   Updated: 2024/01/25 09:03:33 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/01/25 13:24:04 by rrebois          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ private:
 	int						_socketFd;
 	std::vector<pollfd>		_pollFds; // To use poll(), keeps track of fds for multiple clients
 	mapCmds					_commandsList;
+
 	Server();
 
 public:
@@ -42,7 +43,7 @@ public:
 	Server(const int &port, const std::string &password);
 
 	std::string	getPassword() const;
-	ClientMap	getClientMap() const;
+	ClientMap	&getClientMap();
 	void		cmdInit();
 	static void	signalHandler(int signal); //static because of signal() that can' t accept member function
 	void		runningLoop();
@@ -51,9 +52,12 @@ public:
 	void		clientHandle(const int &fd);
 	void		parseInput(const int &fd, const std::string &input);
 	void		msgToClient(const int &fd, const std::string &msg);
+
+
 };
 
-void	pass_cmd(int fd, vecstr& cmd, Server& serv);
-void	nick_cmd(int fd, vecstr& cmd, Server& serv);
+int	pass_cmd(int fd, vecstr &cmd, Server &serv);
+int	nick_cmd(int fd, vecstr &cmd, Server &serv);
+int user_cmd(int fd, vecstr &cmd, Server &serv);
 
 #endif
