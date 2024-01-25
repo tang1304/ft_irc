@@ -6,7 +6,7 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/17 15:45:59 by tgellon           #+#    #+#             */
-/*   Updated: 2024/01/25 10:47:59 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/01/25 14:58:49 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 # include <netinet/in.h>
 # include <poll.h>
 # include <unistd.h>
+# include <errno.h>
 # include <csignal>
 # include <cstring>
 
