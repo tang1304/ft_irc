@@ -6,7 +6,7 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:03:01 by tgellon           #+#    #+#             */
-/*   Updated: 2024/01/25 15:29:17 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/01/29 09:13:46 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,7 @@ void	Server::runningLoop(){
 		if (poll(this->_pollFds.data(), this->_pollFds.size(), -1) == -1 && !signalStatus)
 			throw (std::runtime_error("Error: poll() failed"));
 		for (size_t i = 0; i < _pollFds.size(); ++i){
+std::cout << _pollFds.size() << std::endl;
 			if (_pollFds[i].revents & POLLIN){ //there is data to read
 				if (_pollFds[i].fd == _pollFds[0].fd){ // or it->fd == _socketFd ? // socket fd -> means a new connection
 					clientConnexion();
@@ -113,9 +114,14 @@ void	Server::clientConnexion(){
 }
 
 void	Server::clientDisconnection(const int &fd){
+	itVecPollfd	it = _pollFds.begin();
+
 	std::cout << YELLOW << _clients[fd]._clientFd << " disconnected from the server" << DEFAULT << std::endl;
 	close(fd);
 	_clients.erase(fd);
+	while (it->fd != fd)
+		it++;
+	_pollFds.erase(it);
 }
 
 void	Server::clientHandle(const int &fd){
@@ -123,7 +129,6 @@ void	Server::clientHandle(const int &fd){
 	int		bytesRead = 0;
 
 	memset(buffer, 0, BUFFER_SIZE);
-std::cout << "fd" << _clients[fd]._clientFd << std::endl;
 	bytesRead = recv(fd, buffer, BUFFER_SIZE, 0);
 	if (bytesRead == -1){
 		std::cerr << RED << "Error: recv() failed: " << strerror(errno) << DEFAULT << std::endl;
