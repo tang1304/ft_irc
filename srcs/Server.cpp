@@ -6,7 +6,7 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:03:01 by tgellon           #+#    #+#             */
-/*   Updated: 2024/01/29 09:13:46 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/01/29 10:03:37 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,6 +123,46 @@ void	Server::clientDisconnection(const int &fd){
 		it++;
 	_pollFds.erase(it);
 }
+
+//void	Server::clientHandle(const int &fd){
+//	char	buffer[BUFFER_SIZE];
+//	int		bytesRead = 0;
+//
+//	memset(buffer, 0, BUFFER_SIZE);
+//	bytesRead = recv(fd, buffer, BUFFER_SIZE, 0);
+//	if (bytesRead == -1){
+//		std::cerr << RED << "Error: recv() failed" << DEFAULT << std::endl;
+//		clientDisconnection(fd);
+//	}
+//	else if (bytesRead == 0)
+//		clientDisconnection(fd);
+//	else{
+//std::cout << "buffer: " << buffer << std::endl;
+//		_clients[fd].setBufferRead(std::string(buffer), 1);
+//		size_t pos = _clients[fd].getBufferRead().find("\r\n");
+//		if (pos != std::string::npos){
+//			parseInput((fd), buffer);
+//			_clients[fd].setBufferRead("", 0);
+//		}
+//		// send(_clients[fd]._clientFd, _bufferSend, bytesRead, 0);
+//	}
+//}
+//
+//void	Server::parseInput(const int &fd, const std::string &input){
+//	vecStr	command;
+//(void)fd;
+//
+//	command = splitCmd(input, " ");
+//	itMapCmds	it = _commandsList.begin();
+//	for (; it != _commandsList.end(); it++){
+//		if (it->first.find(command[0])){
+//			it->second(fd, command, *this);
+//		}
+//	}
+//	if (it == _commandsList.end()){
+//		std::cerr << "Invalid command: " << command[0] << std::endl;
+//	}
+//}
 
 void	Server::clientHandle(const int &fd){
 	char	buffer[BUFFER_SIZE];

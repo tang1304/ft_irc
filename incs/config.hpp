@@ -6,7 +6,7 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/17 15:45:59 by tgellon           #+#    #+#             */
-/*   Updated: 2024/01/29 09:09:47 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/01/29 09:57:28 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@
 # define CYAN "\033[36m"
 
 # define BUFFER_SIZE 1000
+# define USERLEN 12
 
 # define USAGE "Error\nThere must be 2 arguments : ./ircserv <port> <password>"
 
@@ -42,7 +43,7 @@ class Server;
 typedef std::vector<pollfd>::iterator				itVecPollfd;
 typedef std::vector<std::string>					vecStr;
 typedef std::vector<std::string>::iterator			itVecStr;
-typedef void (*fctPointer)(int, vecStr &, Server &);
+typedef int (*fctPointer)(int, vecStr &, Server &);
 typedef std::map<std::string, fctPointer>			mapCmds;
 typedef std::map<std::string, fctPointer>::iterator	itMapCmds;
 

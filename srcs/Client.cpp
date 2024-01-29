@@ -6,40 +6,66 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 12:49:59 by tgellon           #+#    #+#             */
-/*   Updated: 2024/01/25 13:45:24 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/01/29 09:58:08 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../incs/Client.hpp"
 
-Client::Client() : _pass(false), _registered(false) { }
+Client::Client() : _disconnect(false), _pass(false), _registered(false)  { }
 
 Client::~Client(){
 }
 
-Client::Client(const Client &other) : _pass(false), _registered(false) {
+Client::Client(const Client &other) : _disconnect(false), _pass(false), _registered(false) {
 	*this = other;
 }
 
-std ::string	Client::getNickName() const{
+const std ::string	&Client::getNickName() const{
 	return (_nickName);
 }
 
-std::string	Client::getRealName() const{
+const std ::string	&Client::getUserName() const{
+	return (_userName);
+}
+
+const std::string	&Client::getRealName() const{
 	return (_realName);
 }
 
-std::string	Client::getBufferRead() const{
+const std::string	&Client::getBufferRead() const{
 	return (_bufferRead);
 }
 
-std::string	Client::getBufferSend() const
+const std::string	&Client::getBufferSend() const
 {
 	return (_bufferSend);
 }
 
+bool	Client::getDisconnect() const
+{
+	return (_disconnect);
+}
+
+bool	Client::getPass() const
+{
+	return (_pass);
+}
+
+bool	Client::getRegistered() const
+{
+	return (_registered);
+}
+
 void	Client::setNickName(const std::string &nickName){
 	_nickName = nickName;
+}
+
+void	Client::setUsername(const std::string &userName){
+	if (userName.size() > USERLEN)
+		_userName= userName.substr(0, USERLEN);
+	else
+		_userName = userName;
 }
 
 void	Client::setRealName(const std::string &realName){
@@ -49,6 +75,11 @@ void	Client::setRealName(const std::string &realName){
 void	Client::setPass()
 {
 	_pass = true;
+}
+
+void	Client::setDisconnect()
+{
+	_disconnect = true;
 }
 
 void	Client::setRegistered()
@@ -69,14 +100,4 @@ void	Client::setBufferSend(const std::string& msg, int i)
 		_bufferSend += msg;
 	else
 		_bufferSend.clear();
-}
-
-bool	Client::getPass() const
-{
-	return (_pass);
-}
-
-bool	Client::getRegistered() const
-{
-	return (_registered);
 }
