@@ -6,7 +6,7 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/17 15:45:59 by tgellon           #+#    #+#             */
-/*   Updated: 2024/01/25 14:58:49 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/01/29 09:09:47 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@
 
 class Server;
 
+typedef std::vector<pollfd>::iterator				itVecPollfd;
 typedef std::vector<std::string>					vecStr;
 typedef std::vector<std::string>::iterator			itVecStr;
 typedef void (*fctPointer)(int, vecStr &, Server &);
