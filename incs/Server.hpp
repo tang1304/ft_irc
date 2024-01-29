@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rrebois <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: rrebois <rrebois@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:03:20 by tgellon           #+#    #+#             */
-/*   Updated: 2024/01/25 13:24:04 by rrebois          ###   ########.fr       */
+/*   Updated: 2024/01/29 15:35:45 by rrebois          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,20 +20,18 @@
 class Channel;
 class Client;
 
-typedef std::vector<std::string>	vecstr;
-typedef std::map<int, Client>		ClientMap;
-
 extern int	signalStatus;
 
 class Server{
 private:
 
-	ClientMap				_clients;
-	int						_port;
-	std::string				_password;
-	int						_socketFd;
-	std::vector<pollfd>		_pollFds; // To use poll(), keeps track of fds for multiple clients
-	mapCmds					_commandsList;
+	clientMap			_clients;
+	int					_port;
+	std::string			_password;
+	int					_socketFd;
+	std::vector<pollfd>	_pollFds; // To use poll(), keeps track of fds for multiple clients
+	mapCmds				_commandsList;
+	vecChan				_chanList;
 
 	Server();
 
@@ -43,7 +41,9 @@ public:
 	Server(const int &port, const std::string &password);
 
 	std::string	getPassword() const;
-	ClientMap	&getClientMap();
+	clientMap	&getClientMap();
+	Client		&getClient(int fd); // en template??
+	vecChan		&getChannelList();
 	void		cmdInit();
 	static void	signalHandler(int signal); //static because of signal() that can' t accept member function
 	void		runningLoop();
@@ -53,11 +53,6 @@ public:
 	void		parseInput(const int &fd, const std::string &input);
 	void		msgToClient(const int &fd, const std::string &msg);
 
-
 };
-
-int	pass_cmd(int fd, vecstr &cmd, Server &serv);
-int	nick_cmd(int fd, vecstr &cmd, Server &serv);
-int user_cmd(int fd, vecstr &cmd, Server &serv);
 
 #endif

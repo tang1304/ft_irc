@@ -3,21 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   Client.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rrebois <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: rrebois <rrebois@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 12:49:59 by tgellon           #+#    #+#             */
-/*   Updated: 2024/01/25 15:08:54 by rrebois          ###   ########.fr       */
+/*   Updated: 2024/01/29 11:28:34 by rrebois          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../incs/Client.hpp"
 
-Client::Client() : _disconnect(false), _pass(false), _registered(false)  { }
+Client::Client() : _chanCount(0), _disconnect(false), _pass(false), _registered(false) { }
 
 Client::~Client(){
 }
 
-Client::Client(const Client &other) : _disconnect(false), _pass(false), _registered(false) {
+Client::Client(const Client &other) : _chanCount(0), _disconnect(false), _pass(false), _registered(false) {
 	*this = other;
 }
 

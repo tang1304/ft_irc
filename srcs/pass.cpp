@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   pass.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rrebois <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: rrebois <rrebois@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 11:49:57 by rrebois           #+#    #+#             */
-/*   Updated: 2024/01/25 11:31:30 by rrebois          ###   ########.fr       */
+/*   Updated: 2024/01/29 12:05:42 by rrebois          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../incs/irc.hpp"
 
-int	pass_cmd(int fd, vecstr& cmd, Server &serv)
+int	pass_cmd(int fd, vecStr &cmd, Server &serv)
 {
 	std::string 		ERR;
 	std::stringstream	userFd;
