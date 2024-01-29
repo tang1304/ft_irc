@@ -6,7 +6,7 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:14:10 by tgellon           #+#    #+#             */
-/*   Updated: 2024/01/29 09:47:52 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/01/29 15:12:03 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ public:
 	const std::string	&getRealName() const;
 	const std::string	&getBufferRead() const;
 	const std::string	&getBufferSend() const;
+	const int			&getFd() const;
 	bool				getRegistered() const;
 	bool				getDisconnect() const;
 	bool				getPass() const;
