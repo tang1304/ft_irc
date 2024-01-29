@@ -3,17 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rrebois <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: rrebois <rrebois@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:03:01 by tgellon           #+#    #+#             */
-/*   Updated: 2024/01/25 14:59:58 by rrebois          ###   ########.fr       */
+/*   Updated: 2024/01/29 15:36:05 by rrebois          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../incs/Server.hpp"
 
-Server::~Server(){
-}
+Server::~Server() { }
 
 Server::Server(const int &port, const std::string &password): _port(port), _password(password){
 	// socket initiation;
@@ -61,9 +60,19 @@ std::string	Server::getPassword() const
 	return (_password);
 }
 
-ClientMap &Server::getClientMap()
+clientMap &Server::getClientMap()
 {
 	return (_clients);
+}
+
+Client	&Server::getClient(int fd)
+{
+	return (_clients[fd]);
+}
+
+vecChan	&Server::getChannelList()
+{
+	return (_chanList);
 }
 
 void	Server::signalHandler(int signal)
@@ -185,18 +194,16 @@ void	Server::clientHandle(const int &fd){
 
 void	Server::parseInput(const int &fd, const std::string &input)
 {
-	vecstr command;
+	vecStr command;
 	(void) input;
 
-	command.push_back("USER");
-	command.push_back("1");
-	command.push_back("0");
-	command.push_back("*");
-	command.push_back("");
+	command.push_back("JOIN");
+	command.push_back("#abc,#def,&ghi");
+	command.push_back("abc,def");
 //_clients[fd]._registered = true;
 _clients[fd].setPass();
 _clients[fd].setNickName("TOTO");
-	if (command[0] == "USER" || command[1] == "USER")
-		user_cmd(fd, command, *this);
+	if (command[0] == "JOIN" || command[1] == "JOIN")
+		join_cmd(fd, command, *this);
 	std::cout << _clients[fd].getNickName() << std::endl;
 }
