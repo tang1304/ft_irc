@@ -6,7 +6,7 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 12:49:59 by tgellon           #+#    #+#             */
-/*   Updated: 2024/01/29 09:58:08 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/01/29 15:14:07 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,11 @@ const std::string	&Client::getBufferRead() const{
 const std::string	&Client::getBufferSend() const
 {
 	return (_bufferSend);
+}
+
+const int	&Client::getFd() const
+{
+	return (_clientFd);
 }
 
 bool	Client::getDisconnect() const

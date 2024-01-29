@@ -6,7 +6,7 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:03:20 by tgellon           #+#    #+#             */
-/*   Updated: 2024/01/29 09:56:27 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/01/29 15:59:29 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,12 @@
 class Channel;
 class Client;
 
-typedef std::vector<std::string>	vecstr;
-typedef std::map<int, Client>		ClientMap;
+typedef std::vector<std::string>		vecstr;
+typedef std::vector<Channel>			vecChannel;
+typedef std::vector<Channel>::iterator	itVecChannel;
+typedef std::vector<Client>				vecClient;
+typedef std::vector<Client>::iterator	itVecClient;
+typedef std::map<int, Client>			ClientMap;
 
 extern int	signalStatus;
 
@@ -29,6 +33,7 @@ class Server{
 private:
 
 	ClientMap				_clients;
+	vecChannel				_channels;
 	int						_port;
 	std::string				_password;
 	int						_socketFd;
@@ -44,6 +49,7 @@ public:
 
 	std::string	getPassword() const;
 	ClientMap	&getClientMap();
+	vecChannel	&getChannelVec();
 	void		cmdInit();
 	static void	signalHandler(int signal); //static because of signal() that can' t accept member function
 	void		runningLoop();
@@ -52,12 +58,11 @@ public:
 	void		clientHandle(const int &fd);
 	void		parseInput(const int &fd, std::string &input);
 	void		msgToClient(const int &fd, const std::string &msg);
-
-
 };
 
 int	pass_cmd(int fd, vecStr &cmd, Server &serv);
 int	nick_cmd(int fd, vecstr &cmd, Server &serv);
 int user_cmd(int fd, vecstr &cmd, Server &serv);
+int quit_cmd(int &fd, vecstr &cmd, Server &serv);
 
 #endif

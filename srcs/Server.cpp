@@ -6,7 +6,7 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:03:01 by tgellon           #+#    #+#             */
-/*   Updated: 2024/01/29 10:37:47 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/01/29 13:59:32 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,11 @@ std::string	Server::getPassword() const
 ClientMap &Server::getClientMap()
 {
 	return (_clients);
+}
+
+vecChannel &Server::getChannelVec()
+{
+	return (_channels);
 }
 
 void	Server::signalHandler(int signal)
@@ -159,6 +164,11 @@ void	Server::parseInput(const int &fd, std::string &input){
 		return ;
 	itMapCmds	it = _commandsList.find(command[0]);
 std::cout << "cmd: " << command[0] << std::endl;
+	if (it != _commandsList.end() && (command[0] != "PASS" && command[0] != "USER" && command[0] != "NICK")\
+		&& _clients[fd].getDisconnect()){
+		_clients[fd].setBufferSend(ERR_NOTREGISTERED(_clients[fd].getNickName()), 1);
+		return ;
+		}
 	if (it != _commandsList.end()){
 		it->second(fd, command, *this);
 	}
