@@ -6,7 +6,7 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:03:20 by tgellon           #+#    #+#             */
-/*   Updated: 2024/01/25 13:20:34 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/01/29 09:56:27 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ private:
 	int						_socketFd;
 	std::vector<pollfd>		_pollFds; // To use poll(), keeps track of fds for multiple clients
 	mapCmds					_commandsList;
+
 	Server();
 
 public:
@@ -51,9 +52,12 @@ public:
 	void		clientHandle(const int &fd);
 	void		parseInput(const int &fd, std::string &input);
 	void		msgToClient(const int &fd, const std::string &msg);
+
+
 };
 
-void	pass_cmd(int fd, vecstr& cmd, Server& serv);
-void	nick_cmd(int fd, vecstr& cmd, Server& serv);
+int	pass_cmd(int fd, vecStr &cmd, Server &serv);
+int	nick_cmd(int fd, vecstr &cmd, Server &serv);
+int user_cmd(int fd, vecstr &cmd, Server &serv);
 
 #endif
