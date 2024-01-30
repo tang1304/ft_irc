@@ -6,7 +6,7 @@
 /*   By: rrebois <rrebois@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:15:06 by tgellon           #+#    #+#             */
-/*   Updated: 2024/01/30 11:11:49 by rrebois          ###   ########lyon.fr   */
+/*   Updated: 2024/01/30 15:53:58 by rrebois          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,28 +25,37 @@ private:
 	std::string	_password;
 	vecCli		_usersJoin;
 	vecCli		_chanop;
+	vecStr		_banned; // peut etre a mettre dans client
+	vecStr		_invited;
 	bool		_privated; // invite only or not / false
 	bool		_changeTopic; // false = anyone true = chanops only / false
+	bool		_limitUser;
 	// bool		_passOnOff; // on?
 	int			_connected; //number of users/chanops connected
 	int			_id;
 
 public:
 	void				setId(int i);
-	void				setPrivateChan();
+	void				setPrivated();
 	void				setChangeTopic();
-
+	void				setLimitUser();
 	void				addUser(Client &user);
 	void				addChanop(Client &user);
+	void				addBanned(std::string nickName);
+	void				addInvited(std::string nickName);
 	void				removeUser(Client &user);
 	void				removeChanop(Client &user);
+	void				removeBan(Client &user);
 
 	const int			&getConnected() const;
 	const std::string	&getPassword() const;
+	const std::string	&getName() const;
 	const vecCli		&getUsersJoin() const;
 	const vecCli		&getChanop() const;
-	const std::string	&getName() const;
-
+	const vecStr		&getBanned() const;
+	const vecStr		&getInvited() const;
+	const bool			&getLimitUser() const;
+	const bool			&getPrivated() const;
 	// void	giveChanopStatus();
 
 	Channel(std::string name, std::string key);
