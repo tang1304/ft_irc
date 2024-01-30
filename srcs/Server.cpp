@@ -6,7 +6,7 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:03:01 by tgellon           #+#    #+#             */
-/*   Updated: 2024/01/29 13:59:32 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/01/30 16:20:25 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,8 +45,9 @@ void	Server::cmdInit(){
 	_commandsList["PASS"] = &pass_cmd;
 	_commandsList["USER"] = &user_cmd;
 	_commandsList["NICK"] = &nick_cmd;
+	_commandsList["CAP"] = &cap_cmd;
+	_commandsList["QUIT"] = &quit_cmd;
 	// _commandsList["PING"] = &ping;
-	// _commandsList["QUIT"] = &quit;
 	// _commandsList["PRIVMSG"] = &privmsg;
 	// _commandsList["JOIN"] = &join;
 	// _commandsList["PART"] = &part;
@@ -89,7 +90,7 @@ void	Server::runningLoop(){
 			throw (std::runtime_error("Error: poll() failed"));
 		for (size_t i = 0; i < _pollFds.size(); ++i){
 			if (_pollFds[i].revents & POLLIN){ //there is data to read
-				if (_pollFds[i].fd == _pollFds[0].fd){ // or it->fd == _socketFd ? // socket fd -> means a new connection
+				if (_pollFds[i].fd == _pollFds[0].fd){ // socket fd -> means a new connection
 					clientConnexion();
 				}
 				else{ // means you're on an existing client -> handle client data
@@ -132,8 +133,8 @@ void	Server::clientHandle(const int &fd){
 	char	buffer[BUFFER_SIZE];
 	int		bytesRead = 0;
 
-	memset(buffer, 0, BUFFER_SIZE);
-	bytesRead = recv(fd, buffer, BUFFER_SIZE, 0);
+	memset(&buffer, 0, BUFFER_SIZE);
+	bytesRead = recv(fd, buffer, sizeof(buffer), 0);
 	if (bytesRead == -1){
 		std::cerr << RED << "Error: recv() failed: " << strerror(errno) << DEFAULT << std::endl;
 		clientDisconnection(fd);
@@ -141,7 +142,7 @@ void	Server::clientHandle(const int &fd){
 	else if (bytesRead == 0)
 		clientDisconnection(fd);
 	else{
-// std::cout << "buffer: " << buffer << std::endl;
+std::cout << "buffer: " << buffer << "." << std::endl;
 		std::string	buf(buffer);
 		if (buf.empty() || buf == "\r\n")
 			return ;
@@ -159,11 +160,13 @@ void	Server::clientHandle(const int &fd){
 void	Server::parseInput(const int &fd, std::string &input){
 	vecStr	command;
 
+std::cout << "COMMANDE " << std::endl;
 	command = splitCmd(input, " ");
 	if (command.empty())
 		return ;
 	itMapCmds	it = _commandsList.find(command[0]);
-std::cout << "cmd: " << command[0] << std::endl;
+for (size_t i = 0; i < command.size(); i++)
+std::cout << "[SERVER] cmd: " << i << " " << command[i] << "." << std::endl;
 	if (it != _commandsList.end() && (command[0] != "PASS" && command[0] != "USER" && command[0] != "NICK")\
 		&& _clients[fd].getDisconnect()){
 		_clients[fd].setBufferSend(ERR_NOTREGISTERED(_clients[fd].getNickName()), 1);
@@ -175,4 +178,12 @@ std::cout << "cmd: " << command[0] << std::endl;
 	else {
 		_clients[fd].setBufferSend(ERR_UNKNOWNCOMMAND(_clients[fd].getNickName(), command[0]), 1);
 	}
+}
+
+void	Server::registrationDone(int &fd){
+	_clients[fd].setBufferSend(RPL_WELCOME(_clients[fd].getNickName(), _clients[fd].getUserName()), 1);
+	_clients[fd].setBufferSend(RPL_YOURHOST(_clients[fd].getNickName()), 1);
+	_clients[fd].setBufferSend(RPL_CREATED(_clients[fd].getNickName(), "2024"), 1);
+	_clients[fd].setBufferSend(RPL_MYINFO(_clients[fd].getNickName()), 1);
+	_clients[fd].setBufferSend(RPL_ISUPPORT(_clients[fd].getNickName(), "token"), 1);
 }

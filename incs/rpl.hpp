@@ -6,15 +6,33 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 16:21:25 by tgellon           #+#    #+#             */
-/*   Updated: 2024/01/29 16:06:23 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/01/30 14:19:26 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef RPL_HPP
 # define RPL_HPP
 
-# define RPL_WELCOME(user_id, nickname) (":localhost 001 " + nickname + " :Welcome to the Internet Relay Network " + user_id + "\r\n")
+# include "config.hpp"
+
 # define RPL_QUIT(nick) (nick + " left the channel\r\n")
+
+//	1
+# define RPL_WELCOME( nickname, user_id) (":" + SERVERNAME + " 001 " + nickname + \
+	" :Welcome to the" + SERVERNAME + " Network, " + user_id + "[!" + user_id + "@" + LOCALHOST + "]\r\n")
+
+// 2
+# define RPL_YOURHOST(client) (":" + SERVERNAME + " 002 " + client + " :Your host is " + SERVERNAME \
+	+ ", running version 1.0\r\n")
+
+// 3
+# define RPL_CREATED(client, date) (":" + SERVERNAME + " 003 " + client + " :This server was created " + date + "\r\n")
+
+//4
+# define RPL_MYINFO(client) (":" + SERVERNAME + " 004 " + client + " " + SERVERNAME + " 1.0, -+iotlk\r\n")
+
+//5
+# define RPL_ISUPPORT(client, tokens) (":" + SERVERNAME + " 005 " + client + " " + tokens + "\r\n")
 
 # define ERROR(error) ("ERROR: " + error + "\r\n")
 # define ERR_NEEDMOREPARAMS(client, cmd) (client + " " + cmd + " :Not enough parameters\r\n")
@@ -30,4 +48,5 @@
 
 # define ERR_PASSFIRST(client) (client + " :Must confirm password first\r\n")
 # define ERR_NICKFIRST(client) (client + " :Must set nickname first\r\n")
+
 #endif
