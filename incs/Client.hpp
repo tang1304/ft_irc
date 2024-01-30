@@ -6,7 +6,7 @@
 /*   By: rrebois <rrebois@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:14:10 by tgellon           #+#    #+#             */
-/*   Updated: 2024/01/29 11:16:44 by rrebois          ###   ########lyon.fr   */
+/*   Updated: 2024/01/30 11:12:25 by rrebois          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ public:
 	bool				getRegistered() const;
 	bool				getDisconnect() const;
 	bool				getPass() const;
+	const int			&getChanCount() const;
 
 	void				setNickName(const std::string &nickName);
 	void				setUsername(const std::string &userName);
@@ -53,6 +54,7 @@ public:
 	void				setDisconnect();
 	void				setPass();
 	void				setRegistered();
+	void				setChanCount(int i);
 };
 
 #endif

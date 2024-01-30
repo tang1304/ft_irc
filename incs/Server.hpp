@@ -6,7 +6,7 @@
 /*   By: rrebois <rrebois@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:03:20 by tgellon           #+#    #+#             */
-/*   Updated: 2024/01/29 15:35:45 by rrebois          ###   ########lyon.fr   */
+/*   Updated: 2024/01/30 11:21:02 by rrebois          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,19 +40,20 @@ public:
 	~Server();
 	Server(const int &port, const std::string &password);
 
-	std::string	getPassword() const;
-	clientMap	&getClientMap();
-	Client		&getClient(int fd); // en template??
-	vecChan		&getChannelList();
-	void		cmdInit();
-	static void	signalHandler(int signal); //static because of signal() that can' t accept member function
-	void		runningLoop();
-	void		clientConnexion();
-	void		clientDisconnection(const int &fd);
-	void		clientHandle(const int &fd);
-	void		parseInput(const int &fd, const std::string &input);
-	void		msgToClient(const int &fd, const std::string &msg);
-
+	const std::string	&getPassword() const;
+	clientMap			&getClientMap();
+	Client				&getClient(int fd); // en template??
+	const vecChan		&getChanList() const;
+	void				cmdInit();
+	static void			signalHandler(int signal); //static because of signal() that can' t accept member function
+	void				runningLoop();
+	void				clientConnexion();
+	void				clientDisconnection(const int &fd);
+	void				clientHandle(const int &fd);
+	void				parseInput(const int &fd, const std::string &input);
+	void				msgToClient(const int &fd, const std::string &msg);
+	void				addChan(std::string chan, std::string key, Client user);
+	void				removeChan(int id);
 };
 
 #endif
