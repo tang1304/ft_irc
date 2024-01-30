@@ -6,7 +6,7 @@
 /*   By: rrebois <rrebois@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:03:01 by tgellon           #+#    #+#             */
-/*   Updated: 2024/01/29 15:36:05 by rrebois          ###   ########lyon.fr   */
+/*   Updated: 2024/01/30 11:21:44 by rrebois          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ Server::Server(const int &port, const std::string &password): _port(port), _pass
 // 	_commandsList["LIST"] = &list;
 // }
 
-std::string	Server::getPassword() const
+const std::string	&Server::getPassword() const
 {
 	return (_password);
 }
@@ -70,9 +70,31 @@ Client	&Server::getClient(int fd)
 	return (_clients[fd]);
 }
 
-vecChan	&Server::getChannelList()
+const vecChan	&Server::getChanList() const
 {
 	return (_chanList);
+}
+
+void	Server::addChan(std::string chan, std::string key, Client user)
+{
+	int	j = _chanList.size();
+	Channel	newChan(chan, key);
+
+	newChan.setId(j);
+	newChan.addChanop(user);
+	_chanList.push_back(newChan);
+}
+
+void	Server::removeChan(int id)
+{
+	int	i = 0;
+	_chanList.erase(_chanList.begin() + id);
+
+	for (vecChan::iterator it = _chanList.begin(); it != _chanList.end(); it++)
+	{
+		it->setId(i);
+		i++;
+	}
 }
 
 void	Server::signalHandler(int signal)

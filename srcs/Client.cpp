@@ -6,7 +6,7 @@
 /*   By: rrebois <rrebois@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 12:49:59 by tgellon           #+#    #+#             */
-/*   Updated: 2024/01/29 11:28:34 by rrebois          ###   ########lyon.fr   */
+/*   Updated: 2024/01/30 11:13:18 by rrebois          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,11 @@ bool	Client::getRegistered() const
 	return (_registered);
 }
 
+const int	&Client::getChanCount() const
+{
+	return (_chanCount);
+}
+
 void	Client::setNickName(const std::string &nickName){
 	_nickName = nickName;
 }
@@ -97,4 +102,12 @@ void	Client::setBufferRead(const std::string &read, int i){
 void	Client::setBufferSend(const std::string &msg)
 {
 	_bufferSend += msg;
+}
+
+void	Client::setChanCount(int i)
+{
+	if (i)
+		_chanCount++;
+	else
+		_chanCount--;
 }
