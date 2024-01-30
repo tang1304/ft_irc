@@ -6,7 +6,7 @@
 /*   By: rrebois <rrebois@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/17 15:45:59 by tgellon           #+#    #+#             */
-/*   Updated: 2024/01/30 11:17:45 by rrebois          ###   ########lyon.fr   */
+/*   Updated: 2024/01/30 11:37:55 by rrebois          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@
 # define NICKLEN 9
 # define USERLEN 12
 # define CHANMAXUSER 10
-# define USERCHANLIMIT 2
+# define USERCHANLIMIT 5
 
 # define USAGE "Error\nThere must be 2 arguments : ./ircserv <port> <password>"
 

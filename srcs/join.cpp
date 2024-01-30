@@ -36,7 +36,8 @@ static int check_chan_name(std::string name)
 {
 	for (size_t i = 0; i < name.size(); i++)
 	{
-		if (name.c_str()[i] == 7 || name.c_str()[i] == ' ')
+		if (name.c_str()[i] == 7 || name.c_str()[i] == ' ' || \
+			(name.c_str()[0] != '#' && name.c_str()[0] != '&'))
 			return (0);
 	}
 	return (1);
@@ -44,9 +45,15 @@ static int check_chan_name(std::string name)
 
 static int	user_create_chan(vecPair::iterator &it, Server &serv, Client &user)
 {
-	if (!check_chan_name(it->first) || user.getChanCount() == USERCHANLIMIT)
-		return (0);
+	if (!check_chan_name(it->first))
+		return (user.setBufferSend(ERR_BADCHANNAME(user.getNickName(), it->first)), 0); // send here?
+	if (user.getChanCount() == USERCHANLIMIT)
+		return (user.setBufferSend(ERR_TOOMANYCHANNELS(user.getNickName(), it->first)), 0);
 	serv.addChan(it->first, it->second, user);
+
+std::cout << std::endl;
+std::cout << "User chan count " << user.getChanCount() << std::endl;
+std::cout << std::endl;
 	return (1);
 }
 
@@ -70,7 +77,7 @@ int	join_cmd(int fd, vecStr &cmd, Server &serv)
 	// }
 // END TEST
 	if (!check_chan_first_char(chanPass) && cmd.size() < 3)
-		return (ERR_NEEDMOREPARAMS(user.getNickName(), cmd[1]), 1);
+		return (serv.getClientMap()[fd].setBufferSend(ERR_NEEDMOREPARAMS(user.getNickName(), cmd[1])), 1);
 	for (vecPair::iterator it = chanPass.begin(); it != chanPass.end(); it++)
 	{
 		exists = false;
@@ -82,10 +89,7 @@ int	join_cmd(int fd, vecStr &cmd, Server &serv)
 		if (exists)
 			user_join_chan();
 		else
-		{
-			if (!user_create_chan(it, serv, user))
-				std::cout << "Bad chan name" << std::endl; // ERREUR a ajouter faut pas return, just display erreur
-		}
+			user_create_chan(it, serv, user);
 	}
 
 	// TEST

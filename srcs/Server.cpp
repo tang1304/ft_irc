@@ -6,7 +6,7 @@
 /*   By: rrebois <rrebois@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:03:01 by tgellon           #+#    #+#             */
-/*   Updated: 2024/01/30 11:21:44 by rrebois          ###   ########lyon.fr   */
+/*   Updated: 2024/01/30 11:52:21 by rrebois          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,13 +75,14 @@ const vecChan	&Server::getChanList() const
 	return (_chanList);
 }
 
-void	Server::addChan(std::string chan, std::string key, Client user)
+void	Server::addChan(std::string chan, std::string key, Client &user)
 {
 	int	j = _chanList.size();
 	Channel	newChan(chan, key);
 
 	newChan.setId(j);
 	newChan.addChanop(user);
+	user.setChanCount(1);
 	_chanList.push_back(newChan);
 }
 
@@ -220,7 +221,7 @@ void	Server::parseInput(const int &fd, const std::string &input)
 	(void) input;
 
 	command.push_back("JOIN");
-	command.push_back("#abc,#def,&ghi");
+	command.push_back("#abc,#def,&ghi,j kl");
 	command.push_back("abc,def");
 //_clients[fd]._registered = true;
 _clients[fd].setPass();

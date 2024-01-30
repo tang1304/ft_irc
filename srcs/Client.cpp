@@ -6,7 +6,7 @@
 /*   By: rrebois <rrebois@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 12:49:59 by tgellon           #+#    #+#             */
-/*   Updated: 2024/01/30 11:13:18 by rrebois          ###   ########lyon.fr   */
+/*   Updated: 2024/01/30 11:36:38 by rrebois          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,4 +110,5 @@ void	Client::setChanCount(int i)
 		_chanCount++;
 	else
 		_chanCount--;
+std::cout << "User chan count in incre " << _chanCount << std::endl;
 }
