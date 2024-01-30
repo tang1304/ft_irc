@@ -6,13 +6,23 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/29 10:41:49 by tgellon           #+#    #+#             */
-/*   Updated: 2024/01/29 16:36:15 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/01/30 13:19:36 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 # include "irc.hpp"
 
-int	quit_cmd(int &fd, vecStr &cmd, Server &serv){
+static void	msgToAll(Channel &chan, Client &client){
+	itVecClient		itClient = chan.getClientsVec().begin();
+
+	for (; itClient != chan.getClientsVec().end(); itClient++){
+		if (itClient->getFd() != client.getFd())
+			itClient->setBufferSend(RPL_QUIT(itClient->getNickName()), 1);
+	}
+}
+
+int	quit_cmd(int fd, vecStr &cmd, Server &serv){
+	(void)cmd;
 	itVecChannel	itChan = serv.getChannelVec().begin();
 
 	serv.getClientMap()[fd].setBufferSend("Disconnected from the server \r\n", 1);
@@ -27,13 +37,5 @@ int	quit_cmd(int &fd, vecStr &cmd, Server &serv){
 		}
 	}
 	serv.clientDisconnection(fd);
-}
-
-void	msgToAll(Channel &chan, Client &client){
-	itVecClient		itClient = chan.getClientsVec().begin();
-
-	for (; itClient != chan.getClientsVec().end(); itClient++){
-		if (itClient->getFd() != client.getFd())
-			itClient->setBufferSend(RPL_QUIT(itClient->getNickName()), 1);
-	}
+	return (1);
 }

@@ -6,7 +6,7 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/17 15:45:59 by tgellon           #+#    #+#             */
-/*   Updated: 2024/01/29 13:48:45 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/01/30 11:54:47 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,8 @@
 # define PURPLE "\033[35m"
 # define CYAN "\033[36m"
 
+# define SERVERNAME std::string("Ft_Irc")
+# define LOCALHOST std::string("127.0.0.1")
 # define BUFFER_SIZE 1000
 # define USERLEN 12
 

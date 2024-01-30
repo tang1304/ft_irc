@@ -10,7 +10,9 @@ SRCS =	main.cpp \
 		utils.cpp \
 		pass.cpp \
 		nick.cpp \
-		user.cpp
+		user.cpp \
+		cap.cpp \
+		quit.cpp
 OBJ_DIR = objs/
 OBJ = ${SRCS:%.cpp=${OBJ_DIR}%.o}
 NAME = ircserv

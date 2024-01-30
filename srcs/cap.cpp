@@ -1,28 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   irc.hpp                                            :+:      :+:    :+:   */
+/*   cap.cpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/18 10:20:16 by tgellon           #+#    #+#             */
-/*   Updated: 2024/01/30 09:18:07 by tgellon          ###   ########lyon.fr   */
+/*   Created: 2024/01/30 13:56:24 by tgellon           #+#    #+#             */
+/*   Updated: 2024/01/30 13:59:31 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef IRC_HPP
-# define IRC_HPP
+# include "irc.hpp"
 
-# include "config.hpp"
-# include "Server.hpp"
-# include "Channel.hpp"
-# include "Client.hpp"
-# include "rpl.hpp"
-
-class Server;
-
-int			checkArgs(const std::string &port, const std::string &password);
-size_t		len(std::string s);
-vecStr		splitCmd(std::string &str, const std::string &delim);
-
-#endif
+int	cap_cmd(int fd, vecstr& cmd, Server &serv){
+	(void) fd;
+	(void) cmd;
+	(void) serv;
+	return (1);
+}

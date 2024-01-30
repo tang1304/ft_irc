@@ -6,7 +6,7 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/25 13:22:51 by rrebois           #+#    #+#             */
-/*   Updated: 2024/01/29 10:01:13 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/01/30 12:11:55 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,5 +35,6 @@ int user_cmd(int fd, vecstr &cmd, Server &serv)
 	serv.getClientMap()[fd].setUsername(cmd[1]);
 	serv.getClientMap()[fd].setRealName(cmd[4]);
 	serv.getClientMap()[fd].setRegistered();
+	serv.registrationDone(fd);
 	return (0);
 }
