@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   rpl.hpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rrebois <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: rrebois <rrebois@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 16:21:25 by tgellon           #+#    #+#             */
-/*   Updated: 2024/01/25 13:22:36 by rrebois          ###   ########.fr       */
+/*   Updated: 2024/01/30 11:43:48 by rrebois          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,9 @@
 # define ERR_ERRONEUSNICKNAME(client, nick) (client + " " + nick + " :Erroneus nickname\r\n")
 # define ERR_NICKNAMEINUSE(client, nick) (client + " " + nick + " :Nickname is already in use\r\n")
 # define ERRUSER0(client) (client + " :Must set password first\r\n")
-
+# define ERR_TOOMANYCHANNELS(client, channel) (client + " " + channel + " :You have joined too many channels\r\n")
 
 # define ERR_PASSFIRST(client) (client + " :Must confirm password first\r\n")
 # define ERR_NICKFIRST(client) (client + " :Must set nickname first\r\n")
+# define ERR_BADCHANNAME(client, channel) (client + " " + channel + " :Bad channel name\r\n")
 #endif
