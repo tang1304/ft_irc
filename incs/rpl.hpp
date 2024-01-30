@@ -6,7 +6,7 @@
 /*   By: rrebois <rrebois@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 16:21:25 by tgellon           #+#    #+#             */
-/*   Updated: 2024/01/30 11:43:48 by rrebois          ###   ########lyon.fr   */
+/*   Updated: 2024/01/30 15:52:02 by rrebois          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,12 @@
 # define ERR_NICKNAMEINUSE(client, nick) (client + " " + nick + " :Nickname is already in use\r\n")
 # define ERRUSER0(client) (client + " :Must set password first\r\n")
 # define ERR_TOOMANYCHANNELS(client, channel) (client + " " + channel + " :You have joined too many channels\r\n")
+# define ERR_BADCHANNELKEY(client, channel) (client + " " + channel + " :Cannot join channel (+k)\r\n")
+# define ERR_BANNEDFROMCHAN(client, channel) (client + " " + channel + " :Cannot join channel (+b)\r\n")
+# define ERR_CHANNELISFULL(client, channel) (client + " " + channel + " :Cannot join channel (+l)\r\n")
+# define ERR_INVITEONLYCHAN(client, channel) (client + " " + channel + " :Cannot join channel (+i)\r\n")
+# define ERR_BADCHANMASK(channel) (channel + " :Bad Channel Mask\r\n")
 
 # define ERR_PASSFIRST(client) (client + " :Must confirm password first\r\n")
 # define ERR_NICKFIRST(client) (client + " :Must set nickname first\r\n")
-# define ERR_BADCHANNAME(client, channel) (client + " " + channel + " :Bad channel name\r\n")
 #endif

@@ -27,9 +27,37 @@ static int	check_chan_first_char(vecPair pair)
 	return (0);
 }
 
-static void	user_join_chan()
+static int	user_join_chan(vecPair::iterator &it, Server &serv, Client &user)
 {
-	return ;
+	vecChan::iterator	itc;
+	vecStr::const_iterator	itCli;
+	vecStr::const_iterator	itvit;
+
+	for (itc = serv.getChanList().begin(); itc != serv.getChanList().end(); itc++)
+	{
+		if (it->first == itc->getName())
+			break ;
+	}
+	if (it->second != itc->getPassword())
+		return (user.setBufferSend(ERR_BADCHANNELKEY(user.getNickName(), it->first)), 0);
+	for (itCli = itc->getBanned().begin(); itCli != itc->getBanned().end(); itCli++)
+	{
+		if (user.getNickName() == *itCli)
+			return (user.setBufferSend(ERR_BANNEDFROMCHAN(user.getNickName(), it->first)), 0);
+	}
+	if (itc->getConnected() == CHANMAXUSER && itc->getLimitUser())
+		return (user.setBufferSend(ERR_CHANNELISFULL(user.getNickName(), it->first)), 0);
+	if (itc->getPrivated())
+	{
+		for (itvit = itc->getInvited().begin(); itvit != itc->getInvited().end(); itvit++)
+		{
+			if (*itvit == user.getNickName())
+				itc->addUser(user); // + replies
+		}
+		return (user.setBufferSend(ERR_INVITEONLYCHAN(user.getNickName(), it->first)), 0);
+	}
+	itc->addUser(user); // + replies
+	return (1);
 }
 
 static int check_chan_name(std::string name)
@@ -46,19 +74,15 @@ static int check_chan_name(std::string name)
 static int	user_create_chan(vecPair::iterator &it, Server &serv, Client &user)
 {
 	if (!check_chan_name(it->first))
-		return (user.setBufferSend(ERR_BADCHANNAME(user.getNickName(), it->first)), 0); // send here?
+		return (user.setBufferSend(ERR_BADCHANMASK(it->first)), 0); // send here?
 	if (user.getChanCount() == USERCHANLIMIT)
 		return (user.setBufferSend(ERR_TOOMANYCHANNELS(user.getNickName(), it->first)), 0);
 	serv.addChan(it->first, it->second, user);
-
-std::cout << std::endl;
-std::cout << "User chan count " << user.getChanCount() << std::endl;
-std::cout << std::endl;
 	return (1);
 }
 
 int	join_cmd(int fd, vecStr &cmd, Server &serv)
-{
+{// regarder si user registered or not!!!
 	Client	user;
 	vecPair	chanPass;
 	bool	exists;
@@ -83,11 +107,11 @@ int	join_cmd(int fd, vecStr &cmd, Server &serv)
 		exists = false;
 		for (vecChan::const_iterator itc = serv.getChanList().begin(); itc != serv.getChanList().end(); itc++)
 		{
-			// if (it->first == *itc.getName())
-			// 	exists = true;
+			if (it->first == itc->getName())
+				exists = true;
 		}
 		if (exists)
-			user_join_chan();
+			user_join_chan(it, serv, user);
 		else
 			user_create_chan(it, serv, user);
 	}

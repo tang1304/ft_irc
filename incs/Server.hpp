@@ -6,7 +6,7 @@
 /*   By: rrebois <rrebois@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:03:20 by tgellon           #+#    #+#             */
-/*   Updated: 2024/01/30 11:37:00 by rrebois          ###   ########lyon.fr   */
+/*   Updated: 2024/01/30 16:07:25 by rrebois          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ public:
 	const std::string	&getPassword() const;
 	clientMap			&getClientMap();
 	Client				&getClient(int fd); // en template??
-	const vecChan		&getChanList() const;
+	vecChan				&getChanList();
 	void				cmdInit();
 	static void			signalHandler(int signal); //static because of signal() that can' t accept member function
 	void				runningLoop();

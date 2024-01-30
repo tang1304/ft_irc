@@ -13,37 +13,17 @@
 #include "../incs/Channel.hpp"
 
 Channel::Channel(std::string name, std::string key) :
-		_name(name), _password(key), _privated(false), _changeTopic(false),
-		_connected(0) {}
+		_name(name), _topic("No topic"), _password(key), _privated(false),
+		_changeTopic(false), _limitUser(false), _connected(0) {}
 
 Channel::~Channel() {}
 
-const std::string	&Channel::getName() const
+void	Channel::setId(int i)
 {
-	return (_name);
+	_id = i;
 }
 
-const int	&Channel::getConnected() const
-{
-	return (_connected);
-}
-
-const vecCli	&Channel::getUsersJoin() const
-{
-	return (_usersJoin);
-}
-
-const vecCli	&Channel::getChanop() const
-{
-	return (_chanop);
-}
-
-const std::string	&Channel::getPassword() const
-{
-	return (_password);
-}
-
-void	Channel::setPrivateChan()
+void	Channel::setPrivated()
 {
 	if (!_privated)
 		_privated = true;
@@ -59,9 +39,12 @@ void	Channel::setChangeTopic()
 		_changeTopic = true;
 }
 
-void	Channel::setId(int i)
+void	Channel::setLimitUser()
 {
-	_id = i;
+	if (_limitUser)
+		_limitUser = false;
+	else
+		_limitUser = true;
 }
 
 void	Channel::addUser(Client &user)
@@ -74,6 +57,16 @@ void	Channel::addChanop(Client &user)
 {
 	_chanop.push_back(user);
 	_connected++;
+}
+
+void	Channel::addBanned(std::string nickName)
+{
+	_banned.push_back(nickName);
+}
+
+void	Channel::addInvited(std::string nickName)
+{
+	_invited.push_back(nickName);
 }
 
 void	Channel::removeUser(Client &user)
@@ -106,4 +99,61 @@ void	Channel::removeChanop(Client &user)
 	// add if !_connected -> delete channel de server + call destuctor?
 }
 
+void	Channel::removeBan(Client &user)
+{
+	int	index = 0;
+
+	for (vecStr::iterator it = _banned.begin(); it != _banned.end(); it++)
+	{
+		if (user.getNickName() == *it)
+			break ;
+		index++;
+	}
+	_banned.erase(_banned.begin() + index);
+}
+
+const std::string	&Channel::getName() const
+{
+	return (_name);
+}
+
+const int	&Channel::getConnected() const
+{
+	return (_connected);
+}
+
+const vecCli	&Channel::getUsersJoin() const
+{
+	return (_usersJoin);
+}
+
+const vecCli	&Channel::getChanop() const
+{
+	return (_chanop);
+}
+
+const std::string	&Channel::getPassword() const
+{
+	return (_password);
+}
+
+const vecStr	&Channel::getBanned() const
+{
+	return (_banned);
+}
+
+const vecStr	&Channel::getInvited() const
+{
+	return (_invited);
+}
+
+const bool	&Channel::getLimitUser() const
+{
+	return (_limitUser);
+}
+
+const bool	&Channel::getPrivated() const
+{
+	return (_privated);
+}
 // void	Channel::giveChanopStatus()

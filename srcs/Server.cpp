@@ -6,7 +6,7 @@
 /*   By: rrebois <rrebois@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:03:01 by tgellon           #+#    #+#             */
-/*   Updated: 2024/01/30 11:52:21 by rrebois          ###   ########lyon.fr   */
+/*   Updated: 2024/01/30 16:12:39 by rrebois          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ Client	&Server::getClient(int fd)
 	return (_clients[fd]);
 }
 
-const vecChan	&Server::getChanList() const
+vecChan	&Server::getChanList()
 {
 	return (_chanList);
 }
@@ -220,12 +220,25 @@ void	Server::parseInput(const int &fd, const std::string &input)
 	vecStr command;
 	(void) input;
 
+if (fd == 4)
+{
 	command.push_back("JOIN");
 	command.push_back("#abc,#def,&ghi,j kl");
 	command.push_back("abc,def");
 //_clients[fd]._registered = true;
 _clients[fd].setPass();
 _clients[fd].setNickName("TOTO");
+}
+else
+{
+	command.push_back("JOIN");
+	command.push_back("#abc,#def,&jkl,j kl");
+	command.push_back("abc,def");
+//_clients[fd]._registered = true;
+_clients[fd].setPass();
+_clients[fd].setNickName("TITI");
+}
+
 	if (command[0] == "JOIN" || command[1] == "JOIN")
 		join_cmd(fd, command, *this);
 	std::cout << _clients[fd].getNickName() << std::endl;
