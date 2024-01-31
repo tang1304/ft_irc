@@ -49,8 +49,25 @@ void	Channel::setLimitUser()
 
 void	Channel::addUser(Client &user)
 {
+	vecCli::iterator	it;
+
+	for (it = _usersJoin.begin(); it != _usersJoin.end(); it++)
+	{
+		it->setBufferSend(RPL_USERJOIN(user.getNickName(), _name));
+		send(it->_clientFd, it->getBufferSend().c_str(), it->getBufferSend().length(), 0);
+		it->setBufferSend("");
+	}
+	for (it = _chanop.begin(); it != _chanop.end(); it++)
+	{
+		it->setBufferSend(RPL_USERJOIN(user.getNickName(), _name));
+		send(it->_clientFd, it->getBufferSend().c_str(), it->getBufferSend().length(), 0);
+		it->setBufferSend("");
+	}
 	_usersJoin.push_back(user);
 	_connected++;
+	user.setBufferSend(RPL_TOPIC(user.getNickName(), _name, _topic));
+	send(user._clientFd, user.getBufferSend().c_str(), user.getBufferSend().length(), 0);
+	user.setBufferSend("");
 }
 
 void	Channel::addChanop(Client &user)
@@ -122,12 +139,12 @@ const int	&Channel::getConnected() const
 	return (_connected);
 }
 
-const vecCli	&Channel::getUsersJoin() const
+vecCli	&Channel::getUsersJoin()
 {
 	return (_usersJoin);
 }
 
-const vecCli	&Channel::getChanop() const
+vecCli	&Channel::getChanop()
 {
 	return (_chanop);
 }

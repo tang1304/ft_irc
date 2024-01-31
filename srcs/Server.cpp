@@ -6,7 +6,7 @@
 /*   By: rrebois <rrebois@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:03:01 by tgellon           #+#    #+#             */
-/*   Updated: 2024/01/30 16:12:39 by rrebois          ###   ########lyon.fr   */
+/*   Updated: 2024/01/31 09:35:34 by rrebois          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -225,7 +225,7 @@ if (fd == 4)
 	command.push_back("JOIN");
 	command.push_back("#abc,#def,&ghi,j kl");
 	command.push_back("abc,def");
-//_clients[fd]._registered = true;
+_clients[fd]._registered = true;
 _clients[fd].setPass();
 _clients[fd].setNickName("TOTO");
 }
@@ -234,11 +234,10 @@ else
 	command.push_back("JOIN");
 	command.push_back("#abc,#def,&jkl,j kl");
 	command.push_back("abc,def");
-//_clients[fd]._registered = true;
+_clients[fd]._registered = true;
 _clients[fd].setPass();
 _clients[fd].setNickName("TITI");
 }
-
 	if (command[0] == "JOIN" || command[1] == "JOIN")
 		join_cmd(fd, command, *this);
 	std::cout << _clients[fd].getNickName() << std::endl;

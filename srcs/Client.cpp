@@ -6,7 +6,7 @@
 /*   By: rrebois <rrebois@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 12:49:59 by tgellon           #+#    #+#             */
-/*   Updated: 2024/01/30 11:36:38 by rrebois          ###   ########lyon.fr   */
+/*   Updated: 2024/01/31 09:00:47 by rrebois          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,7 +101,10 @@ void	Client::setBufferRead(const std::string &read, int i){
 
 void	Client::setBufferSend(const std::string &msg)
 {
-	_bufferSend += msg;
+	if (msg.empty())
+		_bufferSend = msg;
+	else
+		_bufferSend += msg;
 }
 
 void	Client::setChanCount(int i)
