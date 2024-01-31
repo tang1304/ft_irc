@@ -6,7 +6,7 @@
 /*   By: rrebois <rrebois@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 12:49:59 by tgellon           #+#    #+#             */
-/*   Updated: 2024/01/31 09:00:47 by rrebois          ###   ########lyon.fr   */
+/*   Updated: 2024/01/31 15:36:10 by rrebois          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,11 @@ bool	Client::getRegistered() const
 const int	&Client::getChanCount() const
 {
 	return (_chanCount);
+}
+
+const int	&Client::getClientFd() const
+{
+	return (_clientFd);
 }
 
 void	Client::setNickName(const std::string &nickName){
