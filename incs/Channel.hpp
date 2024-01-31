@@ -6,7 +6,7 @@
 /*   By: rrebois <rrebois@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:15:06 by tgellon           #+#    #+#             */
-/*   Updated: 2024/01/30 15:53:58 by rrebois          ###   ########lyon.fr   */
+/*   Updated: 2024/01/31 09:32:48 by rrebois          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,8 +50,8 @@ public:
 	const int			&getConnected() const;
 	const std::string	&getPassword() const;
 	const std::string	&getName() const;
-	const vecCli		&getUsersJoin() const;
-	const vecCli		&getChanop() const;
+	vecCli		&getUsersJoin();
+	vecCli		&getChanop();
 	const vecStr		&getBanned() const;
 	const vecStr		&getInvited() const;
 	const bool			&getLimitUser() const;

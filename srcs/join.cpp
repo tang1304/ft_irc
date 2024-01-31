@@ -27,7 +27,7 @@ static int	check_chan_first_char(vecPair pair)
 	return (0);
 }
 
-static int	user_join_chan(vecPair::iterator &it, Server &serv, Client &user)
+static void	user_join_chan(vecPair::iterator &it, Server &serv, Client &user)
 {
 	vecChan::iterator	itc;
 	vecStr::const_iterator	itCli;
@@ -39,25 +39,45 @@ static int	user_join_chan(vecPair::iterator &it, Server &serv, Client &user)
 			break ;
 	}
 	if (it->second != itc->getPassword())
-		return (user.setBufferSend(ERR_BADCHANNELKEY(user.getNickName(), it->first)), 0);
+	{
+		user.setBufferSend(ERR_BADCHANNELKEY(user.getNickName(), it->first));
+		send(user._clientFd, user.getBufferSend().c_str(), user.getBufferSend().length(), 0);
+		user.setBufferSend("");
+		return ;
+	}
 	for (itCli = itc->getBanned().begin(); itCli != itc->getBanned().end(); itCli++)
 	{
 		if (user.getNickName() == *itCli)
-			return (user.setBufferSend(ERR_BANNEDFROMCHAN(user.getNickName(), it->first)), 0);
+		{
+			user.setBufferSend(ERR_BANNEDFROMCHAN(user.getNickName(), it->first));
+			send(user._clientFd, user.getBufferSend().c_str(), user.getBufferSend().length(), 0);
+			user.setBufferSend("");
+			return ;
+		}
 	}
 	if (itc->getConnected() == CHANMAXUSER && itc->getLimitUser())
-		return (user.setBufferSend(ERR_CHANNELISFULL(user.getNickName(), it->first)), 0);
+	{
+		user.setBufferSend(ERR_CHANNELISFULL(user.getNickName(), it->first));
+		send(user._clientFd, user.getBufferSend().c_str(), user.getBufferSend().length(), 0);
+		user.setBufferSend("");
+		return ;
+	}
 	if (itc->getPrivated())
 	{
 		for (itvit = itc->getInvited().begin(); itvit != itc->getInvited().end(); itvit++)
 		{
 			if (*itvit == user.getNickName())
+			{
 				itc->addUser(user); // + replies
+				return ;
+			}
 		}
-		return (user.setBufferSend(ERR_INVITEONLYCHAN(user.getNickName(), it->first)), 0);
+		user.setBufferSend(ERR_INVITEONLYCHAN(user.getNickName(), it->first));
+		send(user._clientFd, user.getBufferSend().c_str(), user.getBufferSend().length(), 0);
+		user.setBufferSend("");
+		return ;
 	}
 	itc->addUser(user); // + replies
-	return (1);
 }
 
 static int check_chan_name(std::string name)
@@ -71,35 +91,35 @@ static int check_chan_name(std::string name)
 	return (1);
 }
 
-static int	user_create_chan(vecPair::iterator &it, Server &serv, Client &user)
+static void	user_create_chan(vecPair::iterator &it, Server &serv, Client &user)
 {
 	if (!check_chan_name(it->first))
-		return (user.setBufferSend(ERR_BADCHANMASK(it->first)), 0); // send here?
+	{
+		user.setBufferSend(ERR_BADCHANMASK(it->first));
+		send(user._clientFd, user.getBufferSend().c_str(), user.getBufferSend().length(), 0);
+		user.setBufferSend("");
+		return ;
+	}
 	if (user.getChanCount() == USERCHANLIMIT)
-		return (user.setBufferSend(ERR_TOOMANYCHANNELS(user.getNickName(), it->first)), 0);
-	serv.addChan(it->first, it->second, user);
-	return (1);
+	{
+		user.setBufferSend(ERR_TOOMANYCHANNELS(user.getNickName(), it->first));
+		send(user._clientFd, user.getBufferSend().c_str(), user.getBufferSend().length(), 0);
+		user.setBufferSend("");
+		return ;
+	}
+	serv.addChan(it->first, it->second, user); //+ replies
 }
 
 int	join_cmd(int fd, vecStr &cmd, Server &serv)
-{// regarder si user registered or not!!!
+{
 	Client	user;
 	vecPair	chanPass;
 	bool	exists;
 
 	chanPass = create_pair_cmd(cmd);
 	user = serv.getClient(fd);
-
-// TEST
-	// for (vecPair::iterator it = chanPass.begin(); it != chanPass.end(); it++)
-	// {
-	// 	std::cout << "Chan: " << it->first << " ";
-	// 	if (it->second.empty())
-	// 		std::cout << std::endl;
-	// 	else
-	// 		std::cout << "mdp: " << it->second << std::endl;
-	// }
-// END TEST
+	if (!user.getRegistered())
+		return (serv.getClientMap()[fd].setBufferSend(ERR_NOTREGISTERED(user.getNickName())), 1);
 	if (!check_chan_first_char(chanPass) && cmd.size() < 3)
 		return (serv.getClientMap()[fd].setBufferSend(ERR_NEEDMOREPARAMS(user.getNickName(), cmd[1])), 1);
 	for (vecPair::iterator it = chanPass.begin(); it != chanPass.end(); it++)
@@ -117,7 +137,7 @@ int	join_cmd(int fd, vecStr &cmd, Server &serv)
 	}
 
 	// TEST
-for (vecChan::const_iterator itc = serv.getChanList().begin(); itc != serv.getChanList().end(); itc++)
+for (vecChan::iterator itc = serv.getChanList().begin(); itc != serv.getChanList().end(); itc++)
 {
 	std::cout << "Chan " << itc->getName() << " created." << std::endl;
 	if (!itc->getPassword().empty())
@@ -125,13 +145,11 @@ for (vecChan::const_iterator itc = serv.getChanList().begin(); itc != serv.getCh
 	else
 		std::cout << "No password set for this channel." << std::endl;
 	std::cout << "Users connected " << itc->getConnected() << "." << std::endl;
-	for (vecCli::const_iterator ut = itc->getUsersJoin().begin(); ut != itc->getUsersJoin().end(); ut++)
+	for (vecCli::iterator ut = itc->getUsersJoin().begin(); ut != itc->getUsersJoin().end(); ut++)
 		std::cout << "user " << ut->getNickName() << " connected." << std::endl;
-	for (vecCli::const_iterator ut = itc->getChanop().begin(); ut != itc->getChanop().end(); ut++)
+	for (vecCli::iterator ut = itc->getChanop().begin(); ut != itc->getChanop().end(); ut++)
 		std::cout << "Chanop " << ut->getNickName() << " connected." << std::endl;
 }
 // END TEST
-
-	// for (vecPair::iterator it = chanPass.begin(); it != chanPass.end(); it++)
 	return (0);
 }
