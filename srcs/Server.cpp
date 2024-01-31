@@ -6,7 +6,7 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:03:01 by tgellon           #+#    #+#             */
-/*   Updated: 2024/01/30 16:20:25 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/01/31 13:10:59 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ void	Server::cmdInit(){
 	_commandsList["PASS"] = &pass_cmd;
 	_commandsList["USER"] = &user_cmd;
 	_commandsList["NICK"] = &nick_cmd;
-	_commandsList["CAP"] = &cap_cmd;
+	// _commandsList["CAP"] = &cap_cmd;
 	_commandsList["QUIT"] = &quit_cmd;
 	// _commandsList["PING"] = &ping;
 	// _commandsList["PRIVMSG"] = &privmsg;
@@ -142,7 +142,7 @@ void	Server::clientHandle(const int &fd){
 	else if (bytesRead == 0)
 		clientDisconnection(fd);
 	else{
-std::cout << "buffer: " << buffer << "." << std::endl;
+std::cout << BLUE << "buffer: " << buffer << "." << DEFAULT << std::endl;
 		std::string	buf(buffer);
 		if (buf.empty() || buf == "\r\n")
 			return ;
@@ -160,13 +160,13 @@ std::cout << "buffer: " << buffer << "." << std::endl;
 void	Server::parseInput(const int &fd, std::string &input){
 	vecStr	command;
 
-std::cout << "COMMANDE " << std::endl;
+std::cout << GREEN << "COMMANDE " << DEFAULT << std::endl;
 	command = splitCmd(input, " ");
 	if (command.empty())
 		return ;
 	itMapCmds	it = _commandsList.find(command[0]);
 for (size_t i = 0; i < command.size(); i++)
-std::cout << "[SERVER] cmd: " << i << " " << command[i] << "." << std::endl;
+std::cout << YELLOW << "[SERVER] cmd: " << i << " " << command[i] << "." << DEFAULT << std::endl;
 	if (it != _commandsList.end() && (command[0] != "PASS" && command[0] != "USER" && command[0] != "NICK")\
 		&& _clients[fd].getDisconnect()){
 		_clients[fd].setBufferSend(ERR_NOTREGISTERED(_clients[fd].getNickName()), 1);
@@ -175,7 +175,7 @@ std::cout << "[SERVER] cmd: " << i << " " << command[i] << "." << std::endl;
 	if (it != _commandsList.end()){
 		it->second(fd, command, *this);
 	}
-	else {
+	else if (command[0] != "CAP"){
 		_clients[fd].setBufferSend(ERR_UNKNOWNCOMMAND(_clients[fd].getNickName(), command[0]), 1);
 	}
 }
