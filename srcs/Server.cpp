@@ -6,7 +6,7 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:03:01 by tgellon           #+#    #+#             */
-/*   Updated: 2024/01/31 14:01:15 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/01/31 15:29:45 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -161,14 +161,14 @@ void	Server::parseInput(const int &fd, std::string &input){
 	vecStr		command;
 	vecVecStr	vecCommand;
 
-std::cout << "COMMANDE " << std::endl;
-	command = splitCmds(input, "\n");
+	command = splitCmds(input, "\r\n");
 	vecCommand = splitCmd(command, " ");
 	if (command.empty())
 		return ;
 	itVecVecStr	itvv = vecCommand.begin();
 	for (; itvv != vecCommand.end(); itvv++)
 	{
+std::cout << "COMMANDE " << std::endl;
 itVecStr	i = itvv->begin();
 for (; i < itvv->end(); i++){
 	std::cout << YELLOW << "[SERVER] cmd: " << *i << "." << DEFAULT << std::endl;
@@ -183,6 +183,7 @@ for (; i < itvv->end(); i++){
 			it->second(fd, *itvv, *this);
 		}
 		else if (*itvv->begin() != "CAP"){
+			_clients[fd].setBufferSend(*itvv->begin(), 1);
 			_clients[fd].setBufferSend(ERR_UNKNOWNCOMMAND(_clients[fd].getNickName(), *itvv->begin()), 1);
 		}
 	}

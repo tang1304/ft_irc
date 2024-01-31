@@ -6,7 +6,7 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 10:16:34 by tgellon           #+#    #+#             */
-/*   Updated: 2024/01/31 11:23:12 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/01/31 16:05:03 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,19 +41,19 @@ vecStr	splitCmds(std::string &input, const std::string &delimiter){
 	size_t		prevPos = 0;
 	std::string	tmp;
 
-	while ((pos = input.find(delimiter, prevPos)) != std::string::npos){
+	while ((pos = input.find(delimiter, prevPos)) != std::string::npos && pos != input.size() - 2){
 		tmp = input.substr(prevPos, pos - prevPos);
 		if (!tmp.empty())
 			result.push_back(tmp);
-		prevPos = pos + 1;
+		prevPos = pos + 2;
+		tmp.clear();
 	}
-	tmp = input.substr(prevPos, input.find("\r\n") - prevPos);
+	tmp = input.substr(prevPos, input.size() - prevPos - 2);
 	if (!tmp.empty())
 		result.push_back(tmp);
 vecStr::iterator it = result.begin();
-while (it != result.end()){
-std::cout << BLUE << "Cmd: " << *it << "." << DEFAULT << std::endl;
-it++;
+for (; it != result.end(); it++){
+std::cout << BLUE << "Cmd: " << *it << ". Size: " << it->size() << DEFAULT << std::endl;
 	}
 	return (result);
 }
