@@ -6,7 +6,7 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:03:01 by tgellon           #+#    #+#             */
-/*   Updated: 2024/01/31 11:06:02 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/01/31 11:38:25 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -169,9 +169,11 @@ std::cout << "COMMANDE " << std::endl;
 	itVecVecStr	itvv = vecCommand.begin();
 	for (; itvv != vecCommand.end(); itvv++)
 	{
+itVecStr	i = itvv->begin();
+for (; i < itvv->end(); i++){
+	std::cout << YELLOW << "[SERVER] cmd: " << *i << "." << DEFAULT << std::endl;
+}
 		itMapCmds	it = _commandsList.find(*itvv->begin());
-// for (size_t i = 0; i < command.size(); i++)
-// std::cout << "[SERVER] cmd: " << i << " " << command[i] << "." << std::endl;
 		if (it != _commandsList.end() && (*itvv->begin() != "PASS" && *itvv->begin() != "USER" && *itvv->begin() != "NICK")\
 			&& _clients[fd].getDisconnect()){
 			_clients[fd].setBufferSend(ERR_NOTREGISTERED(_clients[fd].getNickName()), 1);

@@ -6,7 +6,7 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 10:16:34 by tgellon           #+#    #+#             */
-/*   Updated: 2024/01/31 11:09:53 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/01/31 11:23:12 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,11 @@ vecStr	splitCmds(std::string &input, const std::string &delimiter){
 	tmp = input.substr(prevPos, input.find("\r\n") - prevPos);
 	if (!tmp.empty())
 		result.push_back(tmp);
+vecStr::iterator it = result.begin();
+while (it != result.end()){
+std::cout << BLUE << "Cmd: " << *it << "." << DEFAULT << std::endl;
+it++;
+	}
 	return (result);
 }
 
@@ -81,11 +86,6 @@ vecVecStr	splitCmd(vecStr &cmds, const std::string &delimiter){
 		if (colonStr.size() > 0)
 			cmd.push_back(colonStr);
 		result.push_back(cmd);
-	vecStr::iterator it = cmd.begin();
-	while (it != cmd.end()){
-	std::cout << *it << "." << std::endl;
-	it++;
-	}
 	}
 	return (result);
 }
