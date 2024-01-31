@@ -6,7 +6,7 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:03:20 by tgellon           #+#    #+#             */
-/*   Updated: 2024/01/30 13:58:20 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/01/31 10:18:50 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@
 class Channel;
 class Client;
 
-typedef std::vector<std::string>		vecstr;
 typedef std::vector<Channel>			vecChannel;
 typedef std::vector<Channel>::iterator	itVecChannel;
 typedef std::vector<Client>				vecClient;
@@ -61,9 +60,9 @@ public:
 };
 
 int	pass_cmd(int fd, vecStr &cmd, Server &serv);
-int	nick_cmd(int fd, vecstr &cmd, Server &serv);
-int	user_cmd(int fd, vecstr &cmd, Server &serv);
-int	cap_cmd(int fd, vecstr &cmd, Server &serv);
-int	quit_cmd(int fd, vecstr &cmd, Server &serv);
+int	nick_cmd(int fd, vecStr &cmd, Server &serv);
+int	user_cmd(int fd, vecStr &cmd, Server &serv);
+int	cap_cmd(int fd, vecStr &cmd, Server &serv);
+int	quit_cmd(int fd, vecStr &cmd, Server &serv);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 15:06:38 by rrebois           #+#    #+#             */
-/*   Updated: 2024/01/30 12:11:14 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/01/31 10:19:06 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ static int check_password_used(std::string nick, Server &serv)
 	return (1);
 }
 
-int	nick_cmd(int fd, vecstr& cmd, Server &serv)
+int	nick_cmd(int fd, vecStr& cmd, Server &serv)
 {
 	std::string 		ERR;
 	std::stringstream	ss;
