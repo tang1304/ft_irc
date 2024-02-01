@@ -6,7 +6,7 @@
 /*   By: rrebois <rrebois@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:03:20 by tgellon           #+#    #+#             */
-/*   Updated: 2024/01/30 16:07:25 by rrebois          ###   ########lyon.fr   */
+/*   Updated: 2024/02/01 09:42:11 by rrebois          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,10 +50,11 @@ public:
 	void				clientConnexion();
 	void				clientDisconnection(const int &fd);
 	void				clientHandle(const int &fd);
-	void				parseInput(const int &fd, const std::string &input);
+	void				parseInput(const int &fd, std::string &input);
 	void				msgToClient(const int &fd, const std::string &msg);
 	void				addChan(std::string chan, std::string key, Client &user);
 	void				removeChan(int id);
+	void				registrationDone(int &fd);
 };
 
 #endif

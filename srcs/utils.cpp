@@ -6,7 +6,7 @@
 /*   By: rrebois <rrebois@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 10:16:34 by tgellon           #+#    #+#             */
-/*   Updated: 2024/01/29 12:13:12 by rrebois          ###   ########lyon.fr   */
+/*   Updated: 2024/02/01 09:29:09 by rrebois          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ vecStr	splitCmd(std::string &input, const std::string &delimiter){
 		result.push_back(tmp);
 	if (colonStr.size() > 0)
 		result.push_back(colonStr);
-// vecStr::iterator it = result.begin();
+// itVecStr it = result.begin();
 // while (it != result.end()){
 // std::cout << *it << "." << std::endl;
 // it++;

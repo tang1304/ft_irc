@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   config.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: rrebois <rrebois@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/17 15:45:59 by tgellon           #+#    #+#             */
-/*   Updated: 2024/01/30 11:54:47 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/01 09:59:13 by rrebois          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,18 +48,20 @@ class Server;
 class Client;
 class Channel;
 
-typedef std::vector<pollfd>::iterator				itVecPollfd;
-typedef std::vector<Channel>								vecChan;
-typedef std::vector<Channel>::iterator	itVecChan;
-typedef std::vector<Client>									vecClient;
-typedef std::vector<Client>::iterator	itVecClient;
-typedef std::vector<std::string>							vecStr;
-typedef std::vector<std::string>::iterator					itVecStr;
-typedef std::map<int, Client>								clientMap;
-typedef std::vector<std::pair<std::string, std::string> >	vecPair;
-typedef void (*fctPointer)(int, vecStr, Server);
-typedef std::map<std::string, fctPointer>					mapCmds;
-typedef std::map<std::string, fctPointer>::iterator			itMapCmds;
+typedef std::vector<pollfd>::iterator								itVecPollfd;
+typedef std::vector<Channel>										vecChan;
+typedef std::vector<Channel>::iterator								itVecChan;
+typedef std::vector<Client>											vecClient;
+typedef std::vector<Client>::iterator								itVecClient;
+typedef std::vector<std::string>									vecStr;
+typedef std::vector<std::string>::iterator							itVecStr;
+typedef std::map<int, Client>										clientMap;
+typedef std::map<int, Client>::iterator								itClientMap;
+typedef std::vector<std::pair<std::string, std::string> >			vecPair;
+typedef std::vector<std::pair<std::string, std::string> >::iterator	itVecPair;
+typedef int (*fctPointer)(int, vecStr &, Server &);
+typedef std::map<std::string, fctPointer>							mapCmds;
+typedef std::map<std::string, fctPointer>::iterator					itMapCmds;
 
 
 #endif

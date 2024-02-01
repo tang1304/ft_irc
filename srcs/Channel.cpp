@@ -6,7 +6,7 @@
 /*   By: rrebois <rrebois@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/29 15:40:11 by rrebois           #+#    #+#             */
-/*   Updated: 2024/01/29 15:40:11 by rrebois          ###   ########lyon.fr   */
+/*   Updated: 2024/02/01 09:17:14 by rrebois          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ void	Channel::setLimitUser()
 
 void	Channel::addUser(Client &user)
 {
-	vecCli::iterator	it;
+	vecClient::iterator	it;
 
 	for (it = _usersJoin.begin(); it != _usersJoin.end(); it++)
 	{
@@ -90,7 +90,7 @@ void	Channel::removeUser(Client &user)
 {
 	int	index = 0;
 
-	for (vecCli::iterator it = _usersJoin.begin(); it != _usersJoin.end(); it++)
+	for (vecClient::iterator it = _usersJoin.begin(); it != _usersJoin.end(); it++)
 	{
 		if (user.getNickName() == it->getNickName())
 			break ;
@@ -105,7 +105,7 @@ void	Channel::removeChanop(Client &user)
 {
 	int	index = 0;
 
-	for (vecCli::iterator it = _chanop.begin(); it != _chanop.end(); it++)
+	for (vecClient::iterator it = _chanop.begin(); it != _chanop.end(); it++)
 	{
 		if (user.getNickName() == it->getNickName())
 			break ;
@@ -139,12 +139,12 @@ const int	&Channel::getConnected() const
 	return (_connected);
 }
 
-vecCli	&Channel::getUsersJoin()
+vecClient	&Channel::getUsersJoin()
 {
 	return (_usersJoin);
 }
 
-vecCli	&Channel::getChanop()
+vecClient	&Channel::getChanop()
 {
 	return (_chanop);
 }

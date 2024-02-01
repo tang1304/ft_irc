@@ -6,7 +6,7 @@
 /*   By: rrebois <rrebois@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 11:49:57 by rrebois           #+#    #+#             */
-/*   Updated: 2024/01/29 12:05:42 by rrebois          ###   ########lyon.fr   */
+/*   Updated: 2024/02/01 10:01:11 by rrebois          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,13 +25,13 @@ int	pass_cmd(int fd, vecStr &cmd, Server &serv)
 	else
 		ERR = serv.getClientMap()[fd].getNickName();
 	if (serv.getClientMap()[fd].getRegistered())
-		return (serv.getClientMap()[fd].setBufferSend(ERR_ALREADYREGISTERED(ERR), 1), 1);
+		return (serv.getClientMap()[fd].setBufferSend(ERR_ALREADYREGISTERED(ERR)), 1);
 	if (cmd.size() < 2)
-		return (serv.getClientMap()[fd].setBufferSend(ERR_NEEDMOREPARAMS(ERR, cmd[0]), 1), 1);
+		return (serv.getClientMap()[fd].setBufferSend(ERR_NEEDMOREPARAMS(ERR, cmd[0])), 1);
 	if (cmd[1] != serv.getPassword())
 	{
 		serv.getClientMap()[fd].setDisconnect();
-		return (serv.getClientMap()[fd].setBufferSend(ERR_PASSWDMISMATCH(ERR), 1), 1);
+		return (serv.getClientMap()[fd].setBufferSend(ERR_PASSWDMISMATCH(ERR)), 1);
 	}
 	serv.getClientMap()[fd].setPass();
 	return (0);

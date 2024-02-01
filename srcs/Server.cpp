@@ -6,7 +6,7 @@
 /*   By: rrebois <rrebois@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:03:01 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/01 08:36:14 by rrebois          ###   ########lyon.fr   */
+/*   Updated: 2024/02/01 10:14:21 by rrebois          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ void	Server::cmdInit(){
 	_commandsList["QUIT"] = &quit_cmd;
 	// _commandsList["PING"] = &ping;
 	// _commandsList["PRIVMSG"] = &privmsg;
-	// _commandsList["JOIN"] = &join;
+	_commandsList["JOIN"] = &join_cmd;
 	// _commandsList["PART"] = &part;
 	// _commandsList["TOPIC"] = &topic;
 	// _commandsList["KICK"] = &kick;
@@ -92,7 +92,7 @@ void	Server::removeChan(int id)
 	int	i = 0;
 	_chanList.erase(_chanList.begin() + id);
 
-	for (vecChan::iterator it = _chanList.begin(); it != _chanList.end(); it++)
+	for (itVecChan it = _chanList.begin(); it != _chanList.end(); it++)
 	{
 		it->setId(i);
 		i++;
@@ -148,9 +148,9 @@ void	Server::clientConnexion(){
 void	Server::clientDisconnection(const int &fd){
 	itVecPollfd	it = _pollFds.begin();
 
-	// vecChan::iterator	it;
-	// vecCli::iterator	cit;
-	// vecCli::iterator	opit;
+	// itVecChan	it;
+	// itVecClient	cit;
+	// itVecClient	opit;
 
 	// for (it = getChanList().begin(); it != getChanList().end(); it++)
 	// {
@@ -194,7 +194,7 @@ std::cout << BLUE << "buffer: " << buffer << "." << DEFAULT << std::endl;
 			_clients[fd].setBufferRead("", 0);
 		}
 		send(_clients[fd]._clientFd, _clients[fd].getBufferSend().c_str(), _clients[fd].getBufferSend().length(), 0);
-		_clients[fd].setBufferSend("", 0);
+		_clients[fd].setBufferSend("");
 	}
 }
 
@@ -210,21 +210,21 @@ for (size_t i = 0; i < command.size(); i++)
 std::cout << YELLOW << "[SERVER] cmd: " << i << " " << command[i] << "." << DEFAULT << std::endl;
 	if (it != _commandsList.end() && (command[0] != "PASS" && command[0] != "USER" && command[0] != "NICK")\
 		&& _clients[fd].getDisconnect()){
-		_clients[fd].setBufferSend(ERR_NOTREGISTERED(_clients[fd].getNickName()), 1);
+		_clients[fd].setBufferSend(ERR_NOTREGISTERED(_clients[fd].getNickName()));
 		return ;
 		}
 	if (it != _commandsList.end()){
 		it->second(fd, command, *this);
 	}
 	else if (command[0] != "CAP"){
-		_clients[fd].setBufferSend(ERR_UNKNOWNCOMMAND(_clients[fd].getNickName(), command[0]), 1);
+		_clients[fd].setBufferSend(ERR_UNKNOWNCOMMAND(_clients[fd].getNickName(), command[0]));
 	}
 }
 
 void	Server::registrationDone(int &fd){
-	_clients[fd].setBufferSend(RPL_WELCOME(_clients[fd].getNickName(), _clients[fd].getUserName()), 1);
-	_clients[fd].setBufferSend(RPL_YOURHOST(_clients[fd].getNickName()), 1);
-	_clients[fd].setBufferSend(RPL_CREATED(_clients[fd].getNickName(), "2024"), 1);
-	_clients[fd].setBufferSend(RPL_MYINFO(_clients[fd].getNickName()), 1);
-	_clients[fd].setBufferSend(RPL_ISUPPORT(_clients[fd].getNickName(), "token"), 1);
+	_clients[fd].setBufferSend(RPL_WELCOME(_clients[fd].getNickName(), _clients[fd].getUserName()));
+	_clients[fd].setBufferSend(RPL_YOURHOST(_clients[fd].getNickName()));
+	_clients[fd].setBufferSend(RPL_CREATED(_clients[fd].getNickName(), "2024"));
+	_clients[fd].setBufferSend(RPL_MYINFO(_clients[fd].getNickName()));
+	_clients[fd].setBufferSend(RPL_ISUPPORT(_clients[fd].getNickName(), "token"));
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: rrebois <rrebois@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:15:06 by tgellon           #+#    #+#             */
-/*   Updated: 2024/01/30 09:33:44 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/01 09:17:48 by rrebois          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,19 +15,16 @@
 
 # include "irc.hpp"
 # include "Client.hpp"
-# include "Server.hpp"
 
 class Client;
-
-typedef std::vector<Client>	vecClient;
 
 class Channel{
 private:
 	std::string	_name;
 	std::string	_topic;
 	std::string	_password;
-	vecCli		_usersJoin;
-	vecCli		_chanop;
+	vecClient	_usersJoin;
+	vecClient	_chanop;
 	vecStr		_banned; // peut etre a mettre dans client
 	vecStr		_invited;
 	bool		_privated; // invite only or not / false
@@ -53,8 +50,8 @@ public:
 	const int			&getConnected() const;
 	const std::string	&getPassword() const;
 	const std::string	&getName() const;
-	vecCli		&getUsersJoin();
-	vecCli		&getChanop();
+	vecClient				&getUsersJoin();
+	vecClient				&getChanop();
 	const vecStr		&getBanned() const;
 	const vecStr		&getInvited() const;
 	const bool			&getLimitUser() const;
