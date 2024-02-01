@@ -13,8 +13,31 @@
 #ifndef RPL_HPP
 # define RPL_HPP
 
-# define RPL_WELCOME(user_id, nickname) (":localhost 001 " + nickname + " :Welcome to the Internet Relay Network " + user_id + "\r\n")
+# include "config.hpp"
+
+# define RPL_QUIT(nick) (nick + " left the channel\r\n")
+
+//	1
+# define RPL_WELCOME( nickname, user_id) (":" + SERVERNAME + " 001 " + nickname + \
+	" :Welcome to the" + SERVERNAME + " Network, " + user_id + "[!" + user_id + "@" + LOCALHOST + "]\r\n")
+
+// 2
+# define RPL_YOURHOST(client) (":" + SERVERNAME + " 002 " + client + " :Your host is " + SERVERNAME \
+	+ ", running version 1.0\r\n")
+
+// 3
+# define RPL_CREATED(client, date) (":" + SERVERNAME + " 003 " + client + " :This server was created " + date + "\r\n")
+
+//4
+# define RPL_MYINFO(client) (":" + SERVERNAME + " 004 " + client + " " + SERVERNAME + " 1.0, -+iotlk\r\n")
+
+//5
+# define RPL_ISUPPORT(client, tokens) (":" + SERVERNAME + " 005 " + client + " " + tokens + "\r\n")
+
+# define ERROR(error) ("ERROR: " + error + "\r\n")
 # define ERR_NEEDMOREPARAMS(client, cmd) (client + " " + cmd + " :Not enough parameters\r\n")
+# define ERR_NEEDLESSPARAMS " :Too many parameters\n"
+# define ERR_UNKNOWNCOMMAND(client, command) (client + " " + command + " :Unknown command\r\n")
 # define ERR_PASSWDMISMATCH(client) (client + " :Password incorrect\r\n")
 # define ERR_ALREADYREGISTERED(client) (client + " :You may not reregister\r\n")
 # define ERR_NONICKNAMEGIVEN(client) (client + " :No nickname given\r\n")

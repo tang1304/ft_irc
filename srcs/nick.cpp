@@ -52,13 +52,16 @@ int	nick_cmd(int fd, vecStr& cmd, Server &serv)
 	else
 		ERR = serv.getClientMap()[fd].getNickName();
 	if (!serv.getClientMap()[fd].getPass())
-		return (serv.getClientMap()[fd].setBufferSend(ERR_PASSFIRST(ERR)), 1);
+		return (serv.getClientMap()[fd].setBufferSend(ERR_PASSFIRST(ERR), 1), 1);
 	if (cmd.size() < 2)
-		return (serv.getClientMap()[fd].setBufferSend(ERR_NONICKNAMEGIVEN(ERR)), 1);
+		return (serv.getClientMap()[fd].setBufferSend(ERR_NONICKNAMEGIVEN(ERR), 1), 1);
 	if (!check_valid_nick(cmd[1]))
-		return (serv.getClientMap()[fd].setBufferSend(ERR_ERRONEUSNICKNAME(ERR, cmd[1])), 1);
+		return (serv.getClientMap()[fd].setBufferSend(ERR_ERRONEUSNICKNAME(ERR, cmd[1]), 1), 1);
 	if (!check_password_used(cmd[1], serv))
-		return (serv.getClientMap()[fd].setBufferSend(ERR_NICKNAMEINUSE(ERR, cmd[1])), 1);
+		return (serv.getClientMap()[fd].setBufferSend(ERR_NICKNAMEINUSE(ERR, cmd[1]), 1), 1);
 	serv.getClientMap()[fd].setNickName(cmd[1]);
+	if (serv.getClientMap()[fd]._userName.length() != 0){
+		serv.registrationDone(fd);
+	}
 return (0);
 }

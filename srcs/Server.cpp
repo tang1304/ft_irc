@@ -37,23 +37,24 @@ Server::Server(const int &port, const std::string &password): _port(port), _pass
 	tmp.events = POLLIN;
 	tmp.revents = 0;
 	_pollFds.push_back(tmp);
-	// cmdInit();
+	cmdInit();
 }
 
-// void	Server::cmdInit(){
-// 	_commandsList["PASS"] = &pass;
-// 	_commandsList["USER"] = &user;
-// 	_commandsList["NICK"] = &nick;
-// 	_commandsList["PING"] = &ping;
-// 	_commandsList["QUIT"] = &quit;
-// 	_commandsList["PRIVMSG"] = &privmsg;
-// 	_commandsList["JOIN"] = &join;
-// 	_commandsList["PART"] = &part;
-// 	_commandsList["TOPIC"] = &topic;
-// 	_commandsList["KICK"] = &kick;
-// 	_commandsList["INVITE"] = &invite;
-// 	_commandsList["LIST"] = &list;
-// }
+void	Server::cmdInit(){
+	_commandsList["PASS"] = &pass_cmd;
+	_commandsList["USER"] = &user_cmd;
+	_commandsList["NICK"] = &nick_cmd;
+	// _commandsList["CAP"] = &cap_cmd;
+	_commandsList["QUIT"] = &quit_cmd;
+	// _commandsList["PING"] = &ping;
+	// _commandsList["PRIVMSG"] = &privmsg;
+	// _commandsList["JOIN"] = &join;
+	// _commandsList["PART"] = &part;
+	// _commandsList["TOPIC"] = &topic;
+	// _commandsList["KICK"] = &kick;
+	// _commandsList["INVITE"] = &invite;
+	// _commandsList["LIST"] = &list;
+}
 
 const std::string	&Server::getPassword() const
 {
@@ -116,7 +117,7 @@ void	Server::runningLoop(){
 			throw (std::runtime_error("Error: poll() failed"));
 		for (size_t i = 0; i < _pollFds.size(); ++i){
 			if (_pollFds[i].revents & POLLIN){ //there is data to read
-				if (_pollFds[i].fd == _pollFds[0].fd){ // or it->fd == _socketFd ? // socket fd -> means a new connection
+				if (_pollFds[i].fd == _pollFds[0].fd){ // socket fd -> means a new connection
 					clientConnexion();
 				}
 				else{ // means you're on an existing client -> handle client data
@@ -141,10 +142,11 @@ void	Server::clientConnexion(){
 	_pollFds.push_back(tmp);
 	_clients[clientSocket] = Client();
 	_clients[clientSocket]._clientFd = clientSocket;
-	std::cout << GREEN << "New client succesfully connected" << DEFAULT << std::endl;
+	std::cout << GREEN << "New client succesfully connected on socket " << clientSocket << DEFAULT << std::endl;
 }
 
 void	Server::clientDisconnection(const int &fd){
+	itVecPollfd	it = _pollFds.begin();
 
 	// vecChan::iterator	it;
 	// vecCli::iterator	cit;
@@ -163,97 +165,66 @@ void	Server::clientDisconnection(const int &fd){
 	std::cout << YELLOW << _clients[fd]._clientFd << " disconnected from the server" << DEFAULT << std::endl;
 	close(fd);
 	_clients.erase(fd);
+	while (it->fd != fd)
+		it++;
+	_pollFds.erase(it);
 }
-
-//void	Server::clientHandle(const int &fd){
-//	char	buffer[BUFFER_SIZE];
-//	int		bytesRead = 0;
-//
-//	memset(buffer, 0, BUFFER_SIZE);
-//	bytesRead = recv(fd, buffer, BUFFER_SIZE, 0);
-//	if (bytesRead == -1){
-//		std::cerr << RED << "Error: recv() failed" << DEFAULT << std::endl;
-//		clientDisconnection(fd);
-//	}
-//	else if (bytesRead == 0)
-//		clientDisconnection(fd);
-//	else{
-//std::cout << "buffer: " << buffer << std::endl;
-//		_clients[fd].setBufferRead(std::string(buffer), 1);
-//		size_t pos = _clients[fd].getBufferRead().find("\r\n");
-//		if (pos != std::string::npos){
-//			parseInput((fd), buffer);
-//			_clients[fd].setBufferRead("", 0);
-//		}
-//		// send(_clients[fd]._clientFd, _bufferSend, bytesRead, 0);
-//	}
-//}
-//
-//void	Server::parseInput(const int &fd, const std::string &input){
-//	vecStr	command;
-//(void)fd;
-//
-//	command = splitCmd(input, " ");
-//	itMapCmds	it = _commandsList.begin();
-//	for (; it != _commandsList.end(); it++){
-//		if (it->first.find(command[0])){
-//			it->second(fd, command, *this);
-//		}
-//	}
-//	if (it == _commandsList.end()){
-//		std::cerr << "Invalid command: " << command[0] << std::endl;
-//	}
-//}
 
 void	Server::clientHandle(const int &fd){
 	char	buffer[BUFFER_SIZE];
 	int		bytesRead = 0;
 
-	bytesRead = recv(fd, buffer, BUFFER_SIZE, 0);
+	memset(&buffer, 0, BUFFER_SIZE);
+	bytesRead = recv(fd, buffer, sizeof(buffer), 0);
 	if (bytesRead == -1){
-		std::cerr << RED << "Error: recv() failed" << DEFAULT << std::endl;
+		std::cerr << RED << "Error: recv() failed: " << strerror(errno) << DEFAULT << std::endl;
 		clientDisconnection(fd);
 	}
 	else if (bytesRead == 0)
 		clientDisconnection(fd);
 	else{
-		std::cout << "buffer: " << buffer << std::endl;
-		_clients[fd].setBufferRead(std::string(buffer), 1);
-		if (_clients[fd].getBufferRead().find("\r\n") != std::string::npos){
-			parseInput(fd, _clients[fd].getBufferRead());
+std::cout << BLUE << "buffer: " << buffer << "." << DEFAULT << std::endl;
+		std::string	buf(buffer);
+		if (buf.empty() || buf == "\r\n")
+			return ;
+		_clients[fd].setBufferRead(std::string(buf), 1);
+		size_t pos = _clients[fd].getBufferRead().find("\r\n");
+		if (pos != std::string::npos){
+			parseInput((fd), buf);
 			_clients[fd].setBufferRead("", 0);
 		}
 		send(_clients[fd]._clientFd, _clients[fd].getBufferSend().c_str(), _clients[fd].getBufferSend().length(), 0);
-		_clients[fd].setBufferSend("");
-		if (_clients[fd].getDisconnect())
-			clientDisconnection(fd);
+		_clients[fd].setBufferSend("", 0);
 	}
 }
 
-void	Server::parseInput(const int &fd, const std::string &input)
-{
-	vecStr command;
-	(void) input;
+void	Server::parseInput(const int &fd, std::string &input){
+	vecStr	command;
 
-if (fd == 4)
-{
-	command.push_back("JOIN");
-	command.push_back("#abc,#def,&ghi,j kl");
-	command.push_back("abc,def");
-_clients[fd]._registered = true;
-_clients[fd].setPass();
-_clients[fd].setNickName("TOTO");
+std::cout << GREEN << "COMMANDE " << DEFAULT << std::endl;
+	command = splitCmd(input, " ");
+	if (command.empty())
+		return ;
+	itMapCmds	it = _commandsList.find(command[0]);
+for (size_t i = 0; i < command.size(); i++)
+std::cout << YELLOW << "[SERVER] cmd: " << i << " " << command[i] << "." << DEFAULT << std::endl;
+	if (it != _commandsList.end() && (command[0] != "PASS" && command[0] != "USER" && command[0] != "NICK")\
+		&& _clients[fd].getDisconnect()){
+		_clients[fd].setBufferSend(ERR_NOTREGISTERED(_clients[fd].getNickName()), 1);
+		return ;
+		}
+	if (it != _commandsList.end()){
+		it->second(fd, command, *this);
+	}
+	else if (command[0] != "CAP"){
+		_clients[fd].setBufferSend(ERR_UNKNOWNCOMMAND(_clients[fd].getNickName(), command[0]), 1);
+	}
 }
-else
-{
-	command.push_back("JOIN");
-	command.push_back("#abc,#def,&jkl,j kl");
-	command.push_back("abc,def");
-_clients[fd]._registered = true;
-_clients[fd].setPass();
-_clients[fd].setNickName("TITI");
-}
-	if (command[0] == "JOIN" || command[1] == "JOIN")
-		join_cmd(fd, command, *this);
-	std::cout << _clients[fd].getNickName() << std::endl;
+
+void	Server::registrationDone(int &fd){
+	_clients[fd].setBufferSend(RPL_WELCOME(_clients[fd].getNickName(), _clients[fd].getUserName()), 1);
+	_clients[fd].setBufferSend(RPL_YOURHOST(_clients[fd].getNickName()), 1);
+	_clients[fd].setBufferSend(RPL_CREATED(_clients[fd].getNickName(), "2024"), 1);
+	_clients[fd].setBufferSend(RPL_MYINFO(_clients[fd].getNickName()), 1);
+	_clients[fd].setBufferSend(RPL_ISUPPORT(_clients[fd].getNickName(), "token"), 1);
 }

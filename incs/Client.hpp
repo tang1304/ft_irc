@@ -39,6 +39,7 @@ public:
 	const std::string	&getRealName() const;
 	const std::string	&getBufferRead() const;
 	const std::string	&getBufferSend() const;
+	const int			&getFd() const;
 	bool				getRegistered() const;
 	bool				getDisconnect() const;
 	bool				getPass() const;
