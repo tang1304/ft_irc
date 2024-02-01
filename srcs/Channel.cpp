@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rrebois <rrebois@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/29 15:40:11 by rrebois           #+#    #+#             */
-/*   Updated: 2024/02/01 09:17:14 by rrebois          ###   ########lyon.fr   */
+/*   Updated: 2024/02/01 16:13:57 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,12 +89,29 @@ void	Channel::addInvited(std::string nickName)
 void	Channel::removeUser(Client &user)
 {
 	int	index = 0;
+	vecClient::iterator	it;
 
-	for (vecClient::iterator it = _usersJoin.begin(); it != _usersJoin.end(); it++)
+	for (it = _usersJoin.begin(); it != _usersJoin.end(); it++)
 	{
 		if (user.getNickName() == it->getNickName())
 			break ;
 		index++;
+	}
+	for (it = _usersJoin.begin(); it != _usersJoin.end(); it++)
+	{
+		if (user.getNickName() != it->getNickName()){
+			it->setBufferSend(RPL_USERLEFT(user.getNickName(), _name));
+			send(it->_clientFd, it->getBufferSend().c_str(), it->getBufferSend().length(), 0);
+			it->setBufferSend("");
+		}
+	}
+	for (it = _chanop.begin(); it != _chanop.end(); it++)
+	{
+		if (user.getNickName() != it->getNickName()){
+			it->setBufferSend(RPL_USERLEFT(user.getNickName(), _name));
+			send(it->_clientFd, it->getBufferSend().c_str(), it->getBufferSend().length(), 0);
+			it->setBufferSend("");
+		}
 	}
 	_usersJoin.erase(_usersJoin.begin() + index);
 	_connected--;
@@ -104,12 +121,29 @@ void	Channel::removeUser(Client &user)
 void	Channel::removeChanop(Client &user)
 {
 	int	index = 0;
+	vecClient::iterator it;
 
-	for (vecClient::iterator it = _chanop.begin(); it != _chanop.end(); it++)
+	for (it = _chanop.begin(); it != _chanop.end(); it++)
 	{
 		if (user.getNickName() == it->getNickName())
 			break ;
 		index++;
+	}
+	for (it = _usersJoin.begin(); it != _usersJoin.end(); it++)
+	{
+		if (user.getNickName() != it->getNickName()){
+			it->setBufferSend(RPL_USERLEFT(user.getNickName(), _name));
+			send(it->_clientFd, it->getBufferSend().c_str(), it->getBufferSend().length(), 0);
+			it->setBufferSend("");
+		}
+	}
+	for (it = _chanop.begin(); it != _chanop.end(); it++)
+	{
+		if (user.getNickName() != it->getNickName()){
+			it->setBufferSend(RPL_USERLEFT(user.getNickName(), _name));
+			send(it->_clientFd, it->getBufferSend().c_str(), it->getBufferSend().length(), 0);
+			it->setBufferSend("");
+		}
 	}
 	_chanop.erase(_chanop.begin() + index);
 	_connected--;
@@ -174,3 +208,8 @@ const bool	&Channel::getPrivated() const
 	return (_privated);
 }
 // void	Channel::giveChanopStatus()
+
+const int	&Channel::getId() const
+{
+	return (_id);
+}

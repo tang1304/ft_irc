@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   nick.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rrebois <rrebois@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 15:06:38 by rrebois           #+#    #+#             */
-/*   Updated: 2024/02/01 10:01:33 by rrebois          ###   ########lyon.fr   */
+/*   Updated: 2024/02/01 12:43:48 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ int	nick_cmd(int fd, vecStr& cmd, Server &serv)
 	std::string 		ERR;
 	std::stringstream	ss;
 
+std::cout << "In nick" << std::endl;
 	if (serv.getClientMap()[fd].getNickName().empty())
 	{
 		ss << fd;

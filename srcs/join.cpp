@@ -116,6 +116,7 @@ int	join_cmd(int fd, vecStr &cmd, Server &serv)
 	vecPair	chanPass;
 	bool	exists;
 
+std::cout << "In join" << std::endl;
 	chanPass = create_pair_cmd(cmd);
 	user = serv.getClient(fd);
 	if (!user.getRegistered())

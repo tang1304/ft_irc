@@ -6,7 +6,7 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:03:01 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/01 12:26:04 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/01 16:13:09 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ Server::Server(const int &port, const std::string &password): _port(port), _pass
 	tmp.revents = 0;
 	_pollFds.push_back(tmp);
 	cmdInit();
+	std::cout << BLUE << "Server launched\nWaiting for connections..." << DEFAULT << std::endl;
 }
 
 void	Server::cmdInit(){
@@ -100,9 +101,9 @@ void	Server::removeChan(int id)
 
 void	Server::signalHandler(int signal)
 {
-	std::cout << std::endl << YELLOW << "Signal received: " << signal << DEFAULT << std::endl;
+	std::cout << std::endl << YELLOW << "[Server] Signal received: " << signal << std::endl;
 	if (signal == SIGINT){
-		std::cout << "Shutting down the server. Bye !" << std::endl;
+		std::cout << "[Server] Shutting down the server. Bye !" << DEFAULT << std::endl;
 		signalStatus = SIGINT;
 	}
 	return ;
@@ -113,7 +114,7 @@ void	Server::runningLoop(){
 	while (signalStatus == 0)
 	{
 		if (poll(this->_pollFds.data(), this->_pollFds.size(), -1) == -1 && !signalStatus)
-			throw (std::runtime_error("Error: poll() failed"));
+			throw (std::runtime_error("[Server] Error: poll() failed"));
 		for (size_t i = 0; i < _pollFds.size(); ++i){
 			if (_pollFds[i].revents & POLLIN){ //there is data to read
 				if (_pollFds[i].fd == _pollFds[0].fd){ // socket fd -> means a new connection
@@ -133,7 +134,7 @@ void	Server::clientConnexion(){
 
 	int	clientSocket = accept(_socketFd, (struct sockaddr*)&clientAddr, &clientAddrLen);
 	if (clientSocket == -1)
-		throw (std::runtime_error("Error: accept() failed"));
+		throw (std::runtime_error("[Server] Error: accept() failed"));
 	struct pollfd tmp;
 	tmp.fd = clientSocket;
 	tmp.events = POLLIN;
@@ -141,27 +142,41 @@ void	Server::clientConnexion(){
 	_pollFds.push_back(tmp);
 	_clients[clientSocket] = Client();
 	_clients[clientSocket]._clientFd = clientSocket;
-	std::cout << GREEN << "New client succesfully connected on socket " << clientSocket << DEFAULT << std::endl;
+	std::cout << GREEN << "[Server] New client succesfully connected on socket #" << clientSocket << DEFAULT << std::endl;
 }
 
 void	Server::clientDisconnection(const int &fd){
 	itVecPollfd	it = _pollFds.begin();
+	itVecChan	itChan;
+	itVecClient	itClient;
+	itVecClient	itChanop;
 
-	// itVecChan	it;
-	// itVecClient	cit;
-	// itVecClient	opit;
+	for (itChan = getChanList().begin(); itChan != getChanList().end(); itChan++)
+	{
+		for (itClient = itChan->getUsersJoin().begin(); itClient != itChan->getUsersJoin().end(); itClient++)
+		{
+			if (itClient->getClientFd() == fd)
+			{
+				itChan->removeUser(*itClient);
+				itClient--;
+			}
+		}
+		for (itChanop = itChan->getChanop().begin(); itChanop != itChan->getChanop().end(); itChanop++)
+		{
+			if (itChanop->getClientFd() == fd)
+			{
+				itChan->removeChanop(*itChanop);
+				itChanop--;
+			}
+		}
+		if (itChan->getConnected() == 0)
+		{
+			removeChan(itChan->getId());
+			itChan--;
+		}
+	}
 
-	// for (it = getChanList().begin(); it != getChanList().end(); it++)
-	// {
-	// 	for (cit = it->getUsersJoin().begin(); cit != it->getUsersJoin().end(); cit++)
-	// 	{
-	// 		if (cit->getClientFd() == fd)
-	// 			it->removeUser(*cit);
-	// 	}
-	// }
-
-
-	std::cout << YELLOW << _clients[fd]._clientFd << " disconnected from the server" << DEFAULT << std::endl;
+	std::cout << YELLOW << "[Server] Client #" << _clients[fd]._clientFd << " disconnected from the server" << DEFAULT << std::endl;
 	close(fd);
 	_clients.erase(fd);
 	while (it->fd != fd)
@@ -176,12 +191,13 @@ void	Server::clientHandle(const int &fd){
 	memset(&buffer, 0, BUFFER_SIZE);
 	bytesRead = recv(fd, buffer, sizeof(buffer), 0);
 	if (bytesRead == -1){
-		std::cerr << RED << "Error: recv() failed: " << strerror(errno) << DEFAULT << std::endl;
+		std::cerr << RED << "[Server] Error: recv() failed: " << strerror(errno) << DEFAULT << std::endl;
 		clientDisconnection(fd);
 	}
 	else if (bytesRead == 0)
 		clientDisconnection(fd);
 	else{
+		std::cout << PURPLE << "[Client] Received data from client #" << fd << ": " << buffer << DEFAULT << std::endl;
 // std::cout << GREEN << "buffer: " << buffer << "." << DEFAULT << std::endl;
 		std::string	buf(buffer);
 		if (buf.empty() || buf == "\r\n")
@@ -208,17 +224,17 @@ void	Server::parseInput(const int &fd, std::string &input){
 	itVecVecStr	itvv = vecCommand.begin();
 	for (; itvv != vecCommand.end(); itvv++)
 	{
-std::cout << "COMMANDE " << std::endl;
-itVecStr	i = itvv->begin();
-for (; i < itvv->end(); i++){
-	std::cout << BLUE << "[SERVER] cmd: " << *i << "." << DEFAULT << std::endl;
-}
+// std::cout << "COMMANDE " << std::endl;
+// itVecStr	i = itvv->begin();
+// for (; i < itvv->end(); i++){
+// 	std::cout << BLUE << "[SERV] cmd: " << *i << "." << DEFAULT << std::endl;
+// }
 		itMapCmds	it = _commandsList.find(*itvv->begin());
 		if (it != _commandsList.end() && (*itvv->begin() != "PASS" && *itvv->begin() != "USER" && *itvv->begin() != "NICK")\
-			&& _clients[fd].getDisconnect()){
+		&& _clients[fd].getDisconnect()){
 			_clients[fd].setBufferSend(ERR_NOTREGISTERED(_clients[fd].getNickName()));
 			return ;
-			}
+		}
 		if (it != _commandsList.end()){
 			it->second(fd, *itvv, *this);
 		}

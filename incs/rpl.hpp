@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   rpl.hpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rrebois <rrebois@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 16:21:25 by tgellon           #+#    #+#             */
-/*   Updated: 2024/01/31 09:44:56 by rrebois          ###   ########lyon.fr   */
+/*   Updated: 2024/02/01 14:22:00 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,5 +55,6 @@
 # define ERR_NOTREGISTERED(client) (client + " :You may register first\r\n")
 
 # define RPL_USERJOIN(client, channel) (client + " is joining the channel " + channel + "\r\n")
+# define RPL_USERLEFT(client, channel) (client + " has left the channel " + channel + "\r\n")
 # define RPL_TOPIC(client, channel, topic) (client + " " + channel + " :" + topic + "\r\n")
 #endif
