@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rrebois <rrebois@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:15:06 by tgellon           #+#    #+#             */
-/*   Updated: 2024/01/31 09:32:48 by rrebois          ###   ########lyon.fr   */
+/*   Updated: 2024/01/30 09:33:44 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,11 @@
 
 # include "irc.hpp"
 # include "Client.hpp"
+# include "Server.hpp"
 
 class Client;
+
+typedef std::vector<Client>	vecClient;
 
 class Channel{
 private:

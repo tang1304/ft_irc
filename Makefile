@@ -11,6 +11,8 @@ SRCS =	main.cpp \
 		pass.cpp \
 		nick.cpp \
 		user.cpp \
+		cap.cpp \
+		quit.cpp \
 		join.cpp
 OBJ_DIR = objs/
 OBJ = ${SRCS:%.cpp=${OBJ_DIR}%.o}

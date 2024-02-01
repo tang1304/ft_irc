@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   config.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rrebois <rrebois@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/17 15:45:59 by tgellon           #+#    #+#             */
-/*   Updated: 2024/01/30 11:37:55 by rrebois          ###   ########lyon.fr   */
+/*   Updated: 2024/01/30 11:54:47 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 # include <netinet/in.h>
 # include <poll.h>
 # include <unistd.h>
+# include <errno.h>
 # include <csignal>
 # include <cstring>
 
@@ -32,6 +33,8 @@
 # define PURPLE "\033[35m"
 # define CYAN "\033[36m"
 
+# define SERVERNAME std::string("Ft_Irc")
+# define LOCALHOST std::string("127.0.0.1")
 # define BUFFER_SIZE 1000
 # define NICKLEN 9
 # define USERLEN 12
@@ -41,11 +44,15 @@
 # define USAGE "Error\nThere must be 2 arguments : ./ircserv <port> <password>"
 
 class Server;
+
 class Client;
 class Channel;
 
+typedef std::vector<pollfd>::iterator				itVecPollfd;
 typedef std::vector<Channel>								vecChan;
-typedef std::vector<Client>									vecCli;
+typedef std::vector<Channel>::iterator	itVecChan;
+typedef std::vector<Client>									vecClient;
+typedef std::vector<Client>::iterator	itVecClient;
 typedef std::vector<std::string>							vecStr;
 typedef std::vector<std::string>::iterator					itVecStr;
 typedef std::map<int, Client>								clientMap;
@@ -53,5 +60,6 @@ typedef std::vector<std::pair<std::string, std::string> >	vecPair;
 typedef void (*fctPointer)(int, vecStr, Server);
 typedef std::map<std::string, fctPointer>					mapCmds;
 typedef std::map<std::string, fctPointer>::iterator			itMapCmds;
+
 
 #endif

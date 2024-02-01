@@ -42,6 +42,11 @@ const std::string	&Client::getBufferSend() const
 	return (_bufferSend);
 }
 
+const int	&Client::getFd() const
+{
+	return (_clientFd);
+}
+
 bool	Client::getDisconnect() const
 {
 	return (_disconnect);
@@ -104,7 +109,7 @@ void	Client::setBufferRead(const std::string &read, int i){
 		_bufferRead = read;
 }
 
-void	Client::setBufferSend(const std::string &msg)
+void	Client::setBufferSend(const std::string& msg)
 {
 	if (msg.empty())
 		_bufferSend = msg;

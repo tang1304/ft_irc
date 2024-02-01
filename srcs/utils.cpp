@@ -61,12 +61,18 @@ vecPair	create_pair_cmd(vecStr &cmd)
 	return (chanKey);
 }
 
-vecStr	splitCmd(const std::string &input, const std::string &delimiter){
-	vecStr result;
-	size_t pos = 0;
-	size_t prevPos = 0;
-	std::string tmp;
+vecStr	splitCmd(std::string &input, const std::string &delimiter){
+	vecStr		result;
+	size_t		colonPos = 0;
+	size_t		pos = 0;
+	size_t		prevPos = 0;
+	std::string	tmp;
+	std::string	colonStr;
 
+	if ((colonPos = input.find(':')) != std::string::npos && (input.c_str()[colonPos - 1] == ' ')){
+		colonStr = input.substr(colonPos + 1, input.find("\r\n") - colonPos);
+		input.erase(colonPos - 1);
+	}
 	while ((pos = input.find(delimiter, prevPos)) != std::string::npos){
 		tmp = input.substr(prevPos, pos - prevPos);
 		if (!tmp.empty())
@@ -76,10 +82,12 @@ vecStr	splitCmd(const std::string &input, const std::string &delimiter){
 	tmp = input.substr(prevPos, input.find("\r\n") - prevPos);
 	if (!tmp.empty())
 		result.push_back(tmp);
-vecStr::iterator it = result.begin();
-while (it != result.end()){
-std::cout << *it << "." << std::endl;
-it++;
-}
-	return result;
+	if (colonStr.size() > 0)
+		result.push_back(colonStr);
+// vecStr::iterator it = result.begin();
+// while (it != result.end()){
+// std::cout << *it << "." << std::endl;
+// it++;
+// }
+	return (result);
 }
