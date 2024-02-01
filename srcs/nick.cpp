@@ -6,7 +6,7 @@
 /*   By: rrebois <rrebois@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 15:06:38 by rrebois           #+#    #+#             */
-/*   Updated: 2024/02/01 10:01:33 by rrebois          ###   ########lyon.fr   */
+/*   Updated: 2024/02/01 13:45:12 by rrebois          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ int	nick_cmd(int fd, vecStr& cmd, Server &serv)
 	if (!check_password_used(cmd[1], serv))
 		return (serv.getClientMap()[fd].setBufferSend(ERR_NICKNAMEINUSE(ERR, cmd[1])), 1);
 	serv.getClientMap()[fd].setNickName(cmd[1]);
-	if (serv.getClientMap()[fd]._userName.length() != 0){
+	if (serv.getClientMap()[fd].getUserName().length() != 0){
 		serv.registrationDone(fd);
 	}
 return (0);

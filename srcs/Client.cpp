@@ -6,7 +6,7 @@
 /*   By: rrebois <rrebois@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 12:49:59 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/01 09:31:31 by rrebois          ###   ########lyon.fr   */
+/*   Updated: 2024/02/01 13:39:24 by rrebois          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,7 @@ void	Client::setBufferRead(const std::string &read, int i){
 	if (i)
 		_bufferRead += read;
 	else
-		_bufferRead = read;
+		_bufferRead.clear();
 }
 
 void	Client::setBufferSend(const std::string& msg)
@@ -124,4 +124,9 @@ void	Client::setChanCount(int i)
 	else
 		_chanCount--;
 std::cout << "User chan count in incre " << _chanCount << std::endl;
+}
+
+void	Client::setClientFd(int &fd)
+{
+	_clientFd = fd;
 }
