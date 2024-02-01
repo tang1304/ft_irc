@@ -6,7 +6,7 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:03:01 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/01 11:26:37 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/01 12:26:04 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -182,7 +182,7 @@ void	Server::clientHandle(const int &fd){
 	else if (bytesRead == 0)
 		clientDisconnection(fd);
 	else{
-std::cout << BLUE << "buffer: " << buffer << "." << DEFAULT << std::endl;
+// std::cout << GREEN << "buffer: " << buffer << "." << DEFAULT << std::endl;
 		std::string	buf(buffer);
 		if (buf.empty() || buf == "\r\n")
 			return ;
@@ -211,7 +211,7 @@ void	Server::parseInput(const int &fd, std::string &input){
 std::cout << "COMMANDE " << std::endl;
 itVecStr	i = itvv->begin();
 for (; i < itvv->end(); i++){
-	std::cout << YELLOW << "[SERVER] cmd: " << *i << "." << DEFAULT << std::endl;
+	std::cout << BLUE << "[SERVER] cmd: " << *i << "." << DEFAULT << std::endl;
 }
 		itMapCmds	it = _commandsList.find(*itvv->begin());
 		if (it != _commandsList.end() && (*itvv->begin() != "PASS" && *itvv->begin() != "USER" && *itvv->begin() != "NICK")\
