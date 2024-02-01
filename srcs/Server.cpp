@@ -6,7 +6,7 @@
 /*   By: rrebois <rrebois@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:03:01 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/01 10:36:38 by rrebois          ###   ########lyon.fr   */
+/*   Updated: 2024/02/01 14:32:38 by rrebois          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,7 +113,7 @@ void	Server::runningLoop(){
 	signal(SIGINT, Server::signalHandler);
 	while (signalStatus == 0)
 	{
-		if (poll(this->_pollFds.data(), this->_pollFds.size(), -1) == -1 && !signalStatus)
+		if (poll(_pollFds.data(), _pollFds.size(), -1) == -1 && !signalStatus)
 			throw (std::runtime_error("Error: poll() failed"));
 		for (size_t i = 0; i < _pollFds.size(); ++i){
 			if (_pollFds[i].revents & POLLIN){ //there is data to read
@@ -141,33 +141,63 @@ void	Server::clientConnexion(){
 	tmp.revents = 0;
 	_pollFds.push_back(tmp);
 	_clients[clientSocket] = Client();
-	_clients[clientSocket]._clientFd = clientSocket;
+	_clients[clientSocket].setClientFd(clientSocket);
 	std::cout << GREEN << "New client succesfully connected on socket " << clientSocket << DEFAULT << std::endl;
 }
 
 void	Server::clientDisconnection(const int &fd){
 	itVecPollfd	it = _pollFds.begin();
+	itVecChan	itChan;
+	itVecClient	itClient;
+	itVecClient	itChanop;
 
-	// itVecChan	it;
-	// itVecClient	cit;
-	// itVecClient	opit;
+	for (itChan = getChanList().begin(); itChan != getChanList().end(); itChan++)
+	{
+		for (itClient = itChan->getUsersJoin().begin(); itClient != itChan->getUsersJoin().end(); itClient++)
+		{
+			if (itClient->getClientFd() == fd)
+			{
+				itChan->removeUser(*itClient);
+				itClient--;
+			}
+		}
+		for (itChanop = itChan->getChanop().begin(); itChanop != itChan->getChanop().end(); itChanop++)
+		{
+			if (itChanop->getClientFd() == fd)
+			{
+				itChan->removeChanop(*itChanop);
+				itChanop--;
+			}
+		}
+		if (itChan->getConnected() == 0)
+		{
+			removeChan(itChan->getId());
+			itChan--;
+		}
+	}
 
-	// for (it = getChanList().begin(); it != getChanList().end(); it++)
-	// {
-	// 	for (cit = it->getUsersJoin().begin(); cit != it->getUsersJoin().end(); cit++)
-	// 	{
-	// 		if (cit->getClientFd() == fd)
-	// 			it->removeUser(*cit);
-	// 	}
-	// }
-
-
-	std::cout << YELLOW << _clients[fd]._clientFd << " disconnected from the server" << DEFAULT << std::endl;
+	std::cout << YELLOW << _clients[fd].getClientFd() << " disconnected from the server" << DEFAULT << std::endl;
 	close(fd);
 	_clients.erase(fd);
 	while (it->fd != fd)
 		it++;
 	_pollFds.erase(it);
+
+	// TEST
+for (itVecChan itc = getChanList().begin(); itc != getChanList().end(); itc++)
+{
+	std::cout << "Chan " << itc->getName() << " created." << std::endl;
+	if (!itc->getPassword().empty())
+		std::cout << "Chan password " << itc->getPassword() << "." << std::endl;
+	else
+		std::cout << "No password set for this channel." << std::endl;
+	std::cout << "Number of users + chanops connected: " << itc->getConnected() << "." << std::endl;
+	for (itVecClient ut = itc->getUsersJoin().begin(); ut != itc->getUsersJoin().end(); ut++)
+		std::cout << "user " << ut->getNickName() << " connected." << std::endl;
+	for (itVecClient ut = itc->getChanop().begin(); ut != itc->getChanop().end(); ut++)
+		std::cout << "Chanop " << ut->getNickName() << " connected." << std::endl;
+}
+	//END TEST
 }
 
 void	Server::clientHandle(const int &fd){
@@ -193,33 +223,33 @@ std::cout << BLUE << "buffer: " << buffer << "." << DEFAULT << std::endl;
 			parseInput((fd), buf);
 			_clients[fd].setBufferRead("", 0);
 		}
-		send(_clients[fd]._clientFd, _clients[fd].getBufferSend().c_str(), _clients[fd].getBufferSend().length(), 0);
+		send(_clients[fd].getClientFd(), _clients[fd].getBufferSend().c_str(), _clients[fd].getBufferSend().length(), 0);
 		_clients[fd].setBufferSend("");
 	}
 }
 
-void	Server::parseInput(const int &fd, std::string &input){
-	vecStr	command;
+// void	Server::parseInput(const int &fd, std::string &input){
+// 	vecStr	command;
 
-std::cout << GREEN << "COMMANDE " << DEFAULT << std::endl;
-	command = splitCmd(input, " ");
-	if (command.empty())
-		return ;
-	itMapCmds	it = _commandsList.find(command[0]);
-for (size_t i = 0; i < command.size(); i++)
-std::cout << YELLOW << "[SERVER] cmd: " << i << " " << command[i] << "." << DEFAULT << std::endl;
-	if (it != _commandsList.end() || (command[0] != "PASS" && command[0] != "USER" && command[0] != "NICK")\
-		|| _clients[fd].getDisconnect()){
-		_clients[fd].setBufferSend(ERR_NOTREGISTERED(_clients[fd].getNickName()));
-		return ;
-		}
-	if (it != _commandsList.end()){
-		it->second(fd, command, *this);
-	}
-	else if (command[0] != "CAP"){
-		_clients[fd].setBufferSend(ERR_UNKNOWNCOMMAND(_clients[fd].getNickName(), command[0]));
-	}
-}
+// std::cout << GREEN << "COMMANDE " << DEFAULT << std::endl;
+// 	command = splitCmd(input, " ");
+// 	if (command.empty())
+// 		return ;
+// 	itMapCmds	it = _commandsList.find(command[0]);
+// for (size_t i = 0; i < command.size(); i++)
+// std::cout << YELLOW << "[SERVER] cmd: " << i << " " << command[i] << "." << DEFAULT << std::endl;
+// 	if (it != _commandsList.end() || (command[0] != "PASS" && command[0] != "USER" && command[0] != "NICK") ADD sla
+// 		|| _clients[fd].getDisconnect()){
+// 		_clients[fd].setBufferSend(ERR_NOTREGISTERED(_clients[fd].getNickName()));
+// 		return ;
+// 		}
+// 	if (it != _commandsList.end()){
+// 		it->second(fd, command, *this);
+// 	}
+// 	else if (command[0] != "CAP"){
+// 		_clients[fd].setBufferSend(ERR_UNKNOWNCOMMAND(_clients[fd].getNickName(), command[0]));
+// 	}
+// }
 
 void	Server::registrationDone(int &fd){
 	_clients[fd].setBufferSend(RPL_WELCOME(_clients[fd].getNickName(), _clients[fd].getUserName()));
@@ -228,3 +258,34 @@ void	Server::registrationDone(int &fd){
 	_clients[fd].setBufferSend(RPL_MYINFO(_clients[fd].getNickName()));
 	_clients[fd].setBufferSend(RPL_ISUPPORT(_clients[fd].getNickName(), "token"));
 }
+
+// TEST
+void	Server::parseInput(const int &fd, std::string &input)
+{
+	vecStr command;
+	(void) input;
+
+if (fd == 4)
+{
+	command.push_back("JOIN");
+	command.push_back("#abc,#def,&ghi,j kl");
+	command.push_back("abc");
+_clients[fd].setRegistered();
+_clients[fd].setPass();
+_clients[fd].setNickName("TOTO");
+}
+else
+{
+	command.push_back("JOIN");
+	command.push_back("#abc");//,#def,&jkl,j kl");
+	command.push_back("abc,def");
+_clients[fd].setRegistered();
+_clients[fd].setPass();
+_clients[fd].setNickName("TITI");
+}
+	if (command[0] == "JOIN" || command[1] == "JOIN")
+		join_cmd(fd, command, *this);
+	std::cout << _clients[fd].getNickName() << std::endl;
+}
+
+//END TEST

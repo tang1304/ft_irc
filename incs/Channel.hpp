@@ -6,7 +6,7 @@
 /*   By: rrebois <rrebois@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:15:06 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/01 09:17:48 by rrebois          ###   ########lyon.fr   */
+/*   Updated: 2024/02/01 14:30:13 by rrebois          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,8 +41,8 @@ public:
 	void				setLimitUser();
 	void				addUser(Client &user);
 	void				addChanop(Client &user);
-	void				addBanned(std::string nickName);
-	void				addInvited(std::string nickName);
+	void				addBanned(std::string &nickName);
+	void				addInvited(std::string &nickName);
 	void				removeUser(Client &user);
 	void				removeChanop(Client &user);
 	void				removeBan(Client &user);
@@ -50,12 +50,13 @@ public:
 	const int			&getConnected() const;
 	const std::string	&getPassword() const;
 	const std::string	&getName() const;
-	vecClient				&getUsersJoin();
-	vecClient				&getChanop();
+	vecClient			&getUsersJoin();
+	vecClient			&getChanop();
 	const vecStr		&getBanned() const;
 	const vecStr		&getInvited() const;
 	const bool			&getLimitUser() const;
 	const bool			&getPrivated() const;
+	const int			&getId() const;
 	// void	giveChanopStatus();
 
 	Channel(std::string name, std::string key);
