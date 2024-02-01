@@ -3,21 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   Client.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: rrebois <rrebois@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 12:49:59 by tgellon           #+#    #+#             */
-/*   Updated: 2024/01/29 15:14:07 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/01/31 15:36:10 by rrebois          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../incs/Client.hpp"
 
-Client::Client() : _disconnect(false), _pass(false), _registered(false)  { }
+Client::Client() : _chanCount(0), _disconnect(false), _pass(false), _registered(false) { }
 
 Client::~Client(){
 }
 
-Client::Client(const Client &other) : _disconnect(false), _pass(false), _registered(false) {
+Client::Client(const Client &other) : _chanCount(0), _disconnect(false), _pass(false), _registered(false) {
 	*this = other;
 }
 
@@ -62,6 +62,16 @@ bool	Client::getRegistered() const
 	return (_registered);
 }
 
+const int	&Client::getChanCount() const
+{
+	return (_chanCount);
+}
+
+const int	&Client::getClientFd() const
+{
+	return (_clientFd);
+}
+
 void	Client::setNickName(const std::string &nickName){
 	_nickName = nickName;
 }
@@ -99,10 +109,19 @@ void	Client::setBufferRead(const std::string &read, int i){
 		_bufferRead = read;
 }
 
-void	Client::setBufferSend(const std::string& msg, int i)
+void	Client::setBufferSend(const std::string& msg)
+{
+	if (msg.empty())
+		_bufferSend = msg;
+	else
+		_bufferSend += msg;
+}
+
+void	Client::setChanCount(int i)
 {
 	if (i)
-		_bufferSend += msg;
+		_chanCount++;
 	else
-		_bufferSend.clear();
+		_chanCount--;
+std::cout << "User chan count in incre " << _chanCount << std::endl;
 }

@@ -36,17 +36,30 @@
 # define SERVERNAME std::string("Ft_Irc")
 # define LOCALHOST std::string("127.0.0.1")
 # define BUFFER_SIZE 1000
+# define NICKLEN 9
 # define USERLEN 12
+# define CHANMAXUSER 10
+# define USERCHANLIMIT 5
 
 # define USAGE "Error\nThere must be 2 arguments : ./ircserv <port> <password>"
 
 class Server;
 
-typedef std::vector<std::string>					vecStr;
-typedef std::vector<std::string>::iterator			itVecStr;
+class Client;
+class Channel;
+
 typedef std::vector<pollfd>::iterator				itVecPollfd;
-typedef int (*fctPointer)(int, vecStr &, Server &);
-typedef std::map<std::string, fctPointer>			mapCmds;
-typedef std::map<std::string, fctPointer>::iterator	itMapCmds;
+typedef std::vector<Channel>								vecChan;
+typedef std::vector<Channel>::iterator	itVecChan;
+typedef std::vector<Client>									vecClient;
+typedef std::vector<Client>::iterator	itVecClient;
+typedef std::vector<std::string>							vecStr;
+typedef std::vector<std::string>::iterator					itVecStr;
+typedef std::map<int, Client>								clientMap;
+typedef std::vector<std::pair<std::string, std::string> >	vecPair;
+typedef void (*fctPointer)(int, vecStr, Server);
+typedef std::map<std::string, fctPointer>					mapCmds;
+typedef std::map<std::string, fctPointer>::iterator			itMapCmds;
+
 
 #endif

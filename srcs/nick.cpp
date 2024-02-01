@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   nick.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: rrebois <rrebois@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 15:06:38 by rrebois           #+#    #+#             */
-/*   Updated: 2024/01/30 12:11:14 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/01/29 12:05:55 by rrebois          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 static int check_valid_nick(std::string nick)
 {
-	if (nick.size() > 9 || nick.empty())
+	if (nick.size() > NICKLEN || nick.empty())
 		return (0);
 	for (size_t i = 0; i < nick.size(); i++)
 	{
@@ -29,8 +29,8 @@ static int check_valid_nick(std::string nick)
 
 static int check_password_used(std::string nick, Server &serv)
 {
-	ClientMap			cpy;
-	ClientMap::iterator	it;
+	clientMap			cpy;
+	clientMap::iterator	it;
 
 	cpy = serv.getClientMap();
 	for (it = cpy.begin(); it != cpy.end(); it++)
@@ -39,7 +39,7 @@ static int check_password_used(std::string nick, Server &serv)
 	return (1);
 }
 
-int	nick_cmd(int fd, vecstr& cmd, Server &serv)
+int	nick_cmd(int fd, vecStr& cmd, Server &serv)
 {
 	std::string 		ERR;
 	std::stringstream	ss;

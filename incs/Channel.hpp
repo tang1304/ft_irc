@@ -23,26 +23,45 @@ typedef std::vector<Client>	vecClient;
 
 class Channel{
 private:
-	std::string				_name;
-	std::string				_topic;
-	std::string				_password;
-	std::vector	<Client>	_usersJoin;
-	std::vector	<Client>	_chanop;
-	bool					_privated; // invite only or not / false
-	bool					_changeTopic; // false = anyone true = chanops only / false
-	// bool					_passOnOff; // on?
-	int						_connected; //number of users/chanops connected
-	int						_id;
+	std::string	_name;
+	std::string	_topic;
+	std::string	_password;
+	vecCli		_usersJoin;
+	vecCli		_chanop;
+	vecStr		_banned; // peut etre a mettre dans client
+	vecStr		_invited;
+	bool		_privated; // invite only or not / false
+	bool		_changeTopic; // false = anyone true = chanops only / false
+	bool		_limitUser;
+	// bool		_passOnOff; // on?
+	int			_connected; //number of users/chanops connected
+	int			_id;
 
 public:
-	void		setPrivateChan();
-	void		setChangeTopic();
-	std::string	&getName();
-	vecClient	&getClientsVec();
+	void				setId(int i);
+	void				setPrivated();
+	void				setChangeTopic();
+	void				setLimitUser();
+	void				addUser(Client &user);
+	void				addChanop(Client &user);
+	void				addBanned(std::string nickName);
+	void				addInvited(std::string nickName);
+	void				removeUser(Client &user);
+	void				removeChanop(Client &user);
+	void				removeBan(Client &user);
 
-	void		giveChanopStatus();
+	const int			&getConnected() const;
+	const std::string	&getPassword() const;
+	const std::string	&getName() const;
+	vecCli		&getUsersJoin();
+	vecCli		&getChanop();
+	const vecStr		&getBanned() const;
+	const vecStr		&getInvited() const;
+	const bool			&getLimitUser() const;
+	const bool			&getPrivated() const;
+	// void	giveChanopStatus();
 
-	Channel(std::string name);
+	Channel(std::string name, std::string key);
 	~Channel();
 };
 

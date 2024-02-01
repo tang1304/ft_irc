@@ -3,17 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: rrebois <rrebois@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:03:01 by tgellon           #+#    #+#             */
-/*   Updated: 2024/01/31 13:10:59 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/01 08:36:14 by rrebois          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../incs/Server.hpp"
 
-Server::~Server(){
-}
+Server::~Server() { }
 
 Server::Server(const int &port, const std::string &password): _port(port), _password(password){
 	// socket initiation;
@@ -57,19 +56,47 @@ void	Server::cmdInit(){
 	// _commandsList["LIST"] = &list;
 }
 
-std::string	Server::getPassword() const
+const std::string	&Server::getPassword() const
 {
 	return (_password);
 }
 
-ClientMap &Server::getClientMap()
+clientMap &Server::getClientMap()
 {
 	return (_clients);
 }
 
-vecChannel &Server::getChannelVec()
+Client	&Server::getClient(int fd)
 {
-	return (_channels);
+	return (_clients[fd]);
+}
+
+vecChan	&Server::getChanList()
+{
+	return (_chanList);
+}
+
+void	Server::addChan(std::string chan, std::string key, Client &user)
+{
+	int	j = _chanList.size();
+	Channel	newChan(chan, key);
+
+	newChan.setId(j);
+	newChan.addChanop(user);
+	user.setChanCount(1);
+	_chanList.push_back(newChan);
+}
+
+void	Server::removeChan(int id)
+{
+	int	i = 0;
+	_chanList.erase(_chanList.begin() + id);
+
+	for (vecChan::iterator it = _chanList.begin(); it != _chanList.end(); it++)
+	{
+		it->setId(i);
+		i++;
+	}
 }
 
 void	Server::signalHandler(int signal)
@@ -120,6 +147,20 @@ void	Server::clientConnexion(){
 
 void	Server::clientDisconnection(const int &fd){
 	itVecPollfd	it = _pollFds.begin();
+
+	// vecChan::iterator	it;
+	// vecCli::iterator	cit;
+	// vecCli::iterator	opit;
+
+	// for (it = getChanList().begin(); it != getChanList().end(); it++)
+	// {
+	// 	for (cit = it->getUsersJoin().begin(); cit != it->getUsersJoin().end(); cit++)
+	// 	{
+	// 		if (cit->getClientFd() == fd)
+	// 			it->removeUser(*cit);
+	// 	}
+	// }
+
 
 	std::cout << YELLOW << _clients[fd]._clientFd << " disconnected from the server" << DEFAULT << std::endl;
 	close(fd);
