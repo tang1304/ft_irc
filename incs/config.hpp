@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   config.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rrebois <rrebois@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/17 15:45:59 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/01 09:59:13 by rrebois          ###   ########lyon.fr   */
+/*   Updated: 2024/02/01 11:24:49 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,8 @@ typedef std::vector<Client>											vecClient;
 typedef std::vector<Client>::iterator								itVecClient;
 typedef std::vector<std::string>									vecStr;
 typedef std::vector<std::string>::iterator							itVecStr;
+typedef std::vector<vecStr>											vecVecStr;
+typedef std::vector<vecStr>::iterator								itVecVecStr;
 typedef std::map<int, Client>										clientMap;
 typedef std::map<int, Client>::iterator								itClientMap;
 typedef std::vector<std::pair<std::string, std::string> >			vecPair;

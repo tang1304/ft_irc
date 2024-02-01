@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rrebois <rrebois@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 10:16:34 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/01 09:29:09 by rrebois          ###   ########lyon.fr   */
+/*   Updated: 2024/02/01 11:28:04 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,9 +44,9 @@ vecPair	create_pair_cmd(vecStr &cmd)
 	itVecStr	itk;
 
 	if (cmd.size() > 1)
-		chan = splitCmd(cmd[1], ",");
+		chan = splitCmds(cmd[1], ",");
 	if (cmd.size() > 2)
-		key = splitCmd(cmd[2], ",");
+		key = splitCmds(cmd[2], ",");
 	itk = key.begin();
 	for (itc = chan.begin(); itc != chan.end(); itc++)
 	{
@@ -61,33 +61,59 @@ vecPair	create_pair_cmd(vecStr &cmd)
 	return (chanKey);
 }
 
-vecStr	splitCmd(std::string &input, const std::string &delimiter){
+vecStr	splitCmds(std::string &input, const std::string &delimiter){
 	vecStr		result;
-	size_t		colonPos = 0;
 	size_t		pos = 0;
 	size_t		prevPos = 0;
 	std::string	tmp;
-	std::string	colonStr;
 
-	if ((colonPos = input.find(':')) != std::string::npos && (input.c_str()[colonPos - 1] == ' ')){
-		colonStr = input.substr(colonPos + 1, input.find("\r\n") - colonPos);
-		input.erase(colonPos - 1);
-	}
-	while ((pos = input.find(delimiter, prevPos)) != std::string::npos){
+	while ((pos = input.find(delimiter, prevPos)) != std::string::npos && pos != input.size() - 2){
 		tmp = input.substr(prevPos, pos - prevPos);
 		if (!tmp.empty())
 			result.push_back(tmp);
-		prevPos = pos + 1;
+		prevPos = pos + 2;
+		tmp.clear();
 	}
-	tmp = input.substr(prevPos, input.find("\r\n") - prevPos);
+	tmp = input.substr(prevPos, input.size() - prevPos - 2);
 	if (!tmp.empty())
 		result.push_back(tmp);
-	if (colonStr.size() > 0)
-		result.push_back(colonStr);
-// itVecStr it = result.begin();
-// while (it != result.end()){
-// std::cout << *it << "." << std::endl;
-// it++;
-// }
+	return (result);
+}
+
+vecVecStr	splitCmd(vecStr &cmds, const std::string &delimiter){
+	vecVecStr	result;
+	vecStr		cmd;
+	std::string	tmp;
+	std::string	colonStr;
+	size_t		colonPos = 0;
+	size_t		pos = 0;
+	size_t		prevPos = 0;
+
+	itVecStr	it = cmds.begin();
+	for (; it != cmds.end(); it++)
+	{
+		colonPos = 0;
+		pos = 0;
+		prevPos = 0;
+		cmd.clear();
+		tmp.clear();
+		colonStr.clear();
+		if ((colonPos = it->find(':')) != std::string::npos && (it->c_str()[colonPos - 1] == ' ')){
+			colonStr = it->substr(colonPos + 1, it->find("\r\n") - colonPos);
+			it->erase(colonPos - 1);
+		}
+		while ((pos = it->find(delimiter, prevPos)) != std::string::npos){
+			tmp = it->substr(prevPos, pos - prevPos);
+			if (!tmp.empty())
+				cmd.push_back(tmp);
+			prevPos = pos + 1;
+		}
+		tmp = it->substr(prevPos, it->find("\r\n") - prevPos);
+		if (!tmp.empty())
+			cmd.push_back(tmp);
+		if (colonStr.size() > 0)
+			cmd.push_back(colonStr);
+		result.push_back(cmd);
+	}
 	return (result);
 }

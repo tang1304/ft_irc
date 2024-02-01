@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rrebois <rrebois@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:03:01 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/01 10:36:38 by rrebois          ###   ########lyon.fr   */
+/*   Updated: 2024/02/01 11:26:37 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,6 @@ void	Server::cmdInit(){
 	_commandsList["PASS"] = &pass_cmd;
 	_commandsList["USER"] = &user_cmd;
 	_commandsList["NICK"] = &nick_cmd;
-	// _commandsList["CAP"] = &cap_cmd;
 	_commandsList["QUIT"] = &quit_cmd;
 	// _commandsList["PING"] = &ping;
 	// _commandsList["PRIVMSG"] = &privmsg;
@@ -199,25 +198,34 @@ std::cout << BLUE << "buffer: " << buffer << "." << DEFAULT << std::endl;
 }
 
 void	Server::parseInput(const int &fd, std::string &input){
-	vecStr	command;
+	vecStr		command;
+	vecVecStr	vecCommand;
 
-std::cout << GREEN << "COMMANDE " << DEFAULT << std::endl;
-	command = splitCmd(input, " ");
+	command = splitCmds(input, "\r\n");
+	vecCommand = splitCmd(command, " ");
 	if (command.empty())
 		return ;
-	itMapCmds	it = _commandsList.find(command[0]);
-for (size_t i = 0; i < command.size(); i++)
-std::cout << YELLOW << "[SERVER] cmd: " << i << " " << command[i] << "." << DEFAULT << std::endl;
-	if (it != _commandsList.end() || (command[0] != "PASS" && command[0] != "USER" && command[0] != "NICK")\
-		|| _clients[fd].getDisconnect()){
-		_clients[fd].setBufferSend(ERR_NOTREGISTERED(_clients[fd].getNickName()));
-		return ;
+	itVecVecStr	itvv = vecCommand.begin();
+	for (; itvv != vecCommand.end(); itvv++)
+	{
+std::cout << "COMMANDE " << std::endl;
+itVecStr	i = itvv->begin();
+for (; i < itvv->end(); i++){
+	std::cout << YELLOW << "[SERVER] cmd: " << *i << "." << DEFAULT << std::endl;
+}
+		itMapCmds	it = _commandsList.find(*itvv->begin());
+		if (it != _commandsList.end() && (*itvv->begin() != "PASS" && *itvv->begin() != "USER" && *itvv->begin() != "NICK")\
+			&& _clients[fd].getDisconnect()){
+			_clients[fd].setBufferSend(ERR_NOTREGISTERED(_clients[fd].getNickName()));
+			return ;
+			}
+		if (it != _commandsList.end()){
+			it->second(fd, *itvv, *this);
 		}
-	if (it != _commandsList.end()){
-		it->second(fd, command, *this);
-	}
-	else if (command[0] != "CAP"){
-		_clients[fd].setBufferSend(ERR_UNKNOWNCOMMAND(_clients[fd].getNickName(), command[0]));
+		else if (*itvv->begin() != "CAP"){
+			_clients[fd].setBufferSend(*itvv->begin());
+			_clients[fd].setBufferSend(ERR_UNKNOWNCOMMAND(_clients[fd].getNickName(), *itvv->begin()));
+		}
 	}
 }
 
