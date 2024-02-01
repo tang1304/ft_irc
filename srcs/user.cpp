@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   user.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rrebois <rrebois@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/25 13:22:51 by rrebois           #+#    #+#             */
-/*   Updated: 2024/02/01 10:01:55 by rrebois          ###   ########lyon.fr   */
+/*   Updated: 2024/02/01 12:44:03 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ int user_cmd(int fd, vecStr &cmd, Server &serv)
 	std::string 		ERR;
 	std::stringstream	ss;
 
+std::cout << "In user" << std::endl;
 	if (serv.getClientMap()[fd].getNickName().empty())
 	{
 		ss << fd;

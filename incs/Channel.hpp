@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rrebois <rrebois@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:15:06 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/01 09:17:48 by rrebois          ###   ########lyon.fr   */
+/*   Updated: 2024/02/01 16:14:25 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,7 @@ public:
 	const vecStr		&getInvited() const;
 	const bool			&getLimitUser() const;
 	const bool			&getPrivated() const;
+	const int			&getId() const;
 	// void	giveChanopStatus();
 
 	Channel(std::string name, std::string key);

@@ -6,7 +6,7 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 11:49:57 by rrebois           #+#    #+#             */
-/*   Updated: 2024/02/01 12:27:21 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/01 12:43:32 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ int	pass_cmd(int fd, vecStr &cmd, Server &serv)
 	std::string 		ERR;
 	std::stringstream	userFd;
 
+std::cout << "In pass" << std::endl;
 	if (serv.getClientMap()[fd].getNickName().empty())
 	{
 		userFd << fd;
@@ -34,5 +35,6 @@ int	pass_cmd(int fd, vecStr &cmd, Server &serv)
 		return (serv.getClientMap()[fd].setBufferSend(ERR_PASSWDMISMATCH(ERR)), 1);
 	}
 	serv.getClientMap()[fd].setPass();
+std::cout << "Client " << fd << " succesfully enterred password" << std::endl;
 	return (0);
 }
