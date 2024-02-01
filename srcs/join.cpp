@@ -118,8 +118,8 @@ int	join_cmd(int fd, vecStr &cmd, Server &serv)
 
 	chanPass = create_pair_cmd(cmd);
 	user = serv.getClient(fd);
-	if (!user.getRegistered())
-		return (user.setBufferSend(ERR_NOTREGISTERED(user.getNickName())), 1);
+	// if (!user.getRegistered())
+	// 	return (user.setBufferSend(ERR_NOTREGISTERED(user.getNickName())), 1);
 	if (!check_chan_first_char(chanPass) && cmd.size() < 3)
 		return (user.setBufferSend(ERR_NEEDMOREPARAMS(user.getNickName(), cmd[1])), 1);
 	for (itVecPair it = chanPass.begin(); it != chanPass.end(); it++)
@@ -135,7 +135,6 @@ int	join_cmd(int fd, vecStr &cmd, Server &serv)
 		else
 			user_create_chan(it, serv, user);
 	}
-
 	// TEST
 for (itVecChan itc = serv.getChanList().begin(); itc != serv.getChanList().end(); itc++)
 {

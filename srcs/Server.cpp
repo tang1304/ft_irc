@@ -6,7 +6,7 @@
 /*   By: rrebois <rrebois@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:03:01 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/01 14:32:38 by rrebois          ###   ########lyon.fr   */
+/*   Updated: 2024/02/01 15:23:41 by rrebois          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -225,31 +225,33 @@ std::cout << BLUE << "buffer: " << buffer << "." << DEFAULT << std::endl;
 		}
 		send(_clients[fd].getClientFd(), _clients[fd].getBufferSend().c_str(), _clients[fd].getBufferSend().length(), 0);
 		_clients[fd].setBufferSend("");
+		if (_clients[fd].getDisconnect())
+			clientDisconnection(fd);
 	}
 }
 
-// void	Server::parseInput(const int &fd, std::string &input){
-// 	vecStr	command;
+void	Server::parseInput(const int &fd, std::string &input){
+	vecStr	command;
 
-// std::cout << GREEN << "COMMANDE " << DEFAULT << std::endl;
-// 	command = splitCmd(input, " ");
-// 	if (command.empty())
-// 		return ;
-// 	itMapCmds	it = _commandsList.find(command[0]);
-// for (size_t i = 0; i < command.size(); i++)
-// std::cout << YELLOW << "[SERVER] cmd: " << i << " " << command[i] << "." << DEFAULT << std::endl;
-// 	if (it != _commandsList.end() || (command[0] != "PASS" && command[0] != "USER" && command[0] != "NICK") ADD sla
-// 		|| _clients[fd].getDisconnect()){
-// 		_clients[fd].setBufferSend(ERR_NOTREGISTERED(_clients[fd].getNickName()));
-// 		return ;
-// 		}
-// 	if (it != _commandsList.end()){
-// 		it->second(fd, command, *this);
-// 	}
-// 	else if (command[0] != "CAP"){
-// 		_clients[fd].setBufferSend(ERR_UNKNOWNCOMMAND(_clients[fd].getNickName(), command[0]));
-// 	}
-// }
+std::cout << GREEN << "COMMANDE " << DEFAULT << std::endl;
+	command = splitCmd(input, " ");
+	if (command.empty())
+		return ;
+	itMapCmds	it = _commandsList.find(command[0]);
+for (size_t i = 0; i < command.size(); i++)
+std::cout << YELLOW << "[SERVER] cmd: " << i << " " << command[i] << "." << DEFAULT << std::endl;
+	if (it != _commandsList.end() && (command[0] != "PASS" && command[0] != "USER" && command[0] != "NICK") \
+		&& !_clients[fd].getDisconnect()){
+		_clients[fd].setBufferSend(ERR_NOTREGISTERED(_clients[fd].getNickName()));
+		return ;
+		}
+	if (it != _commandsList.end()){
+		it->second(fd, command, *this);
+	}
+	else if (command[0] != "CAP"){
+		_clients[fd].setBufferSend(ERR_UNKNOWNCOMMAND(_clients[fd].getNickName(), command[0]));
+	}
+}
 
 void	Server::registrationDone(int &fd){
 	_clients[fd].setBufferSend(RPL_WELCOME(_clients[fd].getNickName(), _clients[fd].getUserName()));
@@ -260,32 +262,32 @@ void	Server::registrationDone(int &fd){
 }
 
 // TEST
-void	Server::parseInput(const int &fd, std::string &input)
-{
-	vecStr command;
-	(void) input;
+// void	Server::parseInput(const int &fd, std::string &input)
+// {
+// 	vecStr command;
+// 	(void) input;
 
-if (fd == 4)
-{
-	command.push_back("JOIN");
-	command.push_back("#abc,#def,&ghi,j kl");
-	command.push_back("abc");
-_clients[fd].setRegistered();
-_clients[fd].setPass();
-_clients[fd].setNickName("TOTO");
-}
-else
-{
-	command.push_back("JOIN");
-	command.push_back("#abc");//,#def,&jkl,j kl");
-	command.push_back("abc,def");
-_clients[fd].setRegistered();
-_clients[fd].setPass();
-_clients[fd].setNickName("TITI");
-}
-	if (command[0] == "JOIN" || command[1] == "JOIN")
-		join_cmd(fd, command, *this);
-	std::cout << _clients[fd].getNickName() << std::endl;
-}
+// if (fd == 4)
+// {
+// 	command.push_back("JOIN");
+// 	command.push_back("#abc,#def,&ghi,j kl");
+// 	command.push_back("abc");
+// _clients[fd].setRegistered();
+// _clients[fd].setPass();
+// _clients[fd].setNickName("TOTO");
+// }
+// else
+// {
+// 	command.push_back("JOIN");
+// 	command.push_back("#abc");//,#def,&jkl,j kl");
+// 	command.push_back("abc,def");
+// _clients[fd].setRegistered();
+// _clients[fd].setPass();
+// _clients[fd].setNickName("TITI");
+// }
+// 	if (command[0] == "JOIN" || command[1] == "JOIN")
+// 		join_cmd(fd, command, *this);
+// 	std::cout << _clients[fd].getNickName() << std::endl;
+// }
 
 //END TEST
