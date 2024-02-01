@@ -6,7 +6,7 @@
 /*   By: rrebois <rrebois@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 15:06:38 by rrebois           #+#    #+#             */
-/*   Updated: 2024/01/29 12:05:55 by rrebois          ###   ########lyon.fr   */
+/*   Updated: 2024/02/01 10:01:33 by rrebois          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,8 @@ static int check_valid_nick(std::string nick)
 
 static int check_password_used(std::string nick, Server &serv)
 {
-	clientMap			cpy;
-	clientMap::iterator	it;
+	clientMap	cpy;
+	itClientMap	it;
 
 	cpy = serv.getClientMap();
 	for (it = cpy.begin(); it != cpy.end(); it++)
@@ -52,13 +52,13 @@ int	nick_cmd(int fd, vecStr& cmd, Server &serv)
 	else
 		ERR = serv.getClientMap()[fd].getNickName();
 	if (!serv.getClientMap()[fd].getPass())
-		return (serv.getClientMap()[fd].setBufferSend(ERR_PASSFIRST(ERR), 1), 1);
+		return (serv.getClientMap()[fd].setBufferSend(ERR_PASSFIRST(ERR)), 1);
 	if (cmd.size() < 2)
-		return (serv.getClientMap()[fd].setBufferSend(ERR_NONICKNAMEGIVEN(ERR), 1), 1);
+		return (serv.getClientMap()[fd].setBufferSend(ERR_NONICKNAMEGIVEN(ERR)), 1);
 	if (!check_valid_nick(cmd[1]))
-		return (serv.getClientMap()[fd].setBufferSend(ERR_ERRONEUSNICKNAME(ERR, cmd[1]), 1), 1);
+		return (serv.getClientMap()[fd].setBufferSend(ERR_ERRONEUSNICKNAME(ERR, cmd[1])), 1);
 	if (!check_password_used(cmd[1], serv))
-		return (serv.getClientMap()[fd].setBufferSend(ERR_NICKNAMEINUSE(ERR, cmd[1]), 1), 1);
+		return (serv.getClientMap()[fd].setBufferSend(ERR_NICKNAMEINUSE(ERR, cmd[1])), 1);
 	serv.getClientMap()[fd].setNickName(cmd[1]);
 	if (serv.getClientMap()[fd]._userName.length() != 0){
 		serv.registrationDone(fd);
