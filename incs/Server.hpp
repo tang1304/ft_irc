@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: rrebois <rrebois@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:03:20 by tgellon           #+#    #+#             */
-/*   Updated: 2024/01/25 09:03:33 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/01/30 16:07:25 by rrebois          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,20 +20,19 @@
 class Channel;
 class Client;
 
-typedef std::vector<std::string>	vecstr;
-typedef std::map<int, Client>		ClientMap;
-
 extern int	signalStatus;
 
 class Server{
 private:
 
-	ClientMap				_clients;
-	int						_port;
-	std::string				_password;
-	int						_socketFd;
-	std::vector<pollfd>		_pollFds; // To use poll(), keeps track of fds for multiple clients
-	mapCmds					_commandsList;
+	clientMap			_clients;
+	int					_port;
+	std::string			_password;
+	int					_socketFd;
+	std::vector<pollfd>	_pollFds; // To use poll(), keeps track of fds for multiple clients
+	mapCmds				_commandsList;
+	vecChan				_chanList;
+
 	Server();
 
 public:
@@ -41,19 +40,20 @@ public:
 	~Server();
 	Server(const int &port, const std::string &password);
 
-	std::string	getPassword() const;
-	ClientMap	getClientMap() const;
-	void		cmdInit();
-	static void	signalHandler(int signal); //static because of signal() that can' t accept member function
-	void		runningLoop();
-	void		clientConnexion();
-	void		clientDisconnection(const int &fd);
-	void		clientHandle(const int &fd);
-	void		parseInput(const int &fd, const std::string &input);
-	void		msgToClient(const int &fd, const std::string &msg);
+	const std::string	&getPassword() const;
+	clientMap			&getClientMap();
+	Client				&getClient(int fd); // en template??
+	vecChan				&getChanList();
+	void				cmdInit();
+	static void			signalHandler(int signal); //static because of signal() that can' t accept member function
+	void				runningLoop();
+	void				clientConnexion();
+	void				clientDisconnection(const int &fd);
+	void				clientHandle(const int &fd);
+	void				parseInput(const int &fd, const std::string &input);
+	void				msgToClient(const int &fd, const std::string &msg);
+	void				addChan(std::string chan, std::string key, Client &user);
+	void				removeChan(int id);
 };
-
-void	pass_cmd(int fd, vecstr& cmd, Server& serv);
-void	nick_cmd(int fd, vecstr& cmd, Server& serv);
 
 #endif
