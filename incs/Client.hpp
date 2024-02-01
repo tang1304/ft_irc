@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: rrebois <rrebois@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:14:10 by tgellon           #+#    #+#             */
-/*   Updated: 2024/01/29 15:12:03 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/01 08:35:58 by rrebois          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,13 +19,13 @@ class Client{
 private:
 
 public:
-
 	std::string	_nickName;
 	std::string _userName;
 	std::string	_realName;
 	std::string	_bufferRead;
 	std::string	_bufferSend;
 	int			_clientFd;
+	int			_chanCount;
 	bool		_disconnect;
 	bool		_pass;
 	bool		_registered;
@@ -43,15 +43,19 @@ public:
 	bool				getRegistered() const;
 	bool				getDisconnect() const;
 	bool				getPass() const;
+	const int			&getChanCount() const;
+	const int			&getClientFd() const;
 
 	void				setNickName(const std::string &nickName);
 	void				setUsername(const std::string &userName);
 	void				setRealName(const std::string &realName);
-	void				setBufferSend(const std::string& msg, int i);
+	void				setBufferSend(const std::string& msg);
 	void				setBufferRead(const std::string &read, int i);
 	void				setDisconnect();
 	void				setPass();
 	void				setRegistered();
+	void				setChanCount(int i);
+	// void				setClientFd(int fd);
 };
 
 #endif
