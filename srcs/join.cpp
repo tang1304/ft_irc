@@ -111,7 +111,7 @@ static void	user_create_chan(itVecPair &it, Server &serv, Client &user)
 }
 
 int	join_cmd(int fd, vecStr &cmd, Server &serv)
-{
+{std::cout << "hello" << std::endl;
 	Client	user;
 	vecPair	chanPass;
 	bool	exists;
