@@ -6,7 +6,7 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 10:16:34 by tgellon           #+#    #+#             */
-/*   Updated: 2024/01/31 16:05:03 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/01 11:07:25 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,25 +51,27 @@ vecStr	splitCmds(std::string &input, const std::string &delimiter){
 	tmp = input.substr(prevPos, input.size() - prevPos - 2);
 	if (!tmp.empty())
 		result.push_back(tmp);
-vecStr::iterator it = result.begin();
-for (; it != result.end(); it++){
-std::cout << BLUE << "Cmd: " << *it << ". Size: " << it->size() << DEFAULT << std::endl;
-	}
 	return (result);
 }
 
 vecVecStr	splitCmd(vecStr &cmds, const std::string &delimiter){
 	vecVecStr	result;
-	size_t		colonPos = 0;
-	size_t		pos = 0;
-	size_t		prevPos = 0;
 	vecStr		cmd;
 	std::string	tmp;
 	std::string	colonStr;
+	size_t		colonPos = 0;
+	size_t		pos = 0;
+	size_t		prevPos = 0;
 
 	itVecStr	it = cmds.begin();
 	for (; it != cmds.end(); it++)
 	{
+		colonPos = 0;
+		pos = 0;
+		prevPos = 0;
+		cmd.clear();
+		tmp.clear();
+		colonStr.clear();
 		if ((colonPos = it->find(':')) != std::string::npos && (it->c_str()[colonPos - 1] == ' ')){
 			colonStr = it->substr(colonPos + 1, it->find("\r\n") - colonPos);
 			it->erase(colonPos - 1);

@@ -6,7 +6,7 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 15:06:38 by rrebois           #+#    #+#             */
-/*   Updated: 2024/01/31 10:19:06 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/01 11:11:04 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ int	nick_cmd(int fd, vecStr& cmd, Server &serv)
 	std::string 		ERR;
 	std::stringstream	ss;
 
+std::cout << "In nick" << std::endl;
 	if (serv.getClientMap()[fd].getNickName().empty())
 	{
 		ss << fd;

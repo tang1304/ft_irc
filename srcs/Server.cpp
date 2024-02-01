@@ -6,7 +6,7 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:03:01 by tgellon           #+#    #+#             */
-/*   Updated: 2024/01/31 15:29:45 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/01 11:08:07 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,6 @@ void	Server::cmdInit(){
 	_commandsList["PASS"] = &pass_cmd;
 	_commandsList["USER"] = &user_cmd;
 	_commandsList["NICK"] = &nick_cmd;
-	// _commandsList["CAP"] = &cap_cmd;
 	_commandsList["QUIT"] = &quit_cmd;
 	// _commandsList["PING"] = &ping;
 	// _commandsList["PRIVMSG"] = &privmsg;
@@ -142,7 +141,7 @@ void	Server::clientHandle(const int &fd){
 	else if (bytesRead == 0)
 		clientDisconnection(fd);
 	else{
-std::cout << GREEN << "buffer: " << buffer << "." << DEFAULT << std::endl;
+// std::cout << GREEN << "buffer: " << buffer << "." << DEFAULT << std::endl;
 		std::string	buf(buffer);
 		if (buf.empty() || buf == "\r\n")
 			return ;
@@ -168,14 +167,9 @@ void	Server::parseInput(const int &fd, std::string &input){
 	itVecVecStr	itvv = vecCommand.begin();
 	for (; itvv != vecCommand.end(); itvv++)
 	{
-std::cout << "COMMANDE " << std::endl;
-itVecStr	i = itvv->begin();
-for (; i < itvv->end(); i++){
-	std::cout << YELLOW << "[SERVER] cmd: " << *i << "." << DEFAULT << std::endl;
-}
 		itMapCmds	it = _commandsList.find(*itvv->begin());
 		if (it != _commandsList.end() && (*itvv->begin() != "PASS" && *itvv->begin() != "USER" && *itvv->begin() != "NICK")\
-			&& _clients[fd].getDisconnect()){
+		&& _clients[fd].getDisconnect()){
 			_clients[fd].setBufferSend(ERR_NOTREGISTERED(_clients[fd].getNickName()), 1);
 			return ;
 			}
