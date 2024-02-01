@@ -6,7 +6,7 @@
 /*   By: rrebois <rrebois@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:03:01 by tgellon           #+#    #+#             */
-/*   Updated: 2024/01/31 15:39:39 by rrebois          ###   ########lyon.fr   */
+/*   Updated: 2024/02/01 08:36:14 by rrebois          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,18 +146,18 @@ void	Server::clientConnexion(){
 
 void	Server::clientDisconnection(const int &fd){
 
-	vecChan::iterator	it;
-	vecCli::iterator	cit;
-	vecCli::iterator	opit;
+	// vecChan::iterator	it;
+	// vecCli::iterator	cit;
+	// vecCli::iterator	opit;
 
-	for (it = getChanList().begin(); it != getChanList().end(); it++)
-	{
-		for (cit = it->getUsersJoin().begin(); cit != it->getUsersJoin().end(); cit++)
-		{
-			if (cit->getClientFd() == fd)
-				it->removeUser(*cit);
-		}
-	}
+	// for (it = getChanList().begin(); it != getChanList().end(); it++)
+	// {
+	// 	for (cit = it->getUsersJoin().begin(); cit != it->getUsersJoin().end(); cit++)
+	// 	{
+	// 		if (cit->getClientFd() == fd)
+	// 			it->removeUser(*cit);
+	// 	}
+	// }
 
 
 	std::cout << YELLOW << _clients[fd]._clientFd << " disconnected from the server" << DEFAULT << std::endl;
