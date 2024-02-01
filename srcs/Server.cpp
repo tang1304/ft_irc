@@ -3,17 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: rrebois <rrebois@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:03:01 by tgellon           #+#    #+#             */
-/*   Updated: 2024/01/25 09:01:08 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/01 08:36:14 by rrebois          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../incs/Server.hpp"
 
-Server::~Server(){
-}
+Server::~Server() { }
 
 Server::Server(const int &port, const std::string &password): _port(port), _password(password){
 	// socket initiation;
@@ -56,14 +55,47 @@ Server::Server(const int &port, const std::string &password): _port(port), _pass
 // 	_commandsList["LIST"] = &list;
 // }
 
-std::string	Server::getPassword() const
+const std::string	&Server::getPassword() const
 {
 	return (_password);
 }
 
-ClientMap Server::getClientMap() const
+clientMap &Server::getClientMap()
 {
 	return (_clients);
+}
+
+Client	&Server::getClient(int fd)
+{
+	return (_clients[fd]);
+}
+
+vecChan	&Server::getChanList()
+{
+	return (_chanList);
+}
+
+void	Server::addChan(std::string chan, std::string key, Client &user)
+{
+	int	j = _chanList.size();
+	Channel	newChan(chan, key);
+
+	newChan.setId(j);
+	newChan.addChanop(user);
+	user.setChanCount(1);
+	_chanList.push_back(newChan);
+}
+
+void	Server::removeChan(int id)
+{
+	int	i = 0;
+	_chanList.erase(_chanList.begin() + id);
+
+	for (vecChan::iterator it = _chanList.begin(); it != _chanList.end(); it++)
+	{
+		it->setId(i);
+		i++;
+	}
 }
 
 void	Server::signalHandler(int signal)
@@ -113,16 +145,70 @@ void	Server::clientConnexion(){
 }
 
 void	Server::clientDisconnection(const int &fd){
+
+	// vecChan::iterator	it;
+	// vecCli::iterator	cit;
+	// vecCli::iterator	opit;
+
+	// for (it = getChanList().begin(); it != getChanList().end(); it++)
+	// {
+	// 	for (cit = it->getUsersJoin().begin(); cit != it->getUsersJoin().end(); cit++)
+	// 	{
+	// 		if (cit->getClientFd() == fd)
+	// 			it->removeUser(*cit);
+	// 	}
+	// }
+
+
 	std::cout << YELLOW << _clients[fd]._clientFd << " disconnected from the server" << DEFAULT << std::endl;
 	close(fd);
 	_clients.erase(fd);
 }
 
+//void	Server::clientHandle(const int &fd){
+//	char	buffer[BUFFER_SIZE];
+//	int		bytesRead = 0;
+//
+//	memset(buffer, 0, BUFFER_SIZE);
+//	bytesRead = recv(fd, buffer, BUFFER_SIZE, 0);
+//	if (bytesRead == -1){
+//		std::cerr << RED << "Error: recv() failed" << DEFAULT << std::endl;
+//		clientDisconnection(fd);
+//	}
+//	else if (bytesRead == 0)
+//		clientDisconnection(fd);
+//	else{
+//std::cout << "buffer: " << buffer << std::endl;
+//		_clients[fd].setBufferRead(std::string(buffer), 1);
+//		size_t pos = _clients[fd].getBufferRead().find("\r\n");
+//		if (pos != std::string::npos){
+//			parseInput((fd), buffer);
+//			_clients[fd].setBufferRead("", 0);
+//		}
+//		// send(_clients[fd]._clientFd, _bufferSend, bytesRead, 0);
+//	}
+//}
+//
+//void	Server::parseInput(const int &fd, const std::string &input){
+//	vecStr	command;
+//(void)fd;
+//
+//	command = splitCmd(input, " ");
+//	itMapCmds	it = _commandsList.begin();
+//	for (; it != _commandsList.end(); it++){
+//		if (it->first.find(command[0])){
+//			it->second(fd, command, *this);
+//		}
+//	}
+//	if (it == _commandsList.end()){
+//		std::cerr << "Invalid command: " << command[0] << std::endl;
+//	}
+//}
+
 void	Server::clientHandle(const int &fd){
 	char	buffer[BUFFER_SIZE];
 	int		bytesRead = 0;
 
-	memset(buffer, 0, BUFFER_SIZE);
 	bytesRead = recv(fd, buffer, BUFFER_SIZE, 0);
 	if (bytesRead == -1){
 		std::cerr << RED << "Error: recv() failed" << DEFAULT << std::endl;
@@ -131,29 +217,43 @@ void	Server::clientHandle(const int &fd){
 	else if (bytesRead == 0)
 		clientDisconnection(fd);
 	else{
-std::cout << "buffer: " << buffer << std::endl;
+		std::cout << "buffer: " << buffer << std::endl;
 		_clients[fd].setBufferRead(std::string(buffer), 1);
-		size_t pos = _clients[fd].getBufferRead().find("\r\n");
-		if (pos != std::string::npos){
-			parseInput((fd), buffer);
+		if (_clients[fd].getBufferRead().find("\r\n") != std::string::npos){
+			parseInput(fd, _clients[fd].getBufferRead());
 			_clients[fd].setBufferRead("", 0);
 		}
-		// send(_clients[fd]._clientFd, _bufferSend, bytesRead, 0);
+		send(_clients[fd]._clientFd, _clients[fd].getBufferSend().c_str(), _clients[fd].getBufferSend().length(), 0);
+		_clients[fd].setBufferSend("");
+		if (_clients[fd].getDisconnect())
+			clientDisconnection(fd);
 	}
 }
 
-void	Server::parseInput(const int &fd, const std::string &input){
-	vecStr	command;
-(void)fd;
+void	Server::parseInput(const int &fd, const std::string &input)
+{
+	vecStr command;
+	(void) input;
 
-	command = splitCmd(input, " ");
-	itMapCmds	it = _commandsList.begin();
-	for (; it != _commandsList.end(); it++){
-		if (it->first.find(command[0])){
-			it->second(fd, command, *this);
-		}
-	}
-	if (it == _commandsList.end()){
-		std::cerr << "Invalid command: " << command[0] << std::endl;
-	}
+if (fd == 4)
+{
+	command.push_back("JOIN");
+	command.push_back("#abc,#def,&ghi,j kl");
+	command.push_back("abc,def");
+_clients[fd]._registered = true;
+_clients[fd].setPass();
+_clients[fd].setNickName("TOTO");
+}
+else
+{
+	command.push_back("JOIN");
+	command.push_back("#abc,#def,&jkl,j kl");
+	command.push_back("abc,def");
+_clients[fd]._registered = true;
+_clients[fd].setPass();
+_clients[fd].setNickName("TITI");
+}
+	if (command[0] == "JOIN" || command[1] == "JOIN")
+		join_cmd(fd, command, *this);
+	std::cout << _clients[fd].getNickName() << std::endl;
 }

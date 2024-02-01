@@ -1,38 +1,39 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pass.cpp                                           :+:      :+:    :+:   */
+/*   user.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rrebois <rrebois@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/24 11:49:57 by rrebois           #+#    #+#             */
-/*   Updated: 2024/01/29 12:05:42 by rrebois          ###   ########lyon.fr   */
+/*   Created: 2024/01/25 13:22:51 by rrebois           #+#    #+#             */
+/*   Updated: 2024/01/30 11:55:07 by rrebois          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../incs/irc.hpp"
 
-int	pass_cmd(int fd, vecStr &cmd, Server &serv)
+int user_cmd(int fd, vecStr &cmd, Server &serv)
 {
 	std::string 		ERR;
-	std::stringstream	userFd;
+	std::stringstream	ss;
 
 	if (serv.getClientMap()[fd].getNickName().empty())
 	{
-		userFd << fd;
-		userFd >> ERR;
+		ss << fd;
+		ss >> ERR;
 	}
 	else
 		ERR = serv.getClientMap()[fd].getNickName();
 	if (serv.getClientMap()[fd].getRegistered())
 		return (serv.getClientMap()[fd].setBufferSend(ERR_ALREADYREGISTERED(ERR)), 1);
-	if (cmd.size() < 2)
+	if (!serv.getClientMap()[fd].getPass())
+		return (serv.getClientMap()[fd].setBufferSend(ERR_PASSFIRST(ERR)), 1);
+	if (serv.getClientMap()[fd].getNickName().empty())
+		return (serv.getClientMap()[fd].setBufferSend(ERR_NICKFIRST(ERR)), 1);
+	if (cmd.size() < 4 || cmd[1].empty())
 		return (serv.getClientMap()[fd].setBufferSend(ERR_NEEDMOREPARAMS(ERR, cmd[0])), 1);
-	if (cmd[1] != serv.getPassword())
-	{
-		serv.getClientMap()[fd].setDisconnect();
-		return (serv.getClientMap()[fd].setBufferSend(ERR_PASSWDMISMATCH(ERR)), 1);
-	}
-	serv.getClientMap()[fd].setPass();
+	serv.getClientMap()[fd].setUsername(cmd[1]);
+	serv.getClientMap()[fd].setRealName(cmd[4]);
+	serv.getClientMap()[fd].setRegistered();
 	return (0);
 }
