@@ -6,13 +6,13 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 12:49:59 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/02 10:59:42 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/02 16:11:39 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../incs/Client.hpp"
 
-Client::Client() : _chanCount(0), _disconnect(false), _pass(false), _registered(false) { }
+Client::Client() : _bufferRead(""), _bufferSend(""), _chanCount(0), _disconnect(false), _pass(false), _registered(false) { }
 
 Client::~Client(){
 }
