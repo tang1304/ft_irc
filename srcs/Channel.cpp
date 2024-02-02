@@ -6,7 +6,7 @@
 /*   By: rrebois <rrebois@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/29 15:40:11 by rrebois           #+#    #+#             */
-/*   Updated: 2024/02/01 15:07:45 by rrebois          ###   ########lyon.fr   */
+/*   Updated: 2024/02/02 10:46:49 by rrebois          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,7 +113,15 @@ void	Channel::removeChanop(Client &user)
 	}
 	_chanop.erase(_chanop.begin() + index);
 	_connected--;
+	if (!_chanop.size() && _connected >= 1)
+		promoteUserToChanop(*_usersJoin.begin());
 	// add if !_connected -> delete channel de server + call destuctor?
+}
+
+void	Channel::promoteUserToChanop(Client &user)
+{
+	_chanop.push_back(user);
+	_usersJoin.erase(_usersJoin.begin());
 }
 
 void	Channel::removeBan(Client &user)

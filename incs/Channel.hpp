@@ -6,7 +6,7 @@
 /*   By: rrebois <rrebois@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:15:06 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/01 15:29:29 by rrebois          ###   ########lyon.fr   */
+/*   Updated: 2024/02/02 10:46:48 by rrebois          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ public:
 	void				removeUser(Client &user);
 	void				removeChanop(Client &user);
 	void				removeBan(Client &user);
+	void				promoteUserToChanop(Client &user);
 
 	const int			&getConnected() const;
 	const std::string	&getPassword() const;

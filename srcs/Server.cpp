@@ -6,7 +6,7 @@
 /*   By: rrebois <rrebois@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:03:01 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/01 15:23:41 by rrebois          ###   ########lyon.fr   */
+/*   Updated: 2024/02/02 10:56:55 by rrebois          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -240,8 +240,8 @@ std::cout << GREEN << "COMMANDE " << DEFAULT << std::endl;
 	itMapCmds	it = _commandsList.find(command[0]);
 for (size_t i = 0; i < command.size(); i++)
 std::cout << YELLOW << "[SERVER] cmd: " << i << " " << command[i] << "." << DEFAULT << std::endl;
-	if (it != _commandsList.end() && (command[0] != "PASS" && command[0] != "USER" && command[0] != "NICK") \
-		&& !_clients[fd].getDisconnect()){
+	if (it != _commandsList.end() && (command[0] != "PASS" && command[0] != "USER" && command[0] != "NICK" \
+		&& command[0] != "QUIT") && !_clients[fd].getDisconnect()){
 		_clients[fd].setBufferSend(ERR_NOTREGISTERED(_clients[fd].getNickName()));
 		return ;
 		}
