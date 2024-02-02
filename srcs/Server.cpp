@@ -6,7 +6,7 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:03:01 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/01 16:13:09 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/02 11:15:47 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -189,7 +189,7 @@ void	Server::clientHandle(const int &fd){
 	int		bytesRead = 0;
 
 	memset(&buffer, 0, BUFFER_SIZE);
-	bytesRead = recv(fd, buffer, sizeof(buffer), 0);
+	bytesRead = recv(fd, buffer, BUFFER_SIZE, 0);
 	if (bytesRead == -1){
 		std::cerr << RED << "[Server] Error: recv() failed: " << strerror(errno) << DEFAULT << std::endl;
 		clientDisconnection(fd);
@@ -198,13 +198,14 @@ void	Server::clientHandle(const int &fd){
 		clientDisconnection(fd);
 	else{
 		std::cout << PURPLE << "[Client] Received data from client #" << fd << ": " << buffer << DEFAULT << std::endl;
-// std::cout << GREEN << "buffer: " << buffer << "." << DEFAULT << std::endl;
+// std::cout << GREEN << "buffer: " << buffer << ". Size: " << BUFFER_SIZE << DEFAULT << std::endl;
 		std::string	buf(buffer);
-		if (buf.empty() || buf == "\r\n")
-			return ;
 		_clients[fd].setBufferRead(std::string(buf), 1);
+		if ((buf.empty() || buf == "\r\n") && _clients[fd].getBufferRead().empty())
+			return ;
 		size_t pos = _clients[fd].getBufferRead().find("\r\n");
 		if (pos != std::string::npos){
+			buf = _clients[fd].getBufferRead();
 			parseInput((fd), buf);
 			_clients[fd].setBufferRead("", 0);
 		}
@@ -213,18 +214,17 @@ void	Server::clientHandle(const int &fd){
 	}
 }
 
-void	Server::parseInput(const int &fd, std::string &input){
+void	Server:: parseInput(const int &fd, std::string &input){
 	vecStr		command;
 	vecVecStr	vecCommand;
 
 	command = splitCmds(input, "\r\n");
-	vecCommand = splitCmd(command, " ");
-	if (command.empty())
+	vecCommand = splitCmd(command, " "); 
+	if (vecCommand.empty())
 		return ;
 	itVecVecStr	itvv = vecCommand.begin();
 	for (; itvv != vecCommand.end(); itvv++)
 	{
-// std::cout << "COMMANDE " << std::endl;
 // itVecStr	i = itvv->begin();
 // for (; i < itvv->end(); i++){
 // 	std::cout << BLUE << "[SERV] cmd: " << *i << "." << DEFAULT << std::endl;
