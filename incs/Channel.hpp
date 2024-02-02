@@ -6,7 +6,7 @@
 /*   By: rrebois <rrebois@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:15:06 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/02 10:46:48 by rrebois          ###   ########lyon.fr   */
+/*   Updated: 2024/02/02 11:00:34 by rrebois          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ class Client;
 class Channel{
 private:
 	std::string	_name;
-	std::string	_topic;
+	std::string	_topic; // add timestamp of when it has been created and update it when changed
 	std::string	_password;
 	vecClient	_usersJoin;
 	vecClient	_chanop; // Channel moderators are identified by the channel member prefix ('@' for standard channel operators, '%' for halfops) next to their nickname whenever it is associated with a channel (e.g. replies to the NAMES, WHO, and WHOIS commands).

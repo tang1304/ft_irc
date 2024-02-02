@@ -6,7 +6,7 @@
 /*   By: rrebois <rrebois@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 10:20:16 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/01 09:21:15 by rrebois          ###   ########lyon.fr   */
+/*   Updated: 2024/02/02 13:41:14 by rrebois          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ int			pass_cmd(int fd, vecStr &cmd, Server &serv);
 int			nick_cmd(int fd, vecStr &cmd, Server &serv);
 int 		user_cmd(int fd, vecStr &cmd, Server &serv);
 int			join_cmd(int fd, vecStr &cmd, Server &serv);
+int			invite_cmd(int fd, vecStr &cmd, Server &serv);
 int			checkArgs(const std::string &port, const std::string &password);
 size_t		len(std::string s);
 vecStr		splitCmd(std::string &str, const std::string &delim);
