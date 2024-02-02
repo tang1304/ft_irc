@@ -6,7 +6,7 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 10:16:34 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/02 12:42:47 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/02 15:49:47 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,7 @@ vecVecStr	splitCmd(vecStr &cmds, const std::string &delimiter){
 		tmp.clear();
 		colonStr.clear();
 		if ((colonPos = it->find(':')) != std::string::npos && (it->c_str()[colonPos - 1] == ' ')){
-			colonStr = it->substr(colonPos + 1, it->find("\r\n") - colonPos);
+			colonStr = it->substr(colonPos , it->find("\r\n") - colonPos);
 			it->erase(colonPos - 1);
 		}
 		while ((pos = it->find(delimiter, prevPos)) != std::string::npos){

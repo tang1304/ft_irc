@@ -6,7 +6,7 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:03:01 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/02 12:40:36 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/02 15:49:59 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ void	Server::cmdInit(){
 	_commandsList["NICK"] = &nick_cmd;
 	_commandsList["QUIT"] = &quit_cmd;
 	// _commandsList["PING"] = &ping;
-	// _commandsList["PRIVMSG"] = &privmsg;
+	_commandsList["PRIVMSG"] = &privmsgCmd;
 	_commandsList["JOIN"] = &join_cmd;
 	// _commandsList["PART"] = &part;
 	// _commandsList["TOPIC"] = &topic;
@@ -227,10 +227,10 @@ void	Server:: parseInput(const int &fd, std::string &input){
 	itVecVecStr	itvv = vecCommand.begin();
 	for (; itvv != vecCommand.end(); itvv++)
 	{
-// itVecStr	i = itvv->begin();
-// for (; i < itvv->end(); i++){
-// 	std::cout << BLUE << "[SERV] cmd: " << *i << "." << DEFAULT << std::endl;
-// }
+itVecStr	i = itvv->begin();
+for (; i < itvv->end(); i++){
+	std::cout << BLUE << "[SERV] cmd: " << *i << "." << DEFAULT << std::endl;
+}
 		itMapCmds	it = _commandsList.find(*itvv->begin());
 		if (it != _commandsList.end() && (*itvv->begin() != "PASS" && *itvv->begin() != "USER" && *itvv->begin() != "NICK")\
 		&& _clients[fd].getDisconnect()){
