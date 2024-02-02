@@ -6,7 +6,7 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:03:01 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/02 11:15:47 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/02 12:40:36 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -158,6 +158,7 @@ void	Server::clientDisconnection(const int &fd){
 			if (itClient->getClientFd() == fd)
 			{
 				itChan->removeUser(*itClient);
+				sendToChan(*itChan, RPL_USERLEFT(itClient->getNickName(), itChan->getName()));
 				itClient--;
 			}
 		}
@@ -166,6 +167,7 @@ void	Server::clientDisconnection(const int &fd){
 			if (itChanop->getClientFd() == fd)
 			{
 				itChan->removeChanop(*itChanop);
+				sendToChan(*itChan, RPL_USERLEFT(itChanop->getNickName(), itChan->getName()));
 				itChanop--;
 			}
 		}
