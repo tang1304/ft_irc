@@ -6,7 +6,7 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 10:20:16 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/01 11:25:40 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/02 12:18:31 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,5 +32,8 @@ size_t		len(std::string s);
 vecStr		splitCmds(std::string &input, const std::string &delimiter);
 vecVecStr	splitCmd(vecStr &cmds, const std::string &delimiter);
 vecPair		create_pair_cmd(vecStr &cmd);
+void		sendToAll(Server &serv, const std::string &msg);
+void		sendToClient(Client &user, const std::string &msg);
+void		sendToChan(Channel &chan, const std::string &msg);
 
 #endif

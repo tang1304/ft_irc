@@ -6,7 +6,7 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:15:06 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/01 16:14:25 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/02 12:35:15 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ private:
 	std::string	_topic;
 	std::string	_password;
 	vecClient	_usersJoin;
-	vecClient	_chanop;
+	vecClient	_chanop; // Channel moderators are identified by the channel member prefix ('@' for standard channel operators, '%' for halfops) next to their nickname whenever it is associated with a channel (e.g. replies to the NAMES, WHO, and WHOIS commands).
 	vecStr		_banned; // peut etre a mettre dans client
 	vecStr		_invited;
 	bool		_privated; // invite only or not / false
@@ -46,12 +46,13 @@ public:
 	void				removeUser(Client &user);
 	void				removeChanop(Client &user);
 	void				removeBan(Client &user);
+	void				promoteUserToChanop(Client &user);
 
 	const int			&getConnected() const;
 	const std::string	&getPassword() const;
 	const std::string	&getName() const;
-	vecClient				&getUsersJoin();
-	vecClient				&getChanop();
+	vecClient			&getUsersJoin();
+	vecClient			&getChanop();
 	const vecStr		&getBanned() const;
 	const vecStr		&getInvited() const;
 	const bool			&getLimitUser() const;
