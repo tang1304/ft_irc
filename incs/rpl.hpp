@@ -6,7 +6,7 @@
 /*   By: rrebois <rrebois@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 16:21:25 by tgellon           #+#    #+#             */
-/*   Updated: 2024/01/31 09:44:56 by rrebois          ###   ########lyon.fr   */
+/*   Updated: 2024/02/02 16:02:36 by rrebois          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,10 @@
 # define ERR_CHANNELISFULL(client, channel) (client + " " + channel + " :Cannot join channel (+l)\r\n")
 # define ERR_INVITEONLYCHAN(client, channel) (client + " " + channel + " :Cannot join channel (+i)\r\n")
 # define ERR_BADCHANMASK(channel) (channel + " :Bad Channel Mask\r\n")
+# define ERR_NOSUCHCHANNEL(client, channel) (client + " " + channel + " :No such channel\r\n")
+# define ERR_NOTONCHANNEL(client, channel) (client + " " + channel + " :You're not on that channel\r\n")
+# define ERR_CHANOPRIVSNEEDED(client, channel) (client + " " + channel + " :You're not channel operator\r\n")
+# define ERR_USERONCHANNEL(client, nick, channel) (client + " " + nick + " " + channel + " :is already on channel\r\n")
 
 # define ERR_PASSFIRST(client) (client + " :Must confirm password first\r\n")
 # define ERR_NICKFIRST(client) (client + " :Must set nickname first\r\n")
