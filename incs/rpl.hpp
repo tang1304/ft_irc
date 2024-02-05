@@ -6,7 +6,7 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 16:21:25 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/05 14:13:40 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/05 15:56:07 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,11 +34,14 @@
 //5
 # define RPL_ISUPPORT(client, tokens) (":" + SERVERNAME + " 005 " + client + " " + tokens + "\r\n")
 
+//401
+# define ERR_NOSUCHNICK(client, nick) (":" + SERVERNAME + " 005 " + client + " '" + nick + "' :No such nick/channel\r\n")
+
 //404
 # define ERR_CANNOTSENDTOCHAN(client, channel) (":" + SERVERNAME + " 005 " + client + " :Cannot send to channel\r\n")
 
 //407
-# define ERR_TOOMANYTARGETS(client) (":" + SERVERNAME + " 407 " + client + " :Duplicate recipients. No message delivered")
+# define ERR_TOOMANYTARGETS(client) (":" + SERVERNAME + " 407 " + client + " :Duplicate recipients. No message delivered\r\n")
 
 //411
 # define ERR_NORECIPIENT(client, command) (":" + SERVERNAME + " 411 " + client + " :No recipient given (" + command + ")\r\n")
