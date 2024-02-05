@@ -6,7 +6,7 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 15:06:38 by rrebois           #+#    #+#             */
-/*   Updated: 2024/02/01 12:43:48 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/05 08:51:32 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ std::cout << "In nick" << std::endl;
 	if (!check_password_used(cmd[1], serv))
 		return (serv.getClientMap()[fd].setBufferSend(ERR_NICKNAMEINUSE(ERR, cmd[1])), 1);
 	serv.getClientMap()[fd].setNickName(cmd[1]);
-	if (serv.getClientMap()[fd]._userName.length() != 0){
+	if (serv.getClientMap()[fd].getUserName().length() != 0){
 		serv.registrationDone(fd);
 	}
 return (0);

@@ -6,7 +6,7 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/29 15:40:11 by rrebois           #+#    #+#             */
-/*   Updated: 2024/02/02 12:35:55 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/05 08:57:01 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,24 +49,24 @@ void	Channel::setLimitUser()
 
 void	Channel::addUser(Client &user)
 {
-	vecClient::iterator	it;
+	itVecClient	it;
 
 	for (it = _usersJoin.begin(); it != _usersJoin.end(); it++)
 	{
 		it->setBufferSend(RPL_USERJOIN(user.getNickName(), _name));
-		send(it->_clientFd, it->getBufferSend().c_str(), it->getBufferSend().length(), 0);
+		send(it->getClientFd(), it->getBufferSend().c_str(), it->getBufferSend().length(), 0);
 		it->setBufferSend("");
 	}
 	for (it = _chanop.begin(); it != _chanop.end(); it++)
 	{
 		it->setBufferSend(RPL_USERJOIN(user.getNickName(), _name));
-		send(it->_clientFd, it->getBufferSend().c_str(), it->getBufferSend().length(), 0);
+		send(it->getClientFd(), it->getBufferSend().c_str(), it->getBufferSend().length(), 0);
 		it->setBufferSend("");
 	}
 	_usersJoin.push_back(user);
 	_connected++;
 	user.setBufferSend(RPL_TOPIC(user.getNickName(), _name, _topic));
-	send(user._clientFd, user.getBufferSend().c_str(), user.getBufferSend().length(), 0);
+	send(user.getClientFd(), user.getBufferSend().c_str(), user.getBufferSend().length(), 0);
 	user.setBufferSend("");
 }
 
@@ -76,12 +76,12 @@ void	Channel::addChanop(Client &user)
 	_connected++;
 }
 
-void	Channel::addBanned(std::string nickName)
+void	Channel::addBanned(std::string &nickName)
 {
 	_banned.push_back(nickName);
 }
 
-void	Channel::addInvited(std::string nickName)
+void	Channel::addInvited(std::string &nickName)
 {
 	_invited.push_back(nickName);
 }
@@ -89,9 +89,9 @@ void	Channel::addInvited(std::string nickName)
 void	Channel::removeUser(Client &user)
 {
 	int	index = 0;
-	vecClient::iterator	it;
+	itVecClient	it;
 
-	for (it = _usersJoin.begin(); it != _usersJoin.end(); it++)
+	for (itVecClient it = _usersJoin.begin(); it != _usersJoin.end(); it++)
 	{
 		if (user.getNickName() == it->getNickName())
 			break ;
@@ -101,7 +101,7 @@ void	Channel::removeUser(Client &user)
 	{
 		if (user.getNickName() != it->getNickName()){
 			it->setBufferSend(RPL_USERLEFT(user.getNickName(), _name));
-			send(it->_clientFd, it->getBufferSend().c_str(), it->getBufferSend().length(), 0);
+			send(it->getClientFd(), it->getBufferSend().c_str(), it->getBufferSend().length(), 0);
 			it->setBufferSend("");
 		}
 	}
@@ -109,7 +109,7 @@ void	Channel::removeUser(Client &user)
 	{
 		if (user.getNickName() != it->getNickName()){
 			it->setBufferSend(RPL_USERLEFT(user.getNickName(), _name));
-			send(it->_clientFd, it->getBufferSend().c_str(), it->getBufferSend().length(), 0);
+			send(it->getClientFd(), it->getBufferSend().c_str(), it->getBufferSend().length(), 0);
 			it->setBufferSend("");
 		}
 	}
@@ -121,9 +121,8 @@ void	Channel::removeUser(Client &user)
 void	Channel::removeChanop(Client &user)
 {
 	int					index = 0;
-	vecClient::iterator	it;
 
-	for (it = _chanop.begin(); it != _chanop.end(); it++)
+	for (itVecClient it = _chanop.begin(); it != _chanop.end(); it++)
 	{
 		if (user.getNickName() == it->getNickName())
 			break ;
@@ -131,22 +130,6 @@ void	Channel::removeChanop(Client &user)
 	}
 	_chanop.erase(_chanop.begin() + index);
 	_connected--;
-	// for (it = _usersJoin.begin(); it != _usersJoin.end(); it++)
-	// {
-	// 	if (username != it->getNickName()){
-	// 		it->setBufferSend(RPL_USERLEFT(username, _name));
-	// 		send(it->_clientFd, it->getBufferSend().c_str(), it->getBufferSend().length(), 0);
-	// 		it->setBufferSend("");
-	// 	}
-	// }
-	// for (it = _chanop.begin(); it != _chanop.end(); it++)
-	// {
-	// 	if (username != it->getNickName()){
-	// 		it->setBufferSend(RPL_USERLEFT(username, _name));
-	// 		send(it->_clientFd, it->getBufferSend().c_str(), it->getBufferSend().length(), 0);
-	// 		it->setBufferSend("");
-	// 	}
-	// }
 	if (!_chanop.size() && _connected >= 1)
 		promoteUserToChanop(*_usersJoin.begin());
 	// add if !_connected -> delete channel de server + call destuctor?
@@ -162,7 +145,7 @@ void	Channel::removeBan(Client &user)
 {
 	int	index = 0;
 
-	for (vecStr::iterator it = _banned.begin(); it != _banned.end(); it++)
+	for (itVecStr it = _banned.begin(); it != _banned.end(); it++)
 	{
 		if (user.getNickName() == *it)
 			break ;
@@ -215,9 +198,9 @@ const bool	&Channel::getPrivated() const
 {
 	return (_privated);
 }
-// void	Channel::giveChanopStatus()
 
 const int	&Channel::getId() const
 {
 	return (_id);
 }
+// void	Channel::giveChanopStatus()

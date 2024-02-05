@@ -6,7 +6,7 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 10:20:16 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/02 14:05:44 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/05 08:47:33 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ int			nick_cmd(int fd, vecStr &cmd, Server &serv);
 int 		user_cmd(int fd, vecStr &cmd, Server &serv);
 int			join_cmd(int fd, vecStr &cmd, Server &serv);
 int			privmsgCmd(int fd, vecStr &cmd, Server &serv);
+int			invite_cmd(int fd, vecStr &cmd, Server &serv);
 int			checkArgs(const std::string &port, const std::string &password);
 size_t		len(std::string s);
 vecStr		splitCmds(std::string &input, const std::string &delimiter);

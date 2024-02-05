@@ -6,7 +6,7 @@
 /*   By: rrebois <rrebois@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:14:10 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/01 08:35:58 by rrebois          ###   ########lyon.fr   */
+/*   Updated: 2024/02/01 15:08:06 by rrebois          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,6 @@
 
 class Client{
 private:
-
-public:
 	std::string	_nickName;
 	std::string _userName;
 	std::string	_realName;
@@ -29,6 +27,8 @@ public:
 	bool		_disconnect;
 	bool		_pass;
 	bool		_registered;
+
+public:
 
 	Client();
 	~Client();
@@ -55,7 +55,7 @@ public:
 	void				setPass();
 	void				setRegistered();
 	void				setChanCount(int i);
-	// void				setClientFd(int fd);
+	void				setClientFd(int &fd);
 };
 
 #endif

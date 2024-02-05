@@ -6,7 +6,7 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 10:16:34 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/02 15:49:47 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/05 09:14:34 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,32 @@ int	checkArgs(const std::string &port, const std::string &password){
 	return (portValue);
 }
 
+static vecStr	split(std::string &input, const std::string &delimiter){
+	vecStr		result;
+	size_t		colonPos = 0;
+	size_t		pos = 0;
+	size_t		prevPos = 0;
+	std::string	tmp;
+	std::string	colonStr;
+
+	if ((colonPos = input.find(':')) != std::string::npos && (input.c_str()[colonPos - 1] == ' ')){
+		colonStr = input.substr(colonPos + 1, input.find("\r\n") - colonPos);
+		input.erase(colonPos - 1);
+	}
+	while ((pos = input.find(delimiter, prevPos)) != std::string::npos){
+		tmp = input.substr(prevPos, pos - prevPos);
+		if (!tmp.empty())
+			result.push_back(tmp);
+		prevPos = pos + 1;
+	}
+	tmp = input.substr(prevPos, input.find("\r\n") - prevPos);
+	if (!tmp.empty())
+		result.push_back(tmp);
+	if (colonStr.size() > 0)
+		result.push_back(colonStr);
+	return (result);
+}
+
 vecPair	create_pair_cmd(vecStr &cmd)
 {
 	vecPair		chanKey;
@@ -44,9 +70,9 @@ vecPair	create_pair_cmd(vecStr &cmd)
 	itVecStr	itk;
 
 	if (cmd.size() > 1)
-		chan = splitCmds(cmd[1], ",");
+		chan = split(cmd[1], ",");
 	if (cmd.size() > 2)
-		key = splitCmds(cmd[2], ",");
+		key = split(cmd[2], ",");
 	itk = key.begin();
 	for (itc = chan.begin(); itc != chan.end(); itc++)
 	{
@@ -123,7 +149,7 @@ void	sendToAll(Server &serv, const std::string &msg){
 	for (; it != serv.getClientMap().end(); it++){
 		if (it->second.getDisconnect() == 0){
 			it->second.setBufferSend(msg);
-			send(it->second._clientFd, it->second.getBufferSend().c_str(), it->second.getBufferSend().length(), 0);
+			send(it->second.getClientFd(), it->second.getBufferSend().c_str(), it->second.getBufferSend().length(), 0);
 			it->second.setBufferSend("");
 		}
 	}
@@ -132,7 +158,7 @@ void	sendToAll(Server &serv, const std::string &msg){
 void	sendToClient(Client &user, const std::string &msg){
 	if (user.getDisconnect() == 0){
 		user.setBufferSend(msg);
-		send(user._clientFd, user.getBufferSend().c_str(), user.getBufferSend().length(), 0);
+		send(user.getClientFd(), user.getBufferSend().c_str(), user.getBufferSend().length(), 0);
 		user.setBufferSend("");
 	}
 }
@@ -142,7 +168,7 @@ void	sendToChan(Channel &chan, const std::string &msg){
 	for (; it != chan.getUsersJoin().end(); it++){
 		if (it->getDisconnect() == 0){
 			it->setBufferSend(msg);
-			send(it->_clientFd, it->getBufferSend().c_str(), it->getBufferSend().length(), 0);
+			send(it->getClientFd(), it->getBufferSend().c_str(), it->getBufferSend().length(), 0);
 			it->setBufferSend("");
 		}
 	}

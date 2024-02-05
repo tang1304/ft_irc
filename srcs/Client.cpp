@@ -6,7 +6,7 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 12:49:59 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/02 16:11:39 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/05 08:51:23 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,4 +124,9 @@ void	Client::setChanCount(int i)
 	else
 		_chanCount--;
 std::cout << "User chan count in incre " << _chanCount << std::endl;
+}
+
+void	Client::setClientFd(int &fd)
+{
+	_clientFd = fd;
 }
