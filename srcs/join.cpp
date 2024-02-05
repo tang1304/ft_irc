@@ -41,7 +41,7 @@ static void	user_join_chan(itVecPair &it, Server &serv, Client &user)
 	if (it->second != itc->getPassword())
 	{
 		user.setBufferSend(ERR_BADCHANNELKEY(user.getNickName(), it->first));
-		send(user._clientFd, user.getBufferSend().c_str(), user.getBufferSend().length(), 0);
+		send(user.getClientFd(), user.getBufferSend().c_str(), user.getBufferSend().length(), 0);
 		user.setBufferSend("");
 		return ;
 	}
@@ -50,7 +50,7 @@ static void	user_join_chan(itVecPair &it, Server &serv, Client &user)
 		if (user.getNickName() == *itCli)
 		{
 			user.setBufferSend(ERR_BANNEDFROMCHAN(user.getNickName(), it->first));
-			send(user._clientFd, user.getBufferSend().c_str(), user.getBufferSend().length(), 0);
+			send(user.getClientFd(), user.getBufferSend().c_str(), user.getBufferSend().length(), 0);
 			user.setBufferSend("");
 			return ;
 		}
@@ -58,7 +58,7 @@ static void	user_join_chan(itVecPair &it, Server &serv, Client &user)
 	if (itc->getConnected() == CHANMAXUSER && itc->getLimitUser())
 	{
 		user.setBufferSend(ERR_CHANNELISFULL(user.getNickName(), it->first));
-		send(user._clientFd, user.getBufferSend().c_str(), user.getBufferSend().length(), 0);
+		send(user.getClientFd(), user.getBufferSend().c_str(), user.getBufferSend().length(), 0);
 		user.setBufferSend("");
 		return ;
 	}
@@ -73,7 +73,7 @@ static void	user_join_chan(itVecPair &it, Server &serv, Client &user)
 			}
 		}
 		user.setBufferSend(ERR_INVITEONLYCHAN(user.getNickName(), it->first));
-		send(user._clientFd, user.getBufferSend().c_str(), user.getBufferSend().length(), 0);
+		send(user.getClientFd(), user.getBufferSend().c_str(), user.getBufferSend().length(), 0);
 		user.setBufferSend("");
 		return ;
 	}
@@ -96,14 +96,14 @@ static void	user_create_chan(itVecPair &it, Server &serv, Client &user)
 	if (!check_chan_name(it->first))
 	{
 		user.setBufferSend(ERR_BADCHANMASK(it->first));
-		send(user._clientFd, user.getBufferSend().c_str(), user.getBufferSend().length(), 0);
+		send(user.getClientFd(), user.getBufferSend().c_str(), user.getBufferSend().length(), 0);
 		user.setBufferSend("");
 		return ;
 	}
 	if (user.getChanCount() == USERCHANLIMIT)
 	{
 		user.setBufferSend(ERR_TOOMANYCHANNELS(user.getNickName(), it->first));
-		send(user._clientFd, user.getBufferSend().c_str(), user.getBufferSend().length(), 0);
+		send(user.getClientFd(), user.getBufferSend().c_str(), user.getBufferSend().length(), 0);
 		user.setBufferSend("");
 		return ;
 	}
@@ -111,7 +111,7 @@ static void	user_create_chan(itVecPair &it, Server &serv, Client &user)
 }
 
 int	join_cmd(int fd, vecStr &cmd, Server &serv)
-{std::cout << "hello" << std::endl;
+{
 	Client	user;
 	vecPair	chanPass;
 	bool	exists;
@@ -119,8 +119,8 @@ int	join_cmd(int fd, vecStr &cmd, Server &serv)
 std::cout << "In join" << std::endl;
 	chanPass = create_pair_cmd(cmd);
 	user = serv.getClient(fd);
-	if (!user.getRegistered())
-		return (user.setBufferSend(ERR_NOTREGISTERED(user.getNickName())), 1);
+	// if (!user.getRegistered())
+	// 	return (user.setBufferSend(ERR_NOTREGISTERED(user.getNickName())), 1);
 	if (!check_chan_first_char(chanPass) && cmd.size() < 3)
 		return (user.setBufferSend(ERR_NEEDMOREPARAMS(user.getNickName(), cmd[1])), 1);
 	for (itVecPair it = chanPass.begin(); it != chanPass.end(); it++)
@@ -136,7 +136,6 @@ std::cout << "In join" << std::endl;
 		else
 			user_create_chan(it, serv, user);
 	}
-
 	// TEST
 for (itVecChan itc = serv.getChanList().begin(); itc != serv.getChanList().end(); itc++)
 {

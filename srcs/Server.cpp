@@ -6,7 +6,7 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:03:01 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/02 15:49:59 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/05 08:56:01 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,7 +141,7 @@ void	Server::clientConnexion(){
 	tmp.revents = 0;
 	_pollFds.push_back(tmp);
 	_clients[clientSocket] = Client();
-	_clients[clientSocket]._clientFd = clientSocket;
+	_clients[clientSocket].setClientFd(clientSocket);
 	std::cout << GREEN << "[Server] New client succesfully connected on socket #" << clientSocket << DEFAULT << std::endl;
 }
 
@@ -178,12 +178,28 @@ void	Server::clientDisconnection(const int &fd){
 		}
 	}
 
-	std::cout << YELLOW << "[Server] Client #" << _clients[fd]._clientFd << " disconnected from the server" << DEFAULT << std::endl;
+	std::cout << YELLOW << "[Server] Client #" << _clients[fd].getClientFd() << " disconnected from the server" << DEFAULT << std::endl;
 	close(fd);
 	_clients.erase(fd);
 	while (it->fd != fd)
 		it++;
 	_pollFds.erase(it);
+
+	// TEST
+for (itVecChan itc = getChanList().begin(); itc != getChanList().end(); itc++)
+{
+	std::cout << "Chan " << itc->getName() << " created." << std::endl;
+	if (!itc->getPassword().empty())
+		std::cout << "Chan password " << itc->getPassword() << "." << std::endl;
+	else
+		std::cout << "No password set for this channel." << std::endl;
+	std::cout << "Number of users + chanops connected: " << itc->getConnected() << "." << std::endl;
+	for (itVecClient ut = itc->getUsersJoin().begin(); ut != itc->getUsersJoin().end(); ut++)
+		std::cout << "user " << ut->getNickName() << " connected." << std::endl;
+	for (itVecClient ut = itc->getChanop().begin(); ut != itc->getChanop().end(); ut++)
+		std::cout << "Chanop " << ut->getNickName() << " connected." << std::endl;
+}
+	//END TEST
 }
 
 void	Server::clientHandle(const int &fd){
@@ -211,8 +227,10 @@ void	Server::clientHandle(const int &fd){
 			parseInput((fd), buf);
 			_clients[fd].setBufferRead("", 0);
 		}
-		send(_clients[fd]._clientFd, _clients[fd].getBufferSend().c_str(), _clients[fd].getBufferSend().length(), 0);
+		send(_clients[fd].getClientFd(), _clients[fd].getBufferSend().c_str(), _clients[fd].getBufferSend().length(), 0);
 		_clients[fd].setBufferSend("");
+		if (_clients[fd].getDisconnect())
+			clientDisconnection(fd);
 	}
 }
 
