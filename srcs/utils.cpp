@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: rrebois <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 10:16:34 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/05 09:14:34 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/05 10:31:10 by rrebois          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -165,11 +165,20 @@ void	sendToClient(Client &user, const std::string &msg){
 
 void	sendToChan(Channel &chan, const std::string &msg){
 	itVecClient	it = chan.getUsersJoin().begin();
+	itVecClient	itChanop = chan.getChanop().begin();
+
 	for (; it != chan.getUsersJoin().end(); it++){
 		if (it->getDisconnect() == 0){
 			it->setBufferSend(msg);
 			send(it->getClientFd(), it->getBufferSend().c_str(), it->getBufferSend().length(), 0);
 			it->setBufferSend("");
+		}
+	}
+	for (; itChanop != chan.getChanop().end(); itChanop++){
+		if (itChanop->getDisconnect() == 0){
+			itChanop->setBufferSend(msg);
+			send(itChanop->getClientFd(), itChanop->getBufferSend().c_str(), itChanop->getBufferSend().length(), 0);
+			itChanop->setBufferSend("");
 		}
 	}
 }

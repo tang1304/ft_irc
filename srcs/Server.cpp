@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: rrebois <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:03:01 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/05 08:56:01 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/05 10:09:52 by rrebois          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ void	Server::cmdInit(){
 	// _commandsList["PART"] = &part;
 	// _commandsList["TOPIC"] = &topic;
 	// _commandsList["KICK"] = &kick;
-	// _commandsList["INVITE"] = &invite;
+	 _commandsList["INVITE"] = &invite_cmd;
 	// _commandsList["LIST"] = &list;
 }
 
@@ -259,7 +259,6 @@ for (; i < itvv->end(); i++){
 			it->second(fd, *itvv, *this);
 		}
 		else if (*itvv->begin() != "CAP"){
-			_clients[fd].setBufferSend(*itvv->begin());
 			_clients[fd].setBufferSend(ERR_UNKNOWNCOMMAND(_clients[fd].getNickName(), *itvv->begin()));
 		}
 	}

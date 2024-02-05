@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: rrebois <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/29 15:40:11 by rrebois           #+#    #+#             */
-/*   Updated: 2024/02/05 08:57:01 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/05 11:32:12 by rrebois          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,20 +49,7 @@ void	Channel::setLimitUser()
 
 void	Channel::addUser(Client &user)
 {
-	itVecClient	it;
-
-	for (it = _usersJoin.begin(); it != _usersJoin.end(); it++)
-	{
-		it->setBufferSend(RPL_USERJOIN(user.getNickName(), _name));
-		send(it->getClientFd(), it->getBufferSend().c_str(), it->getBufferSend().length(), 0);
-		it->setBufferSend("");
-	}
-	for (it = _chanop.begin(); it != _chanop.end(); it++)
-	{
-		it->setBufferSend(RPL_USERJOIN(user.getNickName(), _name));
-		send(it->getClientFd(), it->getBufferSend().c_str(), it->getBufferSend().length(), 0);
-		it->setBufferSend("");
-	}
+	sendToChan(*this, RPL_USERJOIN(user.getNickName(), _name));
 	_usersJoin.push_back(user);
 	_connected++;
 	user.setBufferSend(RPL_TOPIC(user.getNickName(), _name, _topic));
@@ -91,7 +78,7 @@ void	Channel::removeUser(Client &user)
 	int	index = 0;
 	itVecClient	it;
 
-	for (itVecClient it = _usersJoin.begin(); it != _usersJoin.end(); it++)
+	for (it = _usersJoin.begin(); it != _usersJoin.end(); it++)
 	{
 		if (user.getNickName() == it->getNickName())
 			break ;
