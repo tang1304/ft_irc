@@ -6,7 +6,7 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 10:16:34 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/05 09:14:34 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/05 15:01:09 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -166,6 +166,27 @@ void	sendToClient(Client &user, const std::string &msg){
 void	sendToChan(Channel &chan, const std::string &msg){
 	itVecClient	it = chan.getUsersJoin().begin();
 	for (; it != chan.getUsersJoin().end(); it++){
+		if (it->getDisconnect() == 0){
+			it->setBufferSend(msg);
+			send(it->getClientFd(), it->getBufferSend().c_str(), it->getBufferSend().length(), 0);
+			it->setBufferSend("");
+		}
+	}
+	it = chan.getChanop().begin();
+	for (; it != chan.getChanop().end(); it++){
+		if (it->getDisconnect() == 0){
+			it->setBufferSend(msg);
+			send(it->getClientFd(), it->getBufferSend().c_str(), it->getBufferSend().length(), 0);
+			it->setBufferSend("");
+		}
+	}
+}
+
+void	sendToChanNotUser(Client &user, Channel &chan, const std::string &msg){
+	itVecClient	it = chan.getUsersJoin().begin();
+	for (; it != chan.getUsersJoin().end(); it++)
+		if (it->getFd() == user.getFd()){
+			continue ;
 		if (it->getDisconnect() == 0){
 			it->setBufferSend(msg);
 			send(it->getClientFd(), it->getBufferSend().c_str(), it->getBufferSend().length(), 0);

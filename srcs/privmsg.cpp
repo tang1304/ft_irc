@@ -6,24 +6,47 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 14:03:30 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/02 16:22:37 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/05 15:05:07 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "irc.hpp"
 
 int	privmsgCmd(int fd, vecStr &cmd, Server &serv){
-	if (cmd.size() < 2){
-		sendToClient(serv.getClientMap()[fd], ERR_NORECIPIENT(serv.getClientMap()[fd].getNickName(), cmd[0]));
+	Client user = serv.getClientMap()[fd];
+
+	if (cmd.size() == 1 || cmd.size() > 3 || cmd[1].find(':') == 0){
+		sendToClient(user, ERR_NORECIPIENT(user.getNickName(), cmd[0]));
 		return (0);
 	}
-	if (cmd.size() < 3 || (cmd.size() == 3 && cmd[2].empty())){
-		sendToClient(serv.getClientMap()[fd], ERR_NOTEXTTOSEND(serv.getClientMap()[fd].getNickName()));
+	if (cmd.size() == 2 || (cmd.size() == 3 && (cmd[2].empty() || (cmd[2].find(':') == 0 && cmd[2].size() == 1)))){
+		sendToClient(user, ERR_NOTEXTTOSEND(user.getNickName()));
 		return (0);
 	}
-	if (cmd.size() > 3 || (cmd.size() == 3 && cmd[2].find(':') == std::string::npos)){
-		sendToClient(serv.getClientMap()[fd], ERR_TOOMANYTARGETS(serv.getClientMap()[fd].getNickName()));
+	if ((cmd.size() == 3 && cmd[2].find(':') == std::string::npos)){
+		sendToClient(user, ERR_TOOMANYTARGETS(user.getNickName()));
 		return (0);
 	}
+
+	std::string	target = cmd[1];
+	std::string	msg = cmd[2];
+	if (target.find_first_of("#&") == 0){
+		for (itVecChan it = serv.getChanList().begin(); it != serv.getChanList().end(); it++){
+			if (it->getName() == target){
+				if (isItIn(user, it->getChanop()) || isItIn(user, it->getUsersJoin())){
+					sendToChanNotUser(user, *it, msg);
+					return (0);
+				}
+				else
+					break ;
+			}
+		}
+		sendToClient(user, ERR_CANNOTSENDTOCHAN(user.getNickName(), *it->getName()));
+		return (0);
+	}
+	else{
+		;
+	}
+
 	return  (1);
 }
