@@ -6,7 +6,7 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:03:01 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/05 08:56:01 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/05 14:01:54 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -185,21 +185,21 @@ void	Server::clientDisconnection(const int &fd){
 		it++;
 	_pollFds.erase(it);
 
-	// TEST
-for (itVecChan itc = getChanList().begin(); itc != getChanList().end(); itc++)
-{
-	std::cout << "Chan " << itc->getName() << " created." << std::endl;
-	if (!itc->getPassword().empty())
-		std::cout << "Chan password " << itc->getPassword() << "." << std::endl;
-	else
-		std::cout << "No password set for this channel." << std::endl;
-	std::cout << "Number of users + chanops connected: " << itc->getConnected() << "." << std::endl;
-	for (itVecClient ut = itc->getUsersJoin().begin(); ut != itc->getUsersJoin().end(); ut++)
-		std::cout << "user " << ut->getNickName() << " connected." << std::endl;
-	for (itVecClient ut = itc->getChanop().begin(); ut != itc->getChanop().end(); ut++)
-		std::cout << "Chanop " << ut->getNickName() << " connected." << std::endl;
-}
-	//END TEST
+// 	// TEST
+// for (itVecChan itc = getChanList().begin(); itc != getChanList().end(); itc++)
+// {
+// 	std::cout << "Chan " << itc->getName() << " created." << std::endl;
+// 	if (!itc->getPassword().empty())
+// 		std::cout << "Chan password " << itc->getPassword() << "." << std::endl;
+// 	else
+// 		std::cout << "No password set for this channel." << std::endl;
+// 	std::cout << "Number of users + chanops connected: " << itc->getConnected() << "." << std::endl;
+// 	for (itVecClient ut = itc->getUsersJoin().begin(); ut != itc->getUsersJoin().end(); ut++)
+// 		std::cout << "user " << ut->getNickName() << " connected." << std::endl;
+// 	for (itVecClient ut = itc->getChanop().begin(); ut != itc->getChanop().end(); ut++)
+// 		std::cout << "Chanop " << ut->getNickName() << " connected." << std::endl;
+// }
+// 	//END TEST
 }
 
 void	Server::clientHandle(const int &fd){
@@ -259,7 +259,6 @@ for (; i < itvv->end(); i++){
 			it->second(fd, *itvv, *this);
 		}
 		else if (*itvv->begin() != "CAP"){
-			_clients[fd].setBufferSend(*itvv->begin());
 			_clients[fd].setBufferSend(ERR_UNKNOWNCOMMAND(_clients[fd].getNickName(), *itvv->begin()));
 		}
 	}

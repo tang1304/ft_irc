@@ -6,7 +6,7 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 10:20:16 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/05 08:47:33 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/05 14:41:04 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,5 +36,17 @@ vecPair		create_pair_cmd(vecStr &cmd);
 void		sendToAll(Server &serv, const std::string &msg);
 void		sendToClient(Client &user, const std::string &msg);
 void		sendToChan(Channel &chan, const std::string &msg);
+void		sendToChanNotUser(Client &user, Channel &chan, const std::string &msg);
+
+template <typename T, typename U>
+bool		isItIn(T &content, U &container){
+	typename U::iterator it = container.begin();
+
+	for (; it != container.end(); it++){
+		if (content == *it)
+			return (true);
+	}
+	return (false);
+}
 
 #endif
