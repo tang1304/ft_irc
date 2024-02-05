@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: rrebois <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:15:06 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/05 08:46:45 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/05 17:20:46 by rrebois          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,14 +29,14 @@ private:
 	vecStr		_invited;
 	bool		_privated; // invite only or not / false
 	bool		_changeTopic; // false = anyone true = chanops only / false
-	bool		_limitUser;
+	int			_limitUser;
 	// bool		_passOnOff; // on?
 	int			_connected; //number of users/chanops connected
 	int			_id;
 
 public:
 	void				setId(int i);
-	void				setPrivated();
+	void				setPrivated(char c);
 	void				setChangeTopic();
 	void				setLimitUser();
 	void				addUser(Client &user);
@@ -55,9 +55,10 @@ public:
 	vecClient			&getChanop();
 	const vecStr		&getBanned() const;
 	const vecStr		&getInvited() const;
-	const bool			&getLimitUser() const;
+	const int			&getLimitUser() const;
 	const bool			&getPrivated() const;
 	const int			&getId() const;
+	void				getModeFunc(std::string mode) const;
 	// void	giveChanopStatus();
 
 	Channel(std::string name, std::string key);

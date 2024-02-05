@@ -6,7 +6,7 @@
 /*   By: rrebois <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:03:01 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/05 10:09:52 by rrebois          ###   ########.fr       */
+/*   Updated: 2024/02/05 16:49:53 by rrebois          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,8 @@ void	Server::cmdInit(){
 	// _commandsList["PART"] = &part;
 	// _commandsList["TOPIC"] = &topic;
 	// _commandsList["KICK"] = &kick;
-	 _commandsList["INVITE"] = &invite_cmd;
+	_commandsList["INVITE"] = &invite_cmd;
+	_commandsList["MODE"] = &mode_cmd;
 	// _commandsList["LIST"] = &list;
 }
 

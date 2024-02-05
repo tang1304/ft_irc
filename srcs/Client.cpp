@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: rrebois <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 12:49:59 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/05 08:51:23 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/05 15:00:55 by rrebois          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,13 @@ Client::~Client(){
 
 Client::Client(const Client &other) : _chanCount(0), _disconnect(false), _pass(false), _registered(false) {
 	*this = other;
+}
+
+bool	Client::operator==(Client &rhs) const
+{
+	if (this->getNickName() == rhs.getNickName())
+		return (true);
+	return (false);
 }
 
 const std ::string	&Client::getNickName() const{

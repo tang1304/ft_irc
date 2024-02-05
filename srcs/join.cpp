@@ -6,7 +6,7 @@
 /*   By: rrebois <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/29 09:13:54 by rrebois           #+#    #+#             */
-/*   Updated: 2024/02/05 10:47:03 by rrebois          ###   ########.fr       */
+/*   Updated: 2024/02/05 17:30:20 by rrebois          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,7 @@ static int	check_chan_first_char(vecPair pair)
 		if (it->first[0] == '#' || it->first[0] == '&')
 			valid = true;
 	}
-	if (valid == true)
-		return (1);
-	return (0);
+	return (valid);
 }
 
 static void	user_join_chan(itVecPair &it, Server &serv, Client &user)
@@ -55,7 +53,7 @@ static void	user_join_chan(itVecPair &it, Server &serv, Client &user)
 			return ;
 		}
 	}
-	if (itc->getConnected() == CHANMAXUSER && itc->getLimitUser())
+	if (itc->getConnected() == itc->getLimitUser() && itc->getLimitUser())
 	{
 		user.setBufferSend(ERR_CHANNELISFULL(user.getNickName(), it->first));
 		send(user.getClientFd(), user.getBufferSend().c_str(), user.getBufferSend().length(), 0);

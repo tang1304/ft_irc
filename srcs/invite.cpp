@@ -6,7 +6,7 @@
 /*   By: rrebois <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 12:22:53 by rrebois           #+#    #+#             */
-/*   Updated: 2024/02/05 11:46:56 by rrebois          ###   ########.fr       */
+/*   Updated: 2024/02/05 15:30:24 by rrebois          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,21 +29,11 @@ int	invite_cmd(int fd, vecStr &cmd, Server &serv)
 	}
 	if (itChan == serv.getChanList().end())
 		return (serv.getClientMap()[fd].setBufferSend(ERR_NOSUCHCHANNEL(user.getNickName(), cmd[2])), 1);
-	for (itClient = itChan->getUsersJoin().begin(); itClient != itChan->getUsersJoin().end(); itClient++)
-	{
-		if (itClient->getNickName() == user.getNickName())
-			break ;
-	}
-	for (itChanop = itChan->getChanop().begin(); itChanop != itChan->getChanop().end(); itChanop++)
-	{
-		if (itChanop->getNickName() == user.getNickName())
-			break ;
-	}
-	 if ((itClient == itChan->getUsersJoin().end() && itChanop == itChan->getChanop().end()) && !itChan->getPrivated())
-	 	return (serv.getClientMap()[fd].setBufferSend(ERR_NOTONCHANNEL(user.getNickName(), cmd[2])), 1);
-	 if (itClient != itChan->getUsersJoin().end() && itChan->getPrivated()) // a tester
+	if (!isItIn(user, itChan->getUsersJoin()) && !isItIn(user, itChan->getChanop()) && !itChan->getPrivated())
+		return (serv.getClientMap()[fd].setBufferSend(ERR_NOTONCHANNEL(user.getNickName(), cmd[2])), 1);
+	if (itClient != itChan->getUsersJoin().end() && itChan->getPrivated()) // a tester
 	 	return (serv.getClientMap()[fd].setBufferSend(ERR_CHANOPRIVSNEEDED(user.getNickName(), cmd[2])), 1);
-	 for (itClient = itChan->getUsersJoin().begin(); itClient != itChan->getUsersJoin().end(); itClient++)
+	for (itClient = itChan->getUsersJoin().begin(); itClient != itChan->getUsersJoin().end(); itClient++)
 	{
 		if (itClient->getNickName() == cmd[1])
 			break ;
@@ -53,6 +43,8 @@ int	invite_cmd(int fd, vecStr &cmd, Server &serv)
 		if (itChanop->getNickName() == cmd[1])
 			break ;
 	}
+//	itClient = findIt(cmd[1], itChan->getUsersJoin());
+//	itChanop = findIt(cmd[1], itChan->getChanop());
 	if ((itClient != itChan->getUsersJoin().end() && itClient->getNickName() == cmd[1]) || \
 		(itChanop != itChan->getChanop().end() && itChanop->getNickName() == cmd[1]))
 		return (serv.getClientMap()[fd].setBufferSend(ERR_USERONCHANNEL(user.getNickName(), cmd[1], cmd[2])), 1);

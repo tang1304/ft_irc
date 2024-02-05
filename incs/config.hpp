@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   config.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: rrebois <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/17 15:45:59 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/05 08:46:48 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/05 17:18:11 by rrebois          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,9 @@ typedef std::vector<std::pair<std::string, std::string> >::iterator	itVecPair;
 typedef int (*fctPointer)(int, vecStr &, Server &);
 typedef std::map<std::string, fctPointer>							mapCmds;
 typedef std::map<std::string, fctPointer>::iterator					itMapCmds;
+typedef int (*fctP)(char, Client &, Channel &);
+typedef std::map<char, fctP>										modeCmds;
+typedef std::map<char, fctP>::iterator								itModeCmds;
 
 
 #endif
