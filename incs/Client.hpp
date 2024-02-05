@@ -34,6 +34,8 @@ public:
 	~Client();
 	Client(const Client &other);
 
+	bool	operator==(Client &rhs) const;
+
 	const std::string	&getNickName() const;
 	const std::string	&getUserName() const;
 	const std::string	&getRealName() const;

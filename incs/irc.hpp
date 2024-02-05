@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   irc.hpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: rrebois <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 10:20:16 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/05 08:47:33 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/05 15:28:50 by rrebois          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ int 		user_cmd(int fd, vecStr &cmd, Server &serv);
 int			join_cmd(int fd, vecStr &cmd, Server &serv);
 int			privmsgCmd(int fd, vecStr &cmd, Server &serv);
 int			invite_cmd(int fd, vecStr &cmd, Server &serv);
+int			mode_cmd(int fd, vecStr &cmd, Server &serv);
 int			checkArgs(const std::string &port, const std::string &password);
 size_t		len(std::string s);
 vecStr		splitCmds(std::string &input, const std::string &delimiter);
@@ -36,5 +37,39 @@ vecPair		create_pair_cmd(vecStr &cmd);
 void		sendToAll(Server &serv, const std::string &msg);
 void		sendToClient(Client &user, const std::string &msg);
 void		sendToChan(Channel &chan, const std::string &msg);
+
+
+template <typename T, typename U>
+bool	isItIn(T &content, U &container){
+	typename U::iterator it = container.begin();
+
+	for (; it != container.end(); it++){
+		if (content == *it)
+			return (true);
+	}
+	return (false);
+}
+
+//template <typename T, typename U>
+//typename U::iterator	&findIt(T &content, U &container){
+//	typename U::iterator it = container.begin();
+//
+//	for (; it != container.end(); it++){
+//		if (content == *it)
+//			break ;
+//	}
+//	return (it);
+//}
+
+//template <typename U>
+//typename U::iterator	&findIt(std::string name, U &container){
+//	typename U::iterator it = container.begin();
+//
+//	for (; it != container.end(); it++){
+//		if (name == it->getNickName())
+//			break ;
+//	}
+//	return (it);
+//}
 
 #endif

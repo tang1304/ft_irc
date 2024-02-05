@@ -28,3 +28,5 @@ int	main(int argc, char **argv){
 		std::cerr << RED << e.what() << DEFAULT << std::endl;
 	}
 }
+
+// send ;essage when user becomes chanop

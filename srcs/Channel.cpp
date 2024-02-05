@@ -6,7 +6,7 @@
 /*   By: rrebois <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/29 15:40:11 by rrebois           #+#    #+#             */
-/*   Updated: 2024/02/05 11:32:12 by rrebois          ###   ########.fr       */
+/*   Updated: 2024/02/05 17:22:46 by rrebois          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 Channel::Channel(std::string name, std::string key) :
 		_name(name), _topic("No topic"), _password(key), _privated(false),
-		_changeTopic(false), _limitUser(false), _connected(0) {}
+		_changeTopic(false), _limitUser(USERCHANLIMIT), _connected(0) { }
 
 Channel::~Channel() {}
 
@@ -23,11 +23,11 @@ void	Channel::setId(int i)
 	_id = i;
 }
 
-void	Channel::setPrivated()
+void	Channel::setPrivated(char c)
 {
-	if (!_privated)
+	if (c == '+')
 		_privated = true;
-	else
+	else if (c == '-')
 		_privated = false;
 }
 
@@ -176,7 +176,7 @@ const vecStr	&Channel::getInvited() const
 	return (_invited);
 }
 
-const bool	&Channel::getLimitUser() const
+const int	&Channel::getLimitUser() const
 {
 	return (_limitUser);
 }
@@ -190,4 +190,5 @@ const int	&Channel::getId() const
 {
 	return (_id);
 }
+
 // void	Channel::giveChanopStatus()

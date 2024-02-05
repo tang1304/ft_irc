@@ -14,7 +14,8 @@ SRCS =	main.cpp \
 		privmsg.cpp \
 		quit.cpp \
 		join.cpp \
-		invite.cpp
+		invite.cpp \
+		mode.cpp
 OBJ_DIR = objs/
 OBJ = ${SRCS:%.cpp=${OBJ_DIR}%.o}
 NAME = ircserv
