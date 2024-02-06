@@ -6,7 +6,7 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/29 15:40:11 by rrebois           #+#    #+#             */
-/*   Updated: 2024/02/05 13:12:41 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/06 14:06:13 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,22 +96,6 @@ void	Channel::removeUser(Client &user)
 		if (user.getNickName() == it->getNickName())
 			break ;
 		index++;
-	}
-	for (it = _usersJoin.begin(); it != _usersJoin.end(); it++)
-	{
-		if (user.getNickName() != it->getNickName()){
-			it->setBufferSend(RPL_USERLEFT(user.getNickName(), _name));
-			send(it->getClientFd(), it->getBufferSend().c_str(), it->getBufferSend().length(), 0);
-			it->setBufferSend("");
-		}
-	}
-	for (it = _chanop.begin(); it != _chanop.end(); it++)
-	{
-		if (user.getNickName() != it->getNickName()){
-			it->setBufferSend(RPL_USERLEFT(user.getNickName(), _name));
-			send(it->getClientFd(), it->getBufferSend().c_str(), it->getBufferSend().length(), 0);
-			it->setBufferSend("");
-		}
 	}
 	_usersJoin.erase(_usersJoin.begin() + index);
 	_connected--;

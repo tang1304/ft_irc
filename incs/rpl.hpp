@@ -6,7 +6,7 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 16:21:25 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/05 15:56:07 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/06 16:05:50 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@
 # include "config.hpp"
 
 # define RPL_QUIT(nick) (nick + " left the channel\r\n")
+
+# define RPL_PRIVMSG(nick, username, msg) (":" + nick + "!" + username + "@" + LOCALHOST + " PRIVMSG : " + msg + "\r\n")
 
 //	1
 # define RPL_WELCOME( nickname, user_id) (":" + SERVERNAME + " 001 " + nickname + \
@@ -34,11 +36,23 @@
 //5
 # define RPL_ISUPPORT(client, tokens) (":" + SERVERNAME + " 005 " + client + " " + tokens + "\r\n")
 
+//372
+# define RPL_MOTD(client) (":" + SERVERNAME + " 372 " + client + " : " + MOTD + "\r\n")
+
+//375
+# define RPL_MOTDSTART(client) (":" + SERVERNAME + " 375 " + client + " :- " + SERVERNAME + " Message of the day - \r\n")
+
+//376
+# define RPL_ENDOFMOTD(client) (":" + SERVERNAME + " 376 " + client +  " :End of /MOTD command.\r\n")
+
 //401
-# define ERR_NOSUCHNICK(client, nick) (":" + SERVERNAME + " 005 " + client + " '" + nick + "' :No such nick/channel\r\n")
+# define ERR_NOSUCHNICK(client, nick) (":" + SERVERNAME + " 401 " + client + " '" + nick + "' :No such nick/channel\r\n")
+
+//403
+# define ERR_NOSUCHCHANNEL(client, chan) (":" + SERVERNAME + " 403 " + client + " " + chan + " :No such channel\r\n")
 
 //404
-# define ERR_CANNOTSENDTOCHAN(client, channel) (":" + SERVERNAME + " 005 " + client + " :Cannot send to channel\r\n")
+# define ERR_CANNOTSENDTOCHAN(client, channel) (":" + SERVERNAME + " 404 " + client + " :Cannot send to channel\r\n")
 
 //407
 # define ERR_TOOMANYTARGETS(client) (":" + SERVERNAME + " 407 " + client + " :Duplicate recipients. No message delivered\r\n")
@@ -49,8 +63,13 @@
 //412
 # define ERR_NOTEXTTOSEND(client) (":" + SERVERNAME + " 412 " + client + " :No text to send")
 
+//442
+# define ERR_NOTONCHANNEL(client, chan) (":" + SERVERNAME + " 442 " + client + " " + chan + " You're not on that channel:\r\n")
+
+//461
+# define ERR_NEEDMOREPARAMS(client, cmd) (":" + SERVERNAME + " 461 " + client + " " + cmd + " :Not enough parameters\r\n")
+
 # define ERROR(error) ("ERROR: " + error + "\r\n")
-# define ERR_NEEDMOREPARAMS(client, cmd) (client + " " + cmd + " :Not enough parameters\r\n")
 # define ERR_NEEDLESSPARAMS " :Too many parameters\n"
 # define ERR_UNKNOWNCOMMAND(client, command) (client + " " + command + " :Unknown command\r\n")
 # define ERR_PASSWDMISMATCH(client) (client + " :Password incorrect\r\n")
@@ -64,8 +83,6 @@
 # define ERR_CHANNELISFULL(client, channel) (client + " " + channel + " :Cannot join channel (+l)\r\n")
 # define ERR_INVITEONLYCHAN(client, channel) (client + " " + channel + " :Cannot join channel (+i)\r\n")
 # define ERR_BADCHANMASK(channel) (channel + " :Bad Channel Mask\r\n")
-# define ERR_NOSUCHCHANNEL(client, channel) (client + " " + channel + " :No such channel\r\n")
-# define ERR_NOTONCHANNEL(client, channel) (client + " " + channel + " :You're not on that channel\r\n")
 # define ERR_CHANOPRIVSNEEDED(client, channel) (client + " " + channel + " :You're not channel operator\r\n")
 # define ERR_USERONCHANNEL(client, nick, channel) (client + " " + nick + " " + channel + " :is already on channel\r\n")
 

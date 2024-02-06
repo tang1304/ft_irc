@@ -14,6 +14,8 @@ SRCS =	main.cpp \
 		privmsg.cpp \
 		quit.cpp \
 		join.cpp \
+		motd.cpp \
+		part.cpp \
 		invite.cpp
 OBJ_DIR = objs/
 OBJ = ${SRCS:%.cpp=${OBJ_DIR}%.o}

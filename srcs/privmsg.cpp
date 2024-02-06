@@ -6,7 +6,7 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 14:03:30 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/05 16:07:11 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/06 10:05:35 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,12 +29,12 @@ int	privmsgCmd(int fd, vecStr &cmd, Server &serv){
 	}
 
 	std::string	target = cmd[1];
-	std::string	msg = cmd[2];
+	std::string	msg = cmd[2].substr(1, std::string::npos);
 	if (target.find_first_of("#&") == 0){
 		for (itVecChan it = serv.getChanList().begin(); it != serv.getChanList().end(); it++){
 			if (it->getName() == target){
 				if (isItIn(user, it->getChanop()) || isItIn(user, it->getUsersJoin())){
-					sendToChanNotUser(user, *it, msg);
+					sendToChanNotUser(user, *it, RPL_PRIVMSG(user.getNickName(), user.getUserName(), msg));
 					return (0);
 				}
 				else{
@@ -49,7 +49,7 @@ int	privmsgCmd(int fd, vecStr &cmd, Server &serv){
 	else {
 		for (itClientMap it = serv.getClientMap().begin(); it != serv.getClientMap().end(); it++){
 			if (it->second.getNickName() == target){
-				sendToClient(it->second, msg);
+				sendToClient(it->second, RPL_PRIVMSG(user.getNickName(), user.getUserName(), msg));
 				return (0);
 			}
 		}
