@@ -6,7 +6,7 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 11:49:57 by rrebois           #+#    #+#             */
-/*   Updated: 2024/02/05 08:51:35 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/06 09:11:29 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@ int	pass_cmd(int fd, vecStr &cmd, Server &serv)
 	std::string 		ERR;
 	std::stringstream	userFd;
 
-std::cout << "In pass" << std::endl;
 	if (serv.getClientMap()[fd].getNickName().empty())
 	{
 		userFd << fd;

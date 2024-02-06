@@ -6,7 +6,7 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:03:01 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/05 14:01:54 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/06 15:03:54 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ void	Server::cmdInit(){
 	_commandsList["USER"] = &user_cmd;
 	_commandsList["NICK"] = &nick_cmd;
 	_commandsList["QUIT"] = &quit_cmd;
+	_commandsList["MOTD"] = &motdCmd;
 	// _commandsList["PING"] = &ping;
 	_commandsList["PRIVMSG"] = &privmsgCmd;
 	_commandsList["JOIN"] = &join_cmd;
@@ -239,7 +240,7 @@ void	Server:: parseInput(const int &fd, std::string &input){
 	vecVecStr	vecCommand;
 
 	command = splitCmds(input, "\r\n");
-	vecCommand = splitCmd(command, " "); 
+	vecCommand = splitCmd(command, " ");
 	if (vecCommand.empty())
 		return ;
 	itVecVecStr	itvv = vecCommand.begin();
@@ -270,4 +271,7 @@ void	Server::registrationDone(int &fd){
 	_clients[fd].setBufferSend(RPL_CREATED(_clients[fd].getNickName(), "2024"));
 	_clients[fd].setBufferSend(RPL_MYINFO(_clients[fd].getNickName()));
 	_clients[fd].setBufferSend(RPL_ISUPPORT(_clients[fd].getNickName(), "token"));
+	_clients[fd].setBufferSend(RPL_MOTDSTART(_clients[fd].getNickName()));
+	_clients[fd].setBufferSend(RPL_MOTD(_clients[fd].getNickName()));
+	_clients[fd].setBufferSend(RPL_ENDOFMOTD(_clients[fd].getNickName()));
 }
