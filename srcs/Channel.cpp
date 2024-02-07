@@ -6,7 +6,7 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/29 15:40:11 by rrebois           #+#    #+#             */
-/*   Updated: 2024/02/07 09:28:36 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/07 10:44:11 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,9 +76,9 @@ void	Channel::addChanop(Client &user)
 	_connected++;
 }
 
-void	Channel::addBanned(std::string &nickName)
+void	Channel::addBanned(Client &user)
 {
-	_banned.push_back(nickName);
+	_banned.push_back(user);
 }
 
 void	Channel::addInvited(std::string &nickName)
@@ -89,7 +89,6 @@ void	Channel::addInvited(std::string &nickName)
 void	Channel::removeUser(Client &user)
 {
 	int	index = 0;
-	itVecClient	it;
 
 	for (itVecClient it = _usersJoin.begin(); it != _usersJoin.end(); it++)
 	{
@@ -129,9 +128,9 @@ void	Channel::removeBan(Client &user)
 {
 	int	index = 0;
 
-	for (itVecStr it = _banned.begin(); it != _banned.end(); it++)
+	for (itVecClient it = _banned.begin(); it != _banned.end(); it++)
 	{
-		if (user.getName() == *it)
+		if (user == *it)
 			break ;
 		index++;
 	}
@@ -163,7 +162,7 @@ const std::string	&Channel::getPassword() const
 	return (_password);
 }
 
-const vecStr	&Channel::getBanned() const
+vecClient	&Channel::getBanned()
 {
 	return (_banned);
 }
