@@ -6,7 +6,7 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/29 10:41:49 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/07 13:29:43 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/07 15:58:27 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,14 +22,14 @@ int	quit_cmd(int fd, vecStr &cmd, Server &serv){
 		reason = cmd[1];
 	else
 		reason = "";
-	sendToClient(user, "Disconnected from the server \r\n");
+	sendToClient(user, ERROR(std::string("Disconnected from server")));
 	for (itVecChan itChan = serv.getChanList().begin(); itChan != serv.getChanList().end(); itChan++){
 		if ((itClient = findIt(userName, itChan->getUsersJoin())) != itChan->getUsersJoin().end()){
-			// itChan->removeUser(*itClient);
+			itChan->removeUser(*itClient);
 			sendToChan(*itChan, RPL_QUIT(itClient->getName(), itChan->getName()));
 		}
 		else if ((itClient = findIt(userName, itChan->getChanop())) != itChan->getChanop().end()){
-			// itChan->removeChanop(*itClient);
+			itChan->removeChanop(*itClient);
 			sendToChan(*itChan, RPL_QUIT(itClient->getName(), itChan->getName()));
 		}
 	}
