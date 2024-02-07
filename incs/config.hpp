@@ -6,7 +6,7 @@
 /*   By: rrebois <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/17 15:45:59 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/07 10:35:47 by rrebois          ###   ########.fr       */
+/*   Updated: 2024/02/07 15:51:32 by rrebois          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@
 # define LOCALHOST std::string("127.0.0.1")
 # define BUFFER_SIZE 1000
 # define NICKLEN 9
+# define PASSMAXLEN 15
 # define USERLEN 12
 # define USERPERCHAN 10
 # define CHANUSERCANJOIN 5

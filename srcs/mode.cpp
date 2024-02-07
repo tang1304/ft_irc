@@ -6,7 +6,7 @@
 /*   By: rrebois <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 13:14:23 by rrebois           #+#    #+#             */
-/*   Updated: 2024/02/07 14:30:12 by rrebois          ###   ########.fr       */
+/*   Updated: 2024/02/07 17:12:34 by rrebois          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,8 @@ static void modeLimitUser(char c, std::string target, Client &user, Channel &cha
 	ss >> i;
 	if ((target.empty() && c == '+') || i * 10 / 10 != i)
 	{
-		sendToClient(user, ERR_INVALIDMODEARG(chan.getName(), c+"l"));
+
+		sendToClient(user, ERR_INVALIDMODEPARAM(user.getName(), chan.getName(), c+"l", target));
 		return ;
 	}
 	chan.setLimitUserOnOff(c, i);
@@ -32,12 +33,55 @@ static void	modeInviteOnly(char c, std::string target, Client &user, Channel &ch
 {
 	if (!target.empty())
 	{
-		sendToClient(user, ERR_INVALIDMODEARG(chan.getName(), c+"i"));
+		sendToClient(user, ERR_INVALIDMODEPARAM(user.getName(), chan.getName(), c+"i", target));
 		return ;
 	}
 	chan.setPrivated(c);
 //	sendToChan(); a mettre dans setPrivate
 }
+
+static int checkInvalidKey(std::string target)
+{
+	for (size_t i = 0; i < target.size(); i++)
+	{
+		if (!isalnum(target.c_str()[i]))
+			return (1);
+	}
+	return (0);
+}
+
+static void	modeKey(char c, std::string target, Client &user, Channel &chan)
+{
+	if (c == '+' && (target.empty() || target.size() > PASSMAXLEN))
+	{
+		sendToClient(user, ERR_INVALIDMODEPARAM(user.getName(), chan.getName(), c+"k", target));
+		return ;
+	}
+	if (c == '+' && checkInvalidKey(target))
+	{
+		sendToClient(user, ERR_INVALIDMODEPARAM(user.getName(), chan.getName(), c+"k", target));
+		return ;
+	}
+	chan.setPassword(c, target);
+//	sendToChan(); a mettre dans setPrivate
+}
+
+//static void	modeOperator(char c, std::string target, Client &user, Channel &chan)
+//{//le chan existe et user is chanop in that chan
+//	itVecClient	itClient = findIt(target, chan.getUsersJoin());
+//	itVecClient	itChanop = findIt(target, chan.getChanop());
+//	itVecClient
+//
+//	if (itClient == chan.getUsersJoin().end() && itChanop == chan.getChanop().end())
+//		sendToClient(user, ERR_NOTONCHANNEL(target, chan.getName()));
+//	if ((c == '+' && itChanop != chan.getChanop().end()) || (c == '-' && itClient != chan.getUsersJoin().end()))
+//		return ;
+//	if (c == '+')
+//	{
+//		addChanop()
+//	}
+////	sendToChan(); a mettre dans setPrivate
+//}
 
 int	mode_cmd(int fd, vecStr &cmd, Server &serv) // A verifier
 {
@@ -51,8 +95,8 @@ int	mode_cmd(int fd, vecStr &cmd, Server &serv) // A verifier
 
 	modeList['i'] = &modeInviteOnly;
 //	_modeList['t'] = &modeTopic;
-//	modeList['k'] = &modeKey;
-//	_modeList['o'] = &modeOperator;
+	modeList['k'] = &modeKey;
+//	modeList['o'] = &modeOperator;
 	modeList['l'] = &modeLimitUser;
 	//modeList['b'] = &modeBan;
 	if (cmd.size() < 3)
@@ -92,8 +136,41 @@ std::cout << it->first << " " << it->second << std::endl;
 		else
 		{
 			itCmd = modeList.find(it->first);
-			if (itCmd != modeList.end())
-				itCmd->second(modestring, it->second, user, *itChan);
+			if (itCmd != modeList.end() || it->first == 'o')
+			{
+				if (it->first == 'o')
+				{
+					itClientMap	itCM;
+					for (itCM = serv.getClientMap().begin(); itCM != serv.getClientMap().end(); itCM++)
+					{
+						if (it->second == itCM->second.getName())
+							break ;
+					}
+					if (itCM == serv.getClientMap().end())
+						sendToClient(user, ERR_NOEXISTINGUSER(user.getName(), it->second));
+					else
+					{
+						itVecClient	itClient = findIt(it->second, itChan->getUsersJoin());
+						itVecClient	itChanop = findIt(it->second, itChan->getChanop());
+
+						if (itClient == itChan->getUsersJoin().end() && itChanop == itChan->getChanop().end())
+							sendToClient(user, ERR_NOTONCHANNEL(it->second, itChan->getName()));
+						itChan->promoteDemoteUsers(modestring, user, itCM->second);
+//						if (modestring == '+' && itClient != itChan->getUsersJoin().end())
+//						{
+//							itChan->addChanop(itCM->second);
+//							itChan->removeUser(itCM->second);
+//						}
+//						else if (modestring == '-' && itChanop != itChan->getChanop().end())
+//						{
+//							itChan->addUser(itCM->second);
+//							itChan->removeChanop(itCM->second);
+//						}
+					}
+				}
+				else
+					itCmd->second(modestring, it->second, user, *itChan);
+			}
 			else
 				sendToClient(user, ERR_CMODEUNKNOWNFLAG(cmd[1]));
 		}

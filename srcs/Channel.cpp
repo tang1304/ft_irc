@@ -6,7 +6,7 @@
 /*   By: rrebois <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/29 15:40:11 by rrebois           #+#    #+#             */
-/*   Updated: 2024/02/07 11:09:30 by rrebois          ###   ########.fr       */
+/*   Updated: 2024/02/07 17:44:44 by rrebois          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,14 @@ Channel::~Channel() {}
 void	Channel::setId(int i)
 {
 	_id = i;
+}
+
+void	Channel::setPassword(char c, std::string &key)
+{
+	if (c == '+')
+		_password = key;
+	if (c == '-')
+		_password.clear();
 }
 
 void	Channel::setPrivated(char c)
@@ -106,7 +114,7 @@ void	Channel::removeUser(Client &user)// checker si user pas end
 
 void	Channel::removeChanop(Client &user) // checker si user pas end
 {
-	int					index = 0;
+	int	index = 0;
 
 	for (itVecClient it = _chanop.begin(); it != _chanop.end(); it++)
 	{
@@ -117,14 +125,56 @@ void	Channel::removeChanop(Client &user) // checker si user pas end
 	_chanop.erase(_chanop.begin() + index);
 	_connected--;
 	if (!_chanop.size() && _connected >= 1)
-		promoteUserToChanop(*_usersJoin.begin());
+		promoteFirstUserToChanop(*_usersJoin.begin());
 	// add if !_connected -> delete channel de server + call destuctor?
 }
 
-void	Channel::promoteUserToChanop(Client &user)
+void	Channel::promoteFirstUserToChanop(Client &user)
 {
 	_chanop.push_back(user);
 	_usersJoin.erase(_usersJoin.begin());
+}
+
+void	Channel::promoteDemoteUsers(char c, Client &user, Client &target)
+{
+	if (c == '+' && isItIn(target, getChanop()))
+	{
+		sendToClient(user, ERR_USERALREADYOP(user.getName(), target.getName(), getName()));
+		return ;
+	}
+	else if (c == '+' && !isItIn(target, getChanop()))
+	{
+		int index = 0;
+
+		_chanop.push_back(target);
+		for (itVecClient it = _usersJoin.begin(); it != _usersJoin.end(); it++)
+		{
+			if (user.getName() == it->getName())
+				break ;
+			index++;
+		}
+		_usersJoin.erase(_usersJoin.begin() + index);
+		sendToChan(*this, RPL_USERPROMOTED(user.getName(), target.getName()));
+	}
+	if (c == '-' && isItIn(target, getUsersJoin()))
+	{
+		sendToClient(user, ERR_USERALREADYBASICU(user.getName(), target.getName(), getName()));
+		return ;
+	}
+	else if (c == '-' && !isItIn(target, getUsersJoin()))
+	{
+		_usersJoin.push_back(target);
+		int	index = 0;
+
+		for (itVecClient it = _chanop.begin(); it != _chanop.end(); it++)
+		{
+			if (user.getName() == it->getName())
+				break ;
+			index++;
+		}
+		_chanop.erase(_chanop.begin() + index);
+		sendToChan(*this, RPL_USERDEMOTED(user.getName(), target.getName()));
+	}
 }
 
 void	Channel::removeBan(Client &user)
