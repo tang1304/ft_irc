@@ -3,17 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   user.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: rrebois <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/25 13:22:51 by rrebois           #+#    #+#             */
-/*   Updated: 2024/02/05 08:54:26 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/07 15:24:06 by rrebois          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../incs/irc.hpp"
 
 int user_cmd(int fd, vecStr &cmd, Server &serv)
-{
+{// attention segfaut si USER t  * t
 	std::string 		ERR;
 	std::stringstream	ss;
 
@@ -31,7 +31,7 @@ std::cout << "In user" << std::endl;
 		return (serv.getClientMap()[fd].setBufferSend(ERR_PASSFIRST(ERR)), 1);
 	if (serv.getClientMap()[fd].getName().empty())
 		return (serv.getClientMap()[fd].setBufferSend(ERR_NICKFIRST(ERR)), 1);
-	if (cmd.size() < 4 || cmd[1].empty())
+	if (cmd.size() < 5 || cmd[1].empty())
 		return (serv.getClientMap()[fd].setBufferSend(ERR_NEEDMOREPARAMS(ERR, cmd[0])), 1);
 	serv.getClientMap()[fd].setUsername(cmd[1]);
 	serv.getClientMap()[fd].setRealName(cmd[4]);

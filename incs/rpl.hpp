@@ -6,7 +6,7 @@
 /*   By: rrebois <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 16:21:25 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/07 13:38:25 by rrebois          ###   ########.fr       */
+/*   Updated: 2024/02/07 17:37:20 by rrebois          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,11 @@
 
 //5
 # define RPL_ISUPPORT(client, tokens) (":" + SERVERNAME + " 005 " + client + " " + tokens + "\r\n")
+
+
+# define RPL_USERPROMOTED(client, nick) (":" + SERVERNAME + " " + client + " promoted " + nick + " chanop\r\n")
+
+# define RPL_USERDEMOTED(client, nick) (":" + SERVERNAME + " " + client + " demoted chanop " + nick + "\r\n")
 
 //324 -> needs to be completed
 # define RPL_CHANNELMODEIS(client, channel) (":" + SERVERNAME + " 324 " + client + " " + channel + "\r\n")
@@ -105,6 +110,12 @@
 
 # define ERROR(error) ("ERROR: " + error + "\r\n")
 
+//525
+# define ERR_INVALIDKEY(client, channel) (":" + SERVERNAME + " 525 " + client + " " + channel + " :Key is not well-formed (alphanumeric characters only)\r\n")
+
+// 696
+# define ERR_INVALIDMODEPARAM(client, channel, mode, param) (":" + SERVERNAME + " 696 " + client + " " + \
+			channel + " " + mode + " " + param + " :Invalid parameter\r\n")
 
 # define ERR_NOEXISTINGUSER(client, nick) (":" + SERVERNAME +client + " " + nick + " :No existing user\r\n")
 # define ERR_PASSFIRST(client) (":" + SERVERNAME +client + " :Must confirm password first\r\n")
@@ -112,7 +123,8 @@
 # define ERR_NOTREGISTERED(client) (":" + SERVERNAME + " " + client + " :You may register first\r\n")
 # define ERR_ALREADYINCHANNEL(client, channel) (":" + SERVERNAME + " " + client + " " + channel + " :User already in channel\r\n")
 # define ERR_CMODEUNKNOWNFLAG(channel) (":" + SERVERNAME + " " + channel + " :Unknown MODE flag\r\n")
-# define ERR_INVALIDMODEARG(channel, mode) (":" + SERVERNAME + " " + channel + " :Invalid MODE flag arguments " + mode + "\r\n")
+# define ERR_USERALREADYOP(client, nick, channel) (":" + SERVERNAME + " " + client + " " + nick + " " + channel + " :User already chanop\r\n")
+# define ERR_USERALREADYBASICU(client, nick, channel) (":" + SERVERNAME + " " + client + " " + nick + " " + channel + " :User already basic user\r\n")
 
 # define RPL_USERJOIN(client, channel) (client + " is joining the channel " + channel + "\r\n")
 # define RPL_USERLEFT(client, channel) (client + " has left the channel " + channel + "\r\n")

@@ -18,22 +18,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="5c4682a4-6be0-4046-8bbb-5039e08b383d" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/incs/Channel.hpp" beforeDir="false" afterPath="$PROJECT_DIR$/incs/Channel.hpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/incs/Client.hpp" beforeDir="false" afterPath="$PROJECT_DIR$/incs/Client.hpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/incs/config.hpp" beforeDir="false" afterPath="$PROJECT_DIR$/incs/config.hpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/incs/irc.hpp" beforeDir="false" afterPath="$PROJECT_DIR$/incs/irc.hpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/incs/rpl.hpp" beforeDir="false" afterPath="$PROJECT_DIR$/incs/rpl.hpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/srcs/Channel.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/srcs/Channel.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/srcs/Client.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/srcs/Client.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/srcs/Server.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/srcs/Server.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/srcs/invite.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/srcs/invite.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/srcs/join.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/srcs/join.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/srcs/mode.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/srcs/mode.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/srcs/nick.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/srcs/nick.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/srcs/pass.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/srcs/pass.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/srcs/privmsg.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/srcs/privmsg.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/srcs/user.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/srcs/user.cpp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -153,7 +143,7 @@
       <updated>1706171668137</updated>
       <workItem from="1706171669370" duration="18668000" />
       <workItem from="1707117938788" duration="26739000" />
-      <workItem from="1707293948639" duration="15973000" />
+      <workItem from="1707293948639" duration="25313000" />
     </task>
     <servers />
   </component>
