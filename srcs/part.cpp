@@ -6,7 +6,7 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/06 15:09:03 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/07 09:30:06 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/07 14:33:03 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,9 +32,13 @@ int partCmd(int fd, vecStr &cmd, Server &serv){
 	}
 	if (chanop == true){
 		it->removeChanop(user);
+		sendToChan(*it, RPL_USERLEFT(user.getName(), it->getName()));
 	}
 	else{
 		it->removeUser(user);
+		sendToChan(*it, RPL_USERLEFT(user.getName(), it->getName()));
 	}
+	if (it->getConnected() == 0)
+			serv.removeChan(it->getId());
 	return (0);
 }
