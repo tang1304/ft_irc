@@ -18,13 +18,13 @@ int	pass_cmd(int fd, vecStr &cmd, Server &serv)
 	std::stringstream	userFd;
 
 std::cout << "In pass" << std::endl;
-	if (serv.getClientMap()[fd].getNickName().empty())
+	if (serv.getClientMap()[fd].getName().empty())
 	{
 		userFd << fd;
 		userFd >> ERR;
 	}
 	else
-		ERR = serv.getClientMap()[fd].getNickName();
+		ERR = serv.getClientMap()[fd].getName();
 	if (serv.getClientMap()[fd].getRegistered())
 		return (serv.getClientMap()[fd].setBufferSend(ERR_ALREADYREGISTERED(ERR)), 1);
 	if (cmd.size() < 2)

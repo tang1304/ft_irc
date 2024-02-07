@@ -6,7 +6,7 @@
 /*   By: rrebois <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 10:20:16 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/05 15:28:50 by rrebois          ###   ########.fr       */
+/*   Updated: 2024/02/07 11:18:18 by rrebois          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ bool	isItIn(T &content, U &container){
 }
 
 //template <typename T, typename U>
-//typename U::iterator	&findIt(T &content, U &container){
+//typename U::iterator	findIt(T &content, U &container){
 //	typename U::iterator it = container.begin();
 //
 //	for (; it != container.end(); it++){
@@ -61,15 +61,15 @@ bool	isItIn(T &content, U &container){
 //	return (it);
 //}
 
-//template <typename U>
-//typename U::iterator	&findIt(std::string name, U &container){
-//	typename U::iterator it = container.begin();
-//
-//	for (; it != container.end(); it++){
-//		if (name == it->getNickName())
-//			break ;
-//	}
-//	return (it);
-//}
+template <typename U>
+typename U::iterator	findIt(const std::string &name, U &container){
+	typename U::iterator it = container.begin();
+
+	for (; it != container.end(); it++){
+		if (name == it->getName())
+			break ;
+	}
+	return (it);
+}
 
 #endif

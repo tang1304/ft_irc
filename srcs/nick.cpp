@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   nick.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: rrebois <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 15:06:38 by rrebois           #+#    #+#             */
-/*   Updated: 2024/02/05 08:51:32 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/07 11:11:21 by rrebois          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ static int check_password_used(std::string nick, Server &serv)
 
 	cpy = serv.getClientMap();
 	for (it = cpy.begin(); it != cpy.end(); it++)
-		if (nick == it->second.getNickName())
+		if (nick == it->second.getName())
 			return (0);
 	return (1);
 }
@@ -45,13 +45,13 @@ int	nick_cmd(int fd, vecStr& cmd, Server &serv)
 	std::stringstream	ss;
 
 std::cout << "In nick" << std::endl;
-	if (serv.getClientMap()[fd].getNickName().empty())
+	if (serv.getClientMap()[fd].getName().empty())
 	{
 		ss << fd;
 		ss >> ERR;
 	}
 	else
-		ERR = serv.getClientMap()[fd].getNickName();
+		ERR = serv.getClientMap()[fd].getName();
 	if (!serv.getClientMap()[fd].getPass())
 		return (serv.getClientMap()[fd].setBufferSend(ERR_PASSFIRST(ERR)), 1);
 	if (cmd.size() < 2)
@@ -60,7 +60,7 @@ std::cout << "In nick" << std::endl;
 		return (serv.getClientMap()[fd].setBufferSend(ERR_ERRONEUSNICKNAME(ERR, cmd[1])), 1);
 	if (!check_password_used(cmd[1], serv))
 		return (serv.getClientMap()[fd].setBufferSend(ERR_NICKNAMEINUSE(ERR, cmd[1])), 1);
-	serv.getClientMap()[fd].setNickName(cmd[1]);
+	serv.getClientMap()[fd].setName(cmd[1]);
 	if (serv.getClientMap()[fd].getUserName().length() != 0){
 		serv.registrationDone(fd);
 	}

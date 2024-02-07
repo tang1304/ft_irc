@@ -6,7 +6,7 @@
 /*   By: rrebois <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:15:06 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/05 17:20:46 by rrebois          ###   ########.fr       */
+/*   Updated: 2024/02/07 11:07:26 by rrebois          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,9 +26,9 @@ private:
 	vecClient	_usersJoin;
 	vecClient	_chanop; // Channel moderators are identified by the channel member prefix ('@' for standard channel operators, '%' for halfops) next to their nickname whenever it is associated with a channel (e.g. replies to the NAMES, WHO, and WHOIS commands).
 	vecStr		_banned; // peut etre a mettre dans client
-	vecStr		_invited;
 	bool		_privated; // invite only or not / false
 	bool		_changeTopic; // false = anyone true = chanops only / false
+	bool		_limitUserOnOff;
 	int			_limitUser;
 	// bool		_passOnOff; // on?
 	int			_connected; //number of users/chanops connected
@@ -38,11 +38,10 @@ public:
 	void				setId(int i);
 	void				setPrivated(char c);
 	void				setChangeTopic();
-	void				setLimitUser();
+	void				setLimitUserOnOff(char c, unsigned int i);
 	void				addUser(Client &user);
 	void				addChanop(Client &user);
-	void				addBanned(std::string &nickName);
-	void				addInvited(std::string &nickName);
+	void				addBanned(std::string &nickName);// a modif, add client
 	void				removeUser(Client &user);
 	void				removeChanop(Client &user);
 	void				removeBan(Client &user);
@@ -53,12 +52,12 @@ public:
 	const std::string	&getName() const;
 	vecClient			&getUsersJoin();
 	vecClient			&getChanop();
-	const vecStr		&getBanned() const;
-	const vecStr		&getInvited() const;
+	const vecStr		&getBanned() const; // a modif, add client
 	const int			&getLimitUser() const;
+	const bool			&getLimitUserOnOff() const;
 	const bool			&getPrivated() const;
 	const int			&getId() const;
-	void				getModeFunc(std::string mode) const;
+//	void				getModeFunc(std::string mode) const;
 	// void	giveChanopStatus();
 
 	Channel(std::string name, std::string key);

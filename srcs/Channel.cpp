@@ -6,7 +6,7 @@
 /*   By: rrebois <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/29 15:40:11 by rrebois           #+#    #+#             */
-/*   Updated: 2024/02/05 17:22:46 by rrebois          ###   ########.fr       */
+/*   Updated: 2024/02/07 11:09:30 by rrebois          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,8 @@
 
 Channel::Channel(std::string name, std::string key) :
 		_name(name), _topic("No topic"), _password(key), _privated(false),
-		_changeTopic(false), _limitUser(USERCHANLIMIT), _connected(0) { }
+		_changeTopic(false), _limitUserOnOff(true), _limitUser(USERPERCHAN),
+		_connected(0) { }
 
 Channel::~Channel() {}
 
@@ -39,20 +40,23 @@ void	Channel::setChangeTopic()
 		_changeTopic = true;
 }
 
-void	Channel::setLimitUser()
+void	Channel::setLimitUserOnOff(char c, unsigned int i)
 {
-	if (_limitUser)
-		_limitUser = false;
-	else
-		_limitUser = true;
+	if (c == '+')
+	{
+		_limitUser = i;
+		_limitUserOnOff = true;
+	}
+	else if (c == '-')
+		_limitUserOnOff = false;
 }
 
 void	Channel::addUser(Client &user)
 {
-	sendToChan(*this, RPL_USERJOIN(user.getNickName(), _name));
+	sendToChan(*this, RPL_USERJOIN(user.getName(), _name));
 	_usersJoin.push_back(user);
 	_connected++;
-	user.setBufferSend(RPL_TOPIC(user.getNickName(), _name, _topic));
+	user.setBufferSend(RPL_TOPIC(user.getName(), _name, _topic));
 	send(user.getClientFd(), user.getBufferSend().c_str(), user.getBufferSend().length(), 0);
 	user.setBufferSend("");
 }
@@ -63,39 +67,34 @@ void	Channel::addChanop(Client &user)
 	_connected++;
 }
 
-void	Channel::addBanned(std::string &nickName)
+void	Channel::addBanned(std::string &nickName) //a modifier
 {
 	_banned.push_back(nickName);
 }
 
-void	Channel::addInvited(std::string &nickName)
-{
-	_invited.push_back(nickName);
-}
-
-void	Channel::removeUser(Client &user)
+void	Channel::removeUser(Client &user)// checker si user pas end
 {
 	int	index = 0;
 	itVecClient	it;
 
 	for (it = _usersJoin.begin(); it != _usersJoin.end(); it++)
 	{
-		if (user.getNickName() == it->getNickName())
+		if (user.getName() == it->getName())
 			break ;
 		index++;
 	}
 	for (it = _usersJoin.begin(); it != _usersJoin.end(); it++)
 	{
-		if (user.getNickName() != it->getNickName()){
-			it->setBufferSend(RPL_USERLEFT(user.getNickName(), _name));
+		if (user.getName() != it->getName()){
+			it->setBufferSend(RPL_USERLEFT(user.getName(), _name));
 			send(it->getClientFd(), it->getBufferSend().c_str(), it->getBufferSend().length(), 0);
 			it->setBufferSend("");
 		}
 	}
 	for (it = _chanop.begin(); it != _chanop.end(); it++)
 	{
-		if (user.getNickName() != it->getNickName()){
-			it->setBufferSend(RPL_USERLEFT(user.getNickName(), _name));
+		if (user.getName() != it->getName()){
+			it->setBufferSend(RPL_USERLEFT(user.getName(), _name));
 			send(it->getClientFd(), it->getBufferSend().c_str(), it->getBufferSend().length(), 0);
 			it->setBufferSend("");
 		}
@@ -105,13 +104,13 @@ void	Channel::removeUser(Client &user)
 	// add if !_connected -> delete channel de server + call destuctor?
 }
 
-void	Channel::removeChanop(Client &user)
+void	Channel::removeChanop(Client &user) // checker si user pas end
 {
 	int					index = 0;
 
 	for (itVecClient it = _chanop.begin(); it != _chanop.end(); it++)
 	{
-		if (user.getNickName() == it->getNickName())
+		if (user.getName() == it->getName())
 			break ;
 		index++;
 	}
@@ -134,7 +133,7 @@ void	Channel::removeBan(Client &user)
 
 	for (itVecStr it = _banned.begin(); it != _banned.end(); it++)
 	{
-		if (user.getNickName() == *it)
+		if (user.getName() == *it)
 			break ;
 		index++;
 	}
@@ -171,14 +170,14 @@ const vecStr	&Channel::getBanned() const
 	return (_banned);
 }
 
-const vecStr	&Channel::getInvited() const
-{
-	return (_invited);
-}
-
 const int	&Channel::getLimitUser() const
 {
 	return (_limitUser);
+}
+
+const bool	&Channel::getLimitUserOnOff() const
+{
+	return (_limitUserOnOff);
 }
 
 const bool	&Channel::getPrivated() const

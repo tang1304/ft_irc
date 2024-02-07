@@ -6,7 +6,7 @@
 /*   By: rrebois <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 12:49:59 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/05 15:00:55 by rrebois          ###   ########.fr       */
+/*   Updated: 2024/02/07 11:08:59 by rrebois          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,13 +23,13 @@ Client::Client(const Client &other) : _chanCount(0), _disconnect(false), _pass(f
 
 bool	Client::operator==(Client &rhs) const
 {
-	if (this->getNickName() == rhs.getNickName())
+	if (this->getName() == rhs.getName())
 		return (true);
 	return (false);
 }
 
-const std ::string	&Client::getNickName() const{
-	return (_nickName);
+const std ::string	&Client::getName() const{
+	return (_name);
 }
 
 const std ::string	&Client::getUserName() const{
@@ -79,8 +79,8 @@ const int	&Client::getClientFd() const
 	return (_clientFd);
 }
 
-void	Client::setNickName(const std::string &nickName){
-	_nickName = nickName;
+void	Client::setName(const std::string &name){
+	_name = name;
 }
 
 void	Client::setUsername(const std::string &userName){
