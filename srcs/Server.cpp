@@ -6,7 +6,7 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:03:01 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/07 15:21:33 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/07 15:50:45 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -155,31 +155,6 @@ void	Server::clientDisconnection(const int &fd){
 
 	for (itChan = getChanList().begin(); itChan != getChanList().end(); itChan++)
 	{
-		// for (itClient = itChan->getUsersJoin().begin(); itClient != itChan->getUsersJoin().end(); itClient++)
-		// {
-		// 	if (itClient->getClientFd() == fd)
-		// 	{
-		// 		itChan->removeUser(*itClient);
-		// 		sendToChan(*itChan, RPL_USERLEFT(itClient->getName(), itChan->getName()));
-		// 		itClient--;
-		// 		break ;
-		// 	}
-		// }
-		// for (itChanop = itChan->getChanop().begin(); itChanop != itChan->getChanop().end(); itChanop++)
-		// {
-		// 	if (itChanop->getClientFd() == fd)
-		// 	{
-		// 		itChan->removeChanop(*itChanop);
-		// 		sendToChan(*itChan, RPL_USERLEFT(itChanop->getName(), itChan->getName()));
-		// 		itChanop--;
-		// 		break ;
-		// 	}
-		// }
-		// if (itChan->getConnected() == 0)
-		// {
-		// 	removeChan(itChan->getId());
-		// 	itChan--;
-		// }
 		if ((itClient = findIt(user, itChan->getUsersJoin())) != itChan->getUsersJoin().end()){
 			itChan->removeUser(*itClient);
 			// sendToChan(*itChan, RPL_USERLEFT(itClient->getName(), itChan->getName()));
