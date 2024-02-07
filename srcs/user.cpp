@@ -18,18 +18,18 @@ int user_cmd(int fd, vecStr &cmd, Server &serv)
 	std::stringstream	ss;
 
 std::cout << "In user" << std::endl;
-	if (serv.getClientMap()[fd].getNickName().empty())
+	if (serv.getClientMap()[fd].getName().empty())
 	{
 		ss << fd;
 		ss >> ERR;
 	}
 	else
-		ERR = serv.getClientMap()[fd].getNickName();
+		ERR = serv.getClientMap()[fd].getName();
 	if (serv.getClientMap()[fd].getRegistered())
 		return (serv.getClientMap()[fd].setBufferSend(ERR_ALREADYREGISTERED(ERR)), 1);
 	if (!serv.getClientMap()[fd].getPass())
 		return (serv.getClientMap()[fd].setBufferSend(ERR_PASSFIRST(ERR)), 1);
-	if (serv.getClientMap()[fd].getNickName().empty())
+	if (serv.getClientMap()[fd].getName().empty())
 		return (serv.getClientMap()[fd].setBufferSend(ERR_NICKFIRST(ERR)), 1);
 	if (cmd.size() < 4 || cmd[1].empty())
 		return (serv.getClientMap()[fd].setBufferSend(ERR_NEEDMOREPARAMS(ERR, cmd[0])), 1);

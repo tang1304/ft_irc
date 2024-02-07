@@ -159,7 +159,7 @@ void	Server::clientDisconnection(const int &fd){
 			if (itClient->getClientFd() == fd)
 			{
 				itChan->removeUser(*itClient);
-				sendToChan(*itChan, RPL_USERLEFT(itClient->getNickName(), itChan->getName()));
+				sendToChan(*itChan, RPL_USERLEFT(itClient->getName(), itChan->getName()));
 				itClient--;
 			}
 		}
@@ -168,7 +168,7 @@ void	Server::clientDisconnection(const int &fd){
 			if (itChanop->getClientFd() == fd)
 			{
 				itChan->removeChanop(*itChanop);
-				sendToChan(*itChan, RPL_USERLEFT(itChanop->getNickName(), itChan->getName()));
+				sendToChan(*itChan, RPL_USERLEFT(itChanop->getName(), itChan->getName()));
 				itChanop--;
 			}
 		}
@@ -196,9 +196,9 @@ for (itVecChan itc = getChanList().begin(); itc != getChanList().end(); itc++)
 		std::cout << "No password set for this channel." << std::endl;
 	std::cout << "Number of users + chanops connected: " << itc->getConnected() << "." << std::endl;
 	for (itVecClient ut = itc->getUsersJoin().begin(); ut != itc->getUsersJoin().end(); ut++)
-		std::cout << "user " << ut->getNickName() << " connected." << std::endl;
+		std::cout << "user " << ut->getName() << " connected." << std::endl;
 	for (itVecClient ut = itc->getChanop().begin(); ut != itc->getChanop().end(); ut++)
-		std::cout << "Chanop " << ut->getNickName() << " connected." << std::endl;
+		std::cout << "Chanop " << ut->getName() << " connected." << std::endl;
 }
 	//END TEST
 }
@@ -253,22 +253,22 @@ for (; i < itvv->end(); i++){
 		itMapCmds	it = _commandsList.find(*itvv->begin());
 		if (it != _commandsList.end() && (*itvv->begin() != "PASS" && *itvv->begin() != "USER" && *itvv->begin() != "NICK")\
 		&& _clients[fd].getDisconnect()){
-			_clients[fd].setBufferSend(ERR_NOTREGISTERED(_clients[fd].getNickName()));
+			_clients[fd].setBufferSend(ERR_NOTREGISTERED(_clients[fd].getName()));
 			return ;
 		}
 		if (it != _commandsList.end()){
 			it->second(fd, *itvv, *this);
 		}
 		else if (*itvv->begin() != "CAP"){
-			_clients[fd].setBufferSend(ERR_UNKNOWNCOMMAND(_clients[fd].getNickName(), *itvv->begin()));
+			_clients[fd].setBufferSend(ERR_UNKNOWNCOMMAND(_clients[fd].getName(), *itvv->begin()));
 		}
 	}
 }
 
 void	Server::registrationDone(int &fd){
-	_clients[fd].setBufferSend(RPL_WELCOME(_clients[fd].getNickName(), _clients[fd].getUserName()));
-	_clients[fd].setBufferSend(RPL_YOURHOST(_clients[fd].getNickName()));
-	_clients[fd].setBufferSend(RPL_CREATED(_clients[fd].getNickName(), "2024"));
-	_clients[fd].setBufferSend(RPL_MYINFO(_clients[fd].getNickName()));
-	_clients[fd].setBufferSend(RPL_ISUPPORT(_clients[fd].getNickName(), "token"));
+	_clients[fd].setBufferSend(RPL_WELCOME(_clients[fd].getName(), _clients[fd].getUserName()));
+	_clients[fd].setBufferSend(RPL_YOURHOST(_clients[fd].getName()));
+	_clients[fd].setBufferSend(RPL_CREATED(_clients[fd].getName(), "2024"));
+	_clients[fd].setBufferSend(RPL_MYINFO(_clients[fd].getName()));
+	_clients[fd].setBufferSend(RPL_ISUPPORT(_clients[fd].getName(), "token"));
 }

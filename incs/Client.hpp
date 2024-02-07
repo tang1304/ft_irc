@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rrebois <rrebois@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: rrebois <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:14:10 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/01 15:08:06 by rrebois          ###   ########lyon.fr   */
+/*   Updated: 2024/02/07 11:08:22 by rrebois          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 
 class Client{
 private:
-	std::string	_nickName;
+	std::string	_name;
 	std::string _userName;
 	std::string	_realName;
 	std::string	_bufferRead;
@@ -36,7 +36,7 @@ public:
 
 	bool	operator==(Client &rhs) const;
 
-	const std::string	&getNickName() const;
+	const std::string	&getName() const;
 	const std::string	&getUserName() const;
 	const std::string	&getRealName() const;
 	const std::string	&getBufferRead() const;
@@ -48,7 +48,7 @@ public:
 	const int			&getChanCount() const;
 	const int			&getClientFd() const;
 
-	void				setNickName(const std::string &nickName);
+	void				setName(const std::string &nickName);
 	void				setUsername(const std::string &userName);
 	void				setRealName(const std::string &realName);
 	void				setBufferSend(const std::string& msg);
