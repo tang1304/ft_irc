@@ -20,39 +20,39 @@ int	invite_cmd(int fd, vecStr &cmd, Server &serv) // Any user on chan can invite
 	itVecClient	itChanop;
 
 	if (cmd.size() < 3)
-		return (serv.getClientMap()[fd].setBufferSend(ERR_NEEDMOREPARAMS(user.getNickName(), cmd[0])), 1);
+		return (serv.getClientMap()[fd].setBufferSend(ERR_NEEDMOREPARAMS(user.getName(), cmd[0])), 1);
 	for (itChan = serv.getChanList().begin(); itChan != serv.getChanList().end(); itChan++)
 	{
 		if (itChan->getName() == cmd[2])
 			break ;
 	}
 	if (itChan == serv.getChanList().end())
-		return (serv.getClientMap()[fd].setBufferSend(ERR_NOSUCHCHANNEL(user.getNickName(), cmd[2])), 1);
+		return (serv.getClientMap()[fd].setBufferSend(ERR_NOSUCHCHANNEL(user.getName(), cmd[2])), 1);
 	for (itClient = itChan->getUsersJoin().begin(); itClient != itChan->getUsersJoin().end(); itClient++)
 	{
-		if (itClient->getNickName() == user.getNickName())
+		if (itClient->getName() == user.getName())
 			break ;
 	}
 	for (itChanop = itChan->getUsersJoin().begin(); itChanop != itChan->getUsersJoin().end(); itChanop++)
 	{
-		if (itChanop->getNickName() == user.getNickName())
+		if (itChanop->getName() == user.getName())
 			break ;
 	}
 	// if ((itClient == getUsersJoin().end() && itChanop == getChanop().end()) && !itChan->getPrivated())
-	// 	return (serv.getClientMap()[fd].setBufferSend(ERR_NOTONCHANNEL(user.getNickName(), cmd[2])), 1);
+	// 	return (serv.getClientMap()[fd].setBufferSend(ERR_NOTONCHANNEL(user.getName(), cmd[2])), 1);
 	// if (itClient != getUsersJoin().end() && itChan->getPrivated())
-	// 	return (serv.getClientMap()[fd].setBufferSend(ERR_CHANOPRIVSNEEDED(user.getNickName(), cmd[2])), 1);
+	// 	return (serv.getClientMap()[fd].setBufferSend(ERR_CHANOPRIVSNEEDED(user.getName(), cmd[2])), 1);
 	for (itClient = itChan->getUsersJoin().begin(); itClient != itChan->getUsersJoin().end(); itClient++)
 	{
-		if (itClient->getNickName() == cmd[1])
+		if (itClient->getName() == cmd[1])
 			break ;
 	}
 	for (itChanop = itChan->getUsersJoin().begin(); itChanop != itChan->getUsersJoin().end(); itChanop++)
 	{
-		if (itChanop->getNickName() == cmd[1])
+		if (itChanop->getName() == cmd[1])
 			break ;
 	}
-	if (itClient->getNickName() == cmd[1] || itChanop->getNickName() == cmd[1])
-		return (serv.getClientMap()[fd].setBufferSend(ERR_USERONCHANNEL(user.getNickName(), cmd[1], cmd[2])), 1);
+	if (itClient->getName() == cmd[1] || itChanop->getName() == cmd[1])
+		return (serv.getClientMap()[fd].setBufferSend(ERR_USERONCHANNEL(user.getName(), cmd[1], cmd[2])), 1);
 	return (0);
 }

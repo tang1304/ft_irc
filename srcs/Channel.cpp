@@ -6,7 +6,7 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/29 15:40:11 by rrebois           #+#    #+#             */
-/*   Updated: 2024/02/06 14:06:13 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/07 09:28:36 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,19 +53,19 @@ void	Channel::addUser(Client &user)
 
 	for (it = _usersJoin.begin(); it != _usersJoin.end(); it++)
 	{
-		it->setBufferSend(RPL_USERJOIN(user.getNickName(), _name));
+		it->setBufferSend(RPL_USERJOIN(user.getName(), _name));
 		send(it->getClientFd(), it->getBufferSend().c_str(), it->getBufferSend().length(), 0);
 		it->setBufferSend("");
 	}
 	for (it = _chanop.begin(); it != _chanop.end(); it++)
 	{
-		it->setBufferSend(RPL_USERJOIN(user.getNickName(), _name));
+		it->setBufferSend(RPL_USERJOIN(user.getName(), _name));
 		send(it->getClientFd(), it->getBufferSend().c_str(), it->getBufferSend().length(), 0);
 		it->setBufferSend("");
 	}
 	_usersJoin.push_back(user);
 	_connected++;
-	user.setBufferSend(RPL_TOPIC(user.getNickName(), _name, _topic));
+	user.setBufferSend(RPL_TOPIC(user.getName(), _name, _topic));
 	send(user.getClientFd(), user.getBufferSend().c_str(), user.getBufferSend().length(), 0);
 	user.setBufferSend("");
 }
@@ -93,7 +93,7 @@ void	Channel::removeUser(Client &user)
 
 	for (itVecClient it = _usersJoin.begin(); it != _usersJoin.end(); it++)
 	{
-		if (user.getNickName() == it->getNickName())
+		if (user.getName() == it->getName())
 			break ;
 		index++;
 	}
@@ -104,11 +104,11 @@ void	Channel::removeUser(Client &user)
 
 void	Channel::removeChanop(Client &user)
 {
-	int					index = 0;
+	int	index = 0;
 
 	for (itVecClient it = _chanop.begin(); it != _chanop.end(); it++)
 	{
-		if (user.getNickName() == it->getNickName())
+		if (user.getName() == it->getName())
 			break ;
 		index++;
 	}
@@ -131,7 +131,7 @@ void	Channel::removeBan(Client &user)
 
 	for (itVecStr it = _banned.begin(); it != _banned.end(); it++)
 	{
-		if (user.getNickName() == *it)
+		if (user.getName() == *it)
 			break ;
 		index++;
 	}

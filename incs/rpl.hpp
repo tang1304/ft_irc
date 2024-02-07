@@ -6,7 +6,7 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 16:21:25 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/06 16:05:50 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/07 09:10:00 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,10 +61,10 @@
 # define ERR_NORECIPIENT(client, command) (":" + SERVERNAME + " 411 " + client + " :No recipient given (" + command + ")\r\n")
 
 //412
-# define ERR_NOTEXTTOSEND(client) (":" + SERVERNAME + " 412 " + client + " :No text to send")
+# define ERR_NOTEXTTOSEND(client) (":" + SERVERNAME + " 412 " + client + " :No text to send\r\n")
 
 //442
-# define ERR_NOTONCHANNEL(client, chan) (":" + SERVERNAME + " 442 " + client + " " + chan + " You're not on that channel:\r\n")
+# define ERR_NOTONCHANNEL(client, chan) (":" + SERVERNAME + " 442 " + client + " " + chan + " :You're not on that channel\r\n")
 
 //461
 # define ERR_NEEDMOREPARAMS(client, cmd) (":" + SERVERNAME + " 461 " + client + " " + cmd + " :Not enough parameters\r\n")

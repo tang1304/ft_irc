@@ -6,7 +6,7 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 12:49:59 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/05 14:48:19 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/07 09:28:36 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,12 +22,12 @@ Client::Client(const Client &other) : _chanCount(0), _disconnect(false), _pass(f
 }
 
 bool	Client::operator==(Client &rhs){
-	if (this->getNickName() == rhs.getNickName())
+	if (this->getName() == rhs.getName())
 		return (true);
 	return (false);
 }
 
-const std ::string	&Client::getNickName() const{
+const std ::string	&Client::getName() const{
 	return (_nickName);
 }
 
