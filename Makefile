@@ -16,6 +16,7 @@ SRCS =	main.cpp \
 		join.cpp \
 		motd.cpp \
 		part.cpp \
+		ping.cpp \
 		invite.cpp
 OBJ_DIR = objs/
 OBJ = ${SRCS:%.cpp=${OBJ_DIR}%.o}

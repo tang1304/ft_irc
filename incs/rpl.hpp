@@ -6,7 +6,7 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 16:21:25 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/07 09:10:00 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/07 15:19:48 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,7 @@
 
 # include "config.hpp"
 
-# define RPL_QUIT(nick) (nick + " left the channel\r\n")
-
-# define RPL_PRIVMSG(nick, username, msg) (":" + nick + "!" + username + "@" + LOCALHOST + " PRIVMSG : " + msg + "\r\n")
+# define RPL_CMD(nick, username, cmd, args) (":" + nick + "!" + username + "@" + LOCALHOST + " " + cmd + " " + args + "\r\n")
 
 //	1
 # define RPL_WELCOME( nickname, user_id) (":" + SERVERNAME + " 001 " + nickname + \
@@ -92,5 +90,6 @@
 
 # define RPL_USERJOIN(client, channel) (client + " is joining the channel " + channel + "\r\n")
 # define RPL_USERLEFT(client, channel) (client + " has left the channel " + channel + "\r\n")
+# define RPL_QUIT(client, reason) (":" + SERVERNAME + " " + client + " :Quit :" + reason + "\r\n")
 # define RPL_TOPIC(client, channel, topic) (client + " " + channel + " :" + topic + "\r\n")
 #endif

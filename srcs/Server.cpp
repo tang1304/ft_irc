@@ -6,7 +6,7 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:03:01 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/07 10:20:48 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/07 15:21:33 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ void	Server::cmdInit(){
 	_commandsList["NICK"] = &nick_cmd;
 	_commandsList["QUIT"] = &quit_cmd;
 	_commandsList["MOTD"] = &motdCmd;
-	// _commandsList["PING"] = &ping;
+	_commandsList["PING"] = &pingCmd;
 	_commandsList["PRIVMSG"] = &privmsgCmd;
 	_commandsList["JOIN"] = &join_cmd;
 	_commandsList["PART"] = &partCmd;
@@ -190,6 +190,10 @@ void	Server::clientDisconnection(const int &fd){
 		else if ((itClient = findIt(user, itChan->getBanned())) != itChan->getBanned().end()){
 			;
 		}
+		if (itChan->getConnected() == 0){
+			removeChan(itChan->getId());
+			itChan--;
+		}
 	}
 
 	std::cout << YELLOW << "[Server] Client #" << _clients[fd].getClientFd() << " disconnected from the server" << DEFAULT << std::endl;
@@ -198,7 +202,6 @@ void	Server::clientDisconnection(const int &fd){
 	while (it->fd != fd)
 		it++;
 	_pollFds.erase(it);
-
 }
 
 void	Server::clientHandle(const int &fd){
