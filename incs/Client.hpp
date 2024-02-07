@@ -6,7 +6,7 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:14:10 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/05 14:48:21 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/07 09:28:36 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ public:
 	Client(const Client &other);
 	bool			operator==(Client &rhs);
 
-	const std::string	&getNickName() const;
+	const std::string	&getName() const;
 	const std::string	&getUserName() const;
 	const std::string	&getRealName() const;
 	const std::string	&getBufferRead() const;
