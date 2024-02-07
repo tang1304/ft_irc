@@ -6,11 +6,12 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:03:01 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/07 09:28:36 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/07 10:20:48 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../incs/Server.hpp"
+#include "irc.hpp"
 
 Server::~Server() { }
 
@@ -150,32 +151,44 @@ void	Server::clientDisconnection(const int &fd){
 	itVecPollfd	it = _pollFds.begin();
 	itVecChan	itChan;
 	itVecClient	itClient;
-	itVecClient	itChanop;
+	std::string	user = getClient(fd).getName();
 
 	for (itChan = getChanList().begin(); itChan != getChanList().end(); itChan++)
 	{
-		for (itClient = itChan->getUsersJoin().begin(); itClient != itChan->getUsersJoin().end(); itClient++)
-		{
-			if (itClient->getClientFd() == fd)
-			{
-				itChan->removeUser(*itClient);
-				sendToChan(*itChan, RPL_USERLEFT(itClient->getName(), itChan->getName()));
-				itClient--;
-			}
+		// for (itClient = itChan->getUsersJoin().begin(); itClient != itChan->getUsersJoin().end(); itClient++)
+		// {
+		// 	if (itClient->getClientFd() == fd)
+		// 	{
+		// 		itChan->removeUser(*itClient);
+		// 		sendToChan(*itChan, RPL_USERLEFT(itClient->getName(), itChan->getName()));
+		// 		itClient--;
+		// 		break ;
+		// 	}
+		// }
+		// for (itChanop = itChan->getChanop().begin(); itChanop != itChan->getChanop().end(); itChanop++)
+		// {
+		// 	if (itChanop->getClientFd() == fd)
+		// 	{
+		// 		itChan->removeChanop(*itChanop);
+		// 		sendToChan(*itChan, RPL_USERLEFT(itChanop->getName(), itChan->getName()));
+		// 		itChanop--;
+		// 		break ;
+		// 	}
+		// }
+		// if (itChan->getConnected() == 0)
+		// {
+		// 	removeChan(itChan->getId());
+		// 	itChan--;
+		// }
+		if ((itClient = findIt(user, itChan->getUsersJoin())) != itChan->getUsersJoin().end()){
+			itChan->removeUser(*itClient);
+			// sendToChan(*itChan, RPL_USERLEFT(itClient->getName(), itChan->getName()));
 		}
-		for (itChanop = itChan->getChanop().begin(); itChanop != itChan->getChanop().end(); itChanop++)
-		{
-			if (itChanop->getClientFd() == fd)
-			{
-				itChan->removeChanop(*itChanop);
-				sendToChan(*itChan, RPL_USERLEFT(itChanop->getName(), itChan->getName()));
-				itChanop--;
-			}
+		else if ((itClient = findIt(user, itChan->getChanop())) != itChan->getChanop().end()){
+			itChan->removeChanop(*itClient);
 		}
-		if (itChan->getConnected() == 0)
-		{
-			removeChan(itChan->getId());
-			itChan--;
+		else if ((itClient = findIt(user, itChan->getBanned())) != itChan->getBanned().end()){
+			;
 		}
 	}
 
@@ -186,21 +199,6 @@ void	Server::clientDisconnection(const int &fd){
 		it++;
 	_pollFds.erase(it);
 
-// 	// TEST
-// for (itVecChan itc = getChanList().begin(); itc != getChanList().end(); itc++)
-// {
-// 	std::cout << "Chan " << itc->getName() << " created." << std::endl;
-// 	if (!itc->getPassword().empty())
-// 		std::cout << "Chan password " << itc->getPassword() << "." << std::endl;
-// 	else
-// 		std::cout << "No password set for this channel." << std::endl;
-// 	std::cout << "Number of users + chanops connected: " << itc->getConnected() << "." << std::endl;
-// 	for (itVecClient ut = itc->getUsersJoin().begin(); ut != itc->getUsersJoin().end(); ut++)
-// 		std::cout << "user " << ut->getName() << " connected." << std::endl;
-// 	for (itVecClient ut = itc->getChanop().begin(); ut != itc->getChanop().end(); ut++)
-// 		std::cout << "Chanop " << ut->getName() << " connected." << std::endl;
-// }
-// 	//END TEST
 }
 
 void	Server::clientHandle(const int &fd){

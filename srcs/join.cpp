@@ -30,7 +30,7 @@ static int	check_chan_first_char(vecPair pair)
 static void	user_join_chan(itVecPair &it, Server &serv, Client &user)
 {
 	itVecChan				itc;
-	vecStr::const_iterator	itCli;
+	itVecClient				itCli;
 	vecStr::const_iterator	itvit;
 
 	for (itc = serv.getChanList().begin(); itc != serv.getChanList().end(); itc++)
@@ -47,7 +47,7 @@ static void	user_join_chan(itVecPair &it, Server &serv, Client &user)
 	}
 	for (itCli = itc->getBanned().begin(); itCli != itc->getBanned().end(); itCli++)
 	{
-		if (user.getName() == *itCli)
+		if (user == *itCli)
 		{
 			user.setBufferSend(ERR_BANNEDFROMCHAN(user.getName(), it->first));
 			send(user.getClientFd(), user.getBufferSend().c_str(), user.getBufferSend().length(), 0);
