@@ -6,7 +6,7 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 11:49:57 by rrebois           #+#    #+#             */
-/*   Updated: 2024/02/07 09:28:36 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/08 10:16:21 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,5 @@ int	pass_cmd(int fd, vecStr &cmd, Server &serv)
 		return (serv.getClientMap()[fd].setBufferSend(ERR_PASSWDMISMATCH(ERR)), 1);
 	}
 	serv.getClientMap()[fd].setPass();
-std::cout << "Client " << fd << " succesfully enterred password" << std::endl;
 	return (0);
 }
