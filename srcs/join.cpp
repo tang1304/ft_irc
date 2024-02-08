@@ -58,8 +58,18 @@ static void	user_join_chan(itVecPair &it, Server &serv, Client &user)
 	}
 	itClient = findIt(user.getName(), itc->getUsersJoin());
 	itChanop = findIt(user.getName(), itc->getChanop());
-	if (itClient == itc->getUsersJoin().end() && itChanop == itc->getChanop().end())
+	if (itClient == itc->getUsersJoin().end() && itChanop == itc->getChanop().end()){
+		std::string	allUsers;
 		itc->addUser(user); // + replies
+		if (itc->getTopic().size() > 0)
+			sendToClient(user, RPL_TOPIC(user.getName(), itc->getName(), itc->getTopic()));
+		for (itVecClient it = itc->getUsersJoin().begin(); it != itc->getUsersJoin().end(); it++)
+			allUsers += " " + it->getName();
+		for (itVecClient it = itc->getChanop().begin(); it != itc->getChanop().end(); it++)
+			allUsers += " @" + it->getName();
+		sendToClient(user, RPL_NAMREPLY(user.getName(), itc->getName(), allUsers));
+		sendToClient(user, RPL_ENDOFNAMES(user.getName(), itc->getName()));
+	}
 	else
 		sendToClient(user, ERR_ALREADYINCHANNEL(user.getName(), it->first));
 }
@@ -89,6 +99,10 @@ static void	user_create_chan(itVecPair &it, Server &serv, Client &user)
 		return ;
 	}
 	serv.addChan(it->first, it->second, user); //+ replies
+	Channel	chan = serv.getChanList().back();
+	std::string	userName = "@" + user.getName();
+	sendToClient(user, RPL_NAMREPLY(user.getName(), chan.getName(), userName));
+	sendToClient(user, RPL_ENDOFNAMES(user.getName(), chan.getName()));
 }
 
 int	join_cmd(int fd, vecStr &cmd, Server &serv)
@@ -100,8 +114,6 @@ int	join_cmd(int fd, vecStr &cmd, Server &serv)
 std::cout << "In join" << std::endl;
 	chanPass = create_pair_cmd(cmd);
 	user = serv.getClient(fd);
-	// if (!user.getRegistered())
-	// 	return (user.setBufferSend(ERR_NOTREGISTERED(user.getName())), 1);
 	if (!check_chan_first_char(chanPass) && cmd.size() < 3)
 	{
 		sendToClient(user, ERR_NEEDMOREPARAMS(user.getName(), cmd[1]));

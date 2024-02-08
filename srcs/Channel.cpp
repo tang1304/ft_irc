@@ -6,14 +6,14 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/29 15:40:11 by rrebois           #+#    #+#             */
-/*   Updated: 2024/02/08 10:52:03 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/08 15:16:40 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../incs/Channel.hpp"
 
 Channel::Channel(std::string name, std::string key) :
-		_name(name), _topic("No topic"), _password(key), _privated(false),
+		_name(name), _topic(""), _password(key), _privated(false),
 		_changeTopic(false), _limitUserOnOff(true), _limitUser(USERPERCHAN),
 		_connected(0) { }
 
@@ -64,7 +64,6 @@ void	Channel::addUser(Client &user)
 	sendToChan(*this, RPL_USERJOIN(user.getName(), _name));
 	_usersJoin.push_back(user);
 	_connected++;
-	user.setBufferSend(RPL_TOPIC(user.getName(), _name, _topic));
 	send(user.getClientFd(), user.getBufferSend().c_str(), user.getBufferSend().length(), 0);
 	user.setBufferSend("");
 }
@@ -188,6 +187,11 @@ vecClient	&Channel::getChanop()
 const std::string	&Channel::getPassword() const
 {
 	return (_password);
+}
+
+const std::string	&Channel::getTopic() const
+{
+	return (_topic);
 }
 
 vecClient	&Channel::getBanned()
