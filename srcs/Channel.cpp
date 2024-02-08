@@ -6,7 +6,7 @@
 /*   By: rrebois <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/29 15:40:11 by rrebois           #+#    #+#             */
-/*   Updated: 2024/02/08 11:17:57 by rrebois          ###   ########.fr       */
+/*   Updated: 2024/02/08 15:41:13 by rrebois          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,9 +75,38 @@ void	Channel::addChanop(Client &user)
 	_connected++;
 }
 
-void	Channel::addBanned(Client &user)
+void	Channel::addBanned(Client &user, Client &target)
 {
-	_banned.push_back(user);
+	int index = 0;
+	itVecClient itClient;
+	itVecClient itChanop;
+
+	_banned.push_back(target);
+	for (itClient = getUsersJoin().begin(); itClient != getUsersJoin().end(); ++itClient)
+	{
+		if (*itClient == target)
+			break ;
+		index++;
+	}
+	if (itClient != getUsersJoin().end())
+	{
+		_usersJoin.erase(_usersJoin.begin() + index);
+		_connected--;
+		sendToChan(*this, RPL_USERBANNED(user.getName(), target.getName(), getName()));
+	}
+	else
+	{
+		index = 0;
+		for (itChanop = getChanop().begin(); itChanop != getChanop().end(); ++itChanop)
+		{
+			if (*itChanop == target)
+				break ;
+			index++;
+		}
+		_chanop.erase(_chanop.begin() + index);
+		_connected--;
+		sendToChan(*this, RPL_USERBANNED(user.getName(), target.getName(), getName()));
+	}
 }
 
 void	Channel::removeUser(Client &user)// checker si user pas end
@@ -113,27 +142,40 @@ void	Channel::removeChanop(Client &user) // checker si user pas end
 	// add if !_connected -> delete channel de server + call destuctor?
 }
 
+void	Channel::removeBan(Client &user, Client &target)
+{
+	int index = 0;
+
+	for (itVecClient itBan = getBanned().begin(); itBan != getBanned().end(); ++itBan)
+	{
+		if (*itBan == target)
+			break ;
+		index++;
+	}
+	_banned.erase(_banned.begin() + index);
+	sendToChan(*this, RPL_USERUNBANNED(user.getName(), target.getName(), getName()));
+}
+
 void	Channel::promoteFirstUserToChanop(Client &user)
 {
 	_chanop.push_back(user);
 	_usersJoin.erase(_usersJoin.begin());
 }
 
-void	Channel::promoteDemoteUsers(char c, Client &user, Client &target)
+void	Channel::promoteDemoteUsers(char c, Client &target)
 {
 	if (c == '+')
 	{
 		int index = 0;
 
 		_chanop.push_back(target);
-		for (itVecClient it = _usersJoin.begin(); it != _usersJoin.end(); ++it)
+		for (itVecClient it = _usersJoin.begin(); it != _usersJoin.end(); it++)
 		{
-			if (target.getName() == it->getName())
+			if (target == *it)
 				break ;
 			index++;
 		}
 		_usersJoin.erase(_usersJoin.begin() + index);
-		sendToChan(*this, RPL_USERPROMOTED(user.getName(), target.getName()));
 		return ;
 	}
 	if (c == '-')
@@ -141,28 +183,14 @@ void	Channel::promoteDemoteUsers(char c, Client &user, Client &target)
 		_usersJoin.push_back(target);
 		int	index = 0;
 
-		for (itVecClient it = _chanop.begin(); it != _chanop.end(); ++it)
+		for (itVecClient it = _chanop.begin(); it != _chanop.end(); it++)
 		{
-			if (target.getName() == it->getName())
+			if (target == *it)
 				break ;
 			index++;
 		}
 		_chanop.erase(_chanop.begin() + index);
-		sendToChan(*this, RPL_USERDEMOTED(user.getName(), target.getName()));
 	}
-}
-
-void	Channel::removeBan(Client &user)
-{
-	int	index = 0;
-
-	for (itVecClient it = _banned.begin(); it != _banned.end(); it++)
-	{
-		if (user == *it)
-			break ;
-		index++;
-	}
-	_banned.erase(_banned.begin() + index);
 }
 
 const std::string	&Channel::getName() const

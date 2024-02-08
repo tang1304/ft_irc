@@ -6,7 +6,7 @@
 /*   By: rrebois <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 13:14:23 by rrebois           #+#    #+#             */
-/*   Updated: 2024/02/08 11:18:29 by rrebois          ###   ########.fr       */
+/*   Updated: 2024/02/08 15:50:00 by rrebois          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,14 +71,25 @@ static void	modeOperator(char c, std::string target, Client &user, Channel &chan
 	itVecClient	itClient = findIt(target, chan.getUsersJoin());
 	itVecClient	itChanop = findIt(target, chan.getChanop());
 
+	if (target.empty())
+	{
+		sendToClient(user, ERR_INVALIDMODEPARAM(user.getName(), chan.getName(), c+"o", target));
+		return ;
+	}
 	if (itClient == chan.getUsersJoin().end() && itChanop == chan.getChanop().end())
 	{
 		sendToClient(user, ERR_USERNOTINCHANNEL(user.getName(), target, chan.getName()));
 		return ;
 	}
+	if (user == *itChanop && c == '-' && itChanop != chan.getChanop().end())
+	{
+		sendToClient(user, ERR_CANNOTAUTODEMOTE(user.getName(), chan.getName()));
+		return ;
+	}
 	if (c == '+' && itClient != chan.getUsersJoin().end())
 	{
-		chan.promoteDemoteUsers(c, user, *itClient);
+		chan.promoteDemoteUsers(c, *itClient);
+		sendToChan(chan, RPL_USERPROMOTED(user.getName(), target));
 		return ;
 	}
 	else if (c == '+' && itClient == chan.getUsersJoin().end())
@@ -88,7 +99,8 @@ static void	modeOperator(char c, std::string target, Client &user, Channel &chan
 	}
 	if (c == '-' && itChanop != chan.getChanop().end())
 	{
-		chan.promoteDemoteUsers(c, user, *itChanop);
+		chan.promoteDemoteUsers(c, *itChanop);
+		sendToChan(chan, RPL_USERDEMOTED(user.getName(), target));
 		return ;
 	}
 	else if (c == '-' && itChanop == chan.getChanop().end())
@@ -96,11 +108,44 @@ static void	modeOperator(char c, std::string target, Client &user, Channel &chan
 		sendToClient(user, ERR_USERALREADYBASICU(user.getName(), target, chan.getName()));
 		return ;
 	}
-
 }
 
 static void	modeBan(char c, std::string target, Client &user, Channel &chan)
 {
+	itVecClient	itClient = findIt(target, chan.getUsersJoin());
+	itVecClient	itChanop = findIt(target, chan.getChanop());
+	itVecClient	itBan;
+
+	if (target.empty())
+	{
+		sendToClient(user, ERR_INVALIDMODEPARAM(user.getName(), chan.getName(), c+"b", target));
+		return ;
+	}
+	if (itClient == chan.getUsersJoin().end() && itChanop == chan.getChanop().end() && c == '+')
+	{
+		sendToClient(user, ERR_USERNOTINCHANNEL(user.getName(), target, chan.getName()));
+		return ;
+	}
+	if (((user == *itChanop && itChanop != chan.getChanop().end()) ||
+		(user == *itClient && itClient != chan.getUsersJoin().end())) && c == '+')
+	{
+		sendToClient(user, ERR_CANNOTAUTOBAN(user.getName(), chan.getName()));
+		return ;
+	}
+	if (itClient != chan.getUsersJoin().end() && c == '+')
+		chan.addBanned(user, *itClient);
+	else if (itClient == chan.getUsersJoin().end() && c == '+')
+		chan.addBanned(user, *itChanop);
+	if (c == '-')
+	{
+		itBan = findIt(target, chan.getBanned());
+		if (itBan == chan.getBanned().end())
+		{
+			sendToClient(user, RPL_USERNOTBANNED(target, chan.getName()));
+			return ;
+		}
+		chan.removeBan(user, *itBan);
+	}
 //	sendToChan(); a mettre dans setPrivate
 }
 
