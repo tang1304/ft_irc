@@ -28,7 +28,7 @@ static int	check_chan_first_char(vecPair pair)
 static void	user_join_chan(itVecPair &it, Server &serv, Client &user)
 {
 	itVecChan				itc;
-	itVecClient				itCli;
+	itVecClient				itBan;
 	itVecClient				itClient;
 	itVecClient				itChanop;
 
@@ -38,9 +38,9 @@ static void	user_join_chan(itVecPair &it, Server &serv, Client &user)
 		sendToClient(user, ERR_BADCHANNELKEY(user.getName(), it->first));
 		return ;
 	}
-	for (itCli = itc->getBanned().begin(); itCli != itc->getBanned().end(); itCli++)
+	for (itBan = itc->getBanned().begin(); itBan != itc->getBanned().end(); itBan++)
 	{
-		if (user == *itCli) // A CHANGERRRR!!!!!!!!
+		if (user == *itBan) // A CHANGERRRR!!!!!!!!
 		{
 			sendToClient(user, ERR_BANNEDFROMCHAN(user.getName(), it->first));
 			return ;

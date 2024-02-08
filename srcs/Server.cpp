@@ -6,7 +6,7 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:03:01 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/08 10:42:58 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/08 11:32:13 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -245,7 +245,7 @@ for (; i < itvv->end(); i++){
 }
 		itMapCmds	it = _commandsList.find(*itvv->begin());
 		if (it != _commandsList.end() && (*itvv->begin() != "PASS" && *itvv->begin() != "USER" && *itvv->begin() != "NICK")\
-		&& _clients[fd].getDisconnect()){
+		&& !_clients[fd].getRegistered()){
 			_clients[fd].setBufferSend(ERR_NOTREGISTERED(_clients[fd].getName()));
 			return ;
 		}
