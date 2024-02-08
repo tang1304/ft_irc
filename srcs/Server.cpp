@@ -6,7 +6,7 @@
 /*   By: rrebois <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:03:01 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/08 11:29:58 by rrebois          ###   ########.fr       */
+/*   Updated: 2024/02/08 17:55:08 by rrebois          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,19 +43,19 @@ Server::Server(const int &port, const std::string &password): _port(port), _pass
 }
 
 void	Server::cmdInit(){
-	_commandsList["PASS"] = &pass_cmd;
-	_commandsList["USER"] = &user_cmd;
-	_commandsList["NICK"] = &nick_cmd;
-	_commandsList["QUIT"] = &quit_cmd;
+	_commandsList["PASS"] = &passCmd;
+	_commandsList["USER"] = &userCmd;
+	_commandsList["NICK"] = &nickCmd;
+	_commandsList["QUIT"] = &quitCmd;
 	_commandsList["MOTD"] = &motdCmd;
 	_commandsList["PING"] = &pingCmd;
 	_commandsList["PRIVMSG"] = &privmsgCmd;
-	_commandsList["JOIN"] = &join_cmd;
+	_commandsList["JOIN"] = &joinCmd;
 	_commandsList["PART"] = &partCmd;
 	// _commandsList["TOPIC"] = &topic;
-	// _commandsList["KICK"] = &kick;
-	_commandsList["INVITE"] = &invite_cmd;
-	_commandsList["MODE"] = &mode_cmd;
+	_commandsList["KICK"] = &kickCmd;
+	_commandsList["INVITE"] = &inviteCmd;
+	_commandsList["MODE"] = &modeCmd;
 	// _commandsList["LIST"] = &list;
 }
 

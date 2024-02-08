@@ -39,7 +39,7 @@ static int check_password_used(std::string nick, Server &serv)
 	return (1);
 }
 
-int	nick_cmd(int fd, vecStr& cmd, Server &serv)
+int	nickCmd(int fd, vecStr& cmd, Server &serv)
 {
 	std::string 		ERR;
 	std::stringstream	ss;

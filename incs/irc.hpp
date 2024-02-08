@@ -6,7 +6,7 @@
 /*   By: rrebois <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 10:20:16 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/08 17:17:17 by rrebois          ###   ########.fr       */
+/*   Updated: 2024/02/08 17:56:48 by rrebois          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,17 +21,18 @@
 
 class Server;
 
-int			quit_cmd(int fd, vecStr &cmd, Server &serv);
-int			pass_cmd(int fd, vecStr &cmd, Server &serv);
-int			nick_cmd(int fd, vecStr &cmd, Server &serv);
-int 		user_cmd(int fd, vecStr &cmd, Server &serv);
-int			join_cmd(int fd, vecStr &cmd, Server &serv);
+int			quitCmd(int fd, vecStr &cmd, Server &serv);
+int			passCmd(int fd, vecStr &cmd, Server &serv);
+int			nickCmd(int fd, vecStr &cmd, Server &serv);
+int 		userCmd(int fd, vecStr &cmd, Server &serv);
+int			joinCmd(int fd, vecStr &cmd, Server &serv);
+int			kickCmd(int fd, vecStr &cmd, Server &serv);
 int			privmsgCmd(int fd, vecStr &cmd, Server &serv);
-int			invite_cmd(int fd, vecStr &cmd, Server &serv);
+int			inviteCmd(int fd, vecStr &cmd, Server &serv);
 int			partCmd(int fd, vecStr &cmd, Server &serv);
 int			motdCmd(int fd, vecStr &cmd, Server &serv);
 int			pingCmd(int fd, vecStr &cmd, Server &serv);
-int			mode_cmd(int fd, vecStr &cmd, Server &serv);
+int			modeCmd(int fd, vecStr &cmd, Server &serv);
 int			checkArgs(const std::string &port, const std::string &password);
 size_t		len(std::string s);
 vecStr		split(std::string &input, const std::string &delimiter);
