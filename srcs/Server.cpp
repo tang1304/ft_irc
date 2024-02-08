@@ -6,7 +6,7 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:03:01 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/08 11:32:13 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/08 15:29:53 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ void	Server::cmdInit(){
 	_commandsList["PRIVMSG"] = &privmsgCmd;
 	_commandsList["JOIN"] = &join_cmd;
 	_commandsList["PART"] = &partCmd;
-	// _commandsList["TOPIC"] = &topic;
+	_commandsList["TOPIC"] = &topicCmd;
 	// _commandsList["KICK"] = &kick;
 	_commandsList["INVITE"] = &invite_cmd;
 	_commandsList["MODE"] = &mode_cmd;

@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   part.cpp                                           :+:      :+:    :+:   */
+/*   topic.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/02/06 15:09:03 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/08 15:41:35 by tgellon          ###   ########lyon.fr   */
+/*   Created: 2024/02/08 15:28:56 by tgellon           #+#    #+#             */
+/*   Updated: 2024/02/08 16:34:05 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "irc.hpp"
+#include "irc.hpp"
 
-int partCmd(int fd, vecStr &cmd, Server &serv){
+int	topicCmd(int fd, vecStr &cmd, Server &serv){
 	Client		user = serv.getClientMap()[fd];
 
 	if (cmd.size() < 2){
@@ -30,15 +30,24 @@ int partCmd(int fd, vecStr &cmd, Server &serv){
 		sendToClient(user, ERR_NOTONCHANNEL(user.getName(), chan));
 		return (1);
 	}
-	if (chanop == true){
-		sendToChan(*it, RPL_CMD(user.getName(), user.getUserName(), cmd[0], chan));
-		it->removeChanop(user);
+	if (cmd.size() > 2){
+		std::string	topic = cmd[2];
+		if (it->getChangeTopic() == true && chanop == false){
+			sendToClient(user, ERR_CHANOPRIVSNEEDED(user.getName(), chan));
+			return (1);
+		}
+		it->setTopic(topic);
+		it->setTopicChanger(user.getName());
+		//Needs to change the time of last change
+		sendToChan(*it, RPL_TOPIC(user.getName(), it->getName(), topic));
 	}
 	else{
-		sendToChan(*it, RPL_CMD(user.getName(), user.getUserName(), cmd[0], chan));
-		it->removeUser(user);
+		if (it->getTopic().size() > 0){
+			sendToClient(user, RPL_TOPIC(user.getName(), it->getName(), it->getTopic()));
+			sendToClient(user, RPL_TOPICWHOTIME(user.getName(), it->getName(), it->getTopicChanger(), time));
+		}
+		else
+			sendToClient(user, RPL_NOTOPIC(user.getName(), it->getName()));
 	}
-	if (it->getConnected() == 0)
-		serv.removeChan(it->getId());
 	return (0);
 }
