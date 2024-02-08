@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "irc.hpp"
+# include "../incs/irc.hpp"
 
 int	quit_cmd(int fd, vecStr &cmd, Server &serv){
 	Client		user = serv.getClient(fd);

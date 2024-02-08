@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: rrebois <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:15:06 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/08 10:30:15 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/08 14:10:07 by rrebois          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,12 +42,12 @@ public:
 	void				setLimitUserOnOff(char c, unsigned int i);
 	void				addUser(Client &user);
 	void				addChanop(Client &user);
-	void				addBanned(Client &user);
+	void				addBanned(Client &user, Client &target);
 	void				removeUser(Client &user);
 	void				removeChanop(Client &user);
-	void				removeBan(Client &user);
+	void				removeBan(Client &user, Client &target);
 	void				promoteFirstUserToChanop(Client &user);
-	void				promoteDemoteUsers(char c, Client &user, Client &target);
+	void				promoteDemoteUsers(char c, Client &target);
 
 	const int			&getConnected() const;
 	const std::string	&getPassword() const;
