@@ -6,7 +6,7 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 16:21:25 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/08 10:18:36 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/08 10:26:48 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,12 @@
 //461
 # define ERR_NEEDMOREPARAMS(client, cmd) (":" + SERVERNAME + " 461 " + client + " " + cmd + " :Not enough parameters\r\n")
 
+//474
+# define ERR_BANNEDFROMCHAN(client, channel) (":" + SERVERNAME + " 474 " + client + " " + channel + " :Cannot join channel (+b)\r\n")
+
+//475
+# define ERR_BADCHANNELKEY(client, channel) (":" + SERVERNAME + " 475 " + client + " " + channel + " :Cannot join channel (+k)\r\n")
+
 # define ERROR(error) ("ERROR: " + error + "\r\n")
 # define ERR_NEEDLESSPARAMS " :Too many parameters\n"
 # define ERR_UNKNOWNCOMMAND(client, command) (client + " " + command + " :Unknown command\r\n")
@@ -76,8 +82,6 @@
 # define ERR_ERRONEUSNICKNAME(client, nick) (client + " " + nick + " :Erroneus nickname\r\n")
 # define ERR_NICKNAMEINUSE(client, nick) (client + " " + nick + " :Nickname is already in use\r\n")
 # define ERR_TOOMANYCHANNELS(client, channel) (client + " " + channel + " :You have joined too many channels\r\n")
-# define ERR_BADCHANNELKEY(client, channel) (client + " " + channel + " :Cannot join channel (+k)\r\n")
-# define ERR_BANNEDFROMCHAN(client, channel) (client + " " + channel + " :Cannot join channel (+b)\r\n")
 # define ERR_CHANNELISFULL(client, channel) (client + " " + channel + " :Cannot join channel (+l)\r\n")
 # define ERR_INVITEONLYCHAN(client, channel) (client + " " + channel + " :Cannot join channel (+i)\r\n")
 # define ERR_BADCHANMASK(channel) (channel + " :Bad Channel Mask\r\n")
