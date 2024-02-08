@@ -6,7 +6,7 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:03:01 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/08 09:40:58 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/08 10:42:58 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,8 @@ void	Server::cmdInit(){
 	_commandsList["PART"] = &partCmd;
 	// _commandsList["TOPIC"] = &topic;
 	// _commandsList["KICK"] = &kick;
-	// _commandsList["INVITE"] = &invite;
+	_commandsList["INVITE"] = &invite_cmd;
+	_commandsList["MODE"] = &mode_cmd;
 	// _commandsList["LIST"] = &list;
 }
 
@@ -177,6 +178,22 @@ void	Server::clientDisconnection(const int &fd){
 	while (it->fd != fd)
 		it++;
 	_pollFds.erase(it);
+
+	// TEST
+// for (itVecChan itc = getChanList().begin(); itc != getChanList().end(); itc++)
+// {
+// 	std::cout << "Chan " << itc->getName() << " created." << std::endl;
+// 	if (!itc->getPassword().empty())
+// 		std::cout << "Chan password " << itc->getPassword() << "." << std::endl;
+// 	else
+// 		std::cout << "No password set for this channel." << std::endl;
+// 	std::cout << "Number of users + chanops connected: " << itc->getConnected() << "." << std::endl;
+// 	for (itVecClient ut = itc->getUsersJoin().begin(); ut != itc->getUsersJoin().end(); ut++)
+// 		std::cout << "user " << ut->getName() << " connected." << std::endl;
+// 	for (itVecClient ut = itc->getChanop().begin(); ut != itc->getChanop().end(); ut++)
+// 		std::cout << "Chanop " << ut->getName() << " connected." << std::endl;
+// }
+	//END TEST
 }
 
 void	Server::clientHandle(const int &fd){

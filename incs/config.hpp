@@ -6,7 +6,7 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/17 15:45:59 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/06 08:58:39 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/08 10:30:46 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,9 +38,10 @@
 # define MOTD std::string("HERE IS THE MOTD")
 # define BUFFER_SIZE 1000
 # define NICKLEN 9
+# define PASSMAXLEN 15
 # define USERLEN 12
-# define CHANMAXUSER 10
-# define USERCHANLIMIT 5
+# define USERPERCHAN 10
+# define CHANUSERCANJOIN 5
 
 # define USAGE "Error\nThere must be 2 arguments : ./ircserv <port> <password>"
 
@@ -62,9 +63,14 @@ typedef std::map<int, Client>										clientMap;
 typedef std::map<int, Client>::iterator								itClientMap;
 typedef std::vector<std::pair<std::string, std::string> >			vecPair;
 typedef std::vector<std::pair<std::string, std::string> >::iterator	itVecPair;
+typedef std::vector<std::pair<char, std::string> >					vecModesPair;
+typedef std::vector<std::pair<char, std::string> >::iterator 		itVecModesPair;
 typedef int (*fctPointer)(int, vecStr &, Server &);
 typedef std::map<std::string, fctPointer>							mapCmds;
 typedef std::map<std::string, fctPointer>::iterator					itMapCmds;
+typedef void (*fctP)(char, std::string, Client &, Channel &);
+typedef std::map<char, fctP>										modeCmds;
+typedef std::map<char, fctP>::iterator								itModeCmds;
 
 
 #endif
