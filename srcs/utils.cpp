@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: rrebois <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 10:16:34 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/08 10:52:23 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/08 17:41:49 by rrebois          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ int	checkArgs(const std::string &port, const std::string &password){
 	return (portValue);
 }
 
-static vecStr	split(std::string &input, const std::string &delimiter){
+vecStr	split(std::string &input, const std::string &delimiter){
 	vecStr		result;
 	size_t		colonPos = 0;
 	size_t		pos = 0;
