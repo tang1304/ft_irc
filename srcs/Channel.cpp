@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: rrebois <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/29 15:40:11 by rrebois           #+#    #+#             */
-/*   Updated: 2024/02/08 10:52:03 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/08 11:17:57 by rrebois          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,7 +108,7 @@ void	Channel::removeChanop(Client &user) // checker si user pas end
 	}
 	_chanop.erase(_chanop.begin() + index);
 	_connected--;
-	if (!_chanop.size() && _connected >= 1)
+	if (_chanop.empty() && _connected >= 1)
 		promoteFirstUserToChanop(*_usersJoin.begin());
 	// add if !_connected -> delete channel de server + call destuctor?
 }
@@ -126,9 +126,9 @@ void	Channel::promoteDemoteUsers(char c, Client &user, Client &target)
 		int index = 0;
 
 		_chanop.push_back(target);
-		for (itVecClient it = _usersJoin.begin(); it != _usersJoin.end(); it++)
+		for (itVecClient it = _usersJoin.begin(); it != _usersJoin.end(); ++it)
 		{
-			if (user.getName() == it->getName())
+			if (target.getName() == it->getName())
 				break ;
 			index++;
 		}
@@ -141,9 +141,9 @@ void	Channel::promoteDemoteUsers(char c, Client &user, Client &target)
 		_usersJoin.push_back(target);
 		int	index = 0;
 
-		for (itVecClient it = _chanop.begin(); it != _chanop.end(); it++)
+		for (itVecClient it = _chanop.begin(); it != _chanop.end(); ++it)
 		{
-			if (user.getName() == it->getName())
+			if (target.getName() == it->getName())
 				break ;
 			index++;
 		}

@@ -60,7 +60,7 @@ static void	user_join_chan(itVecPair &it, Server &serv, Client &user)
 	itChanop = findIt(user.getName(), itc->getChanop());
 	if (itClient == itc->getUsersJoin().end() && itChanop == itc->getChanop().end())
 		itc->addUser(user); // + replies
-	else
+	else if (itClient != itc->getUsersJoin().end() || itChanop != itc->getChanop().end())
 		sendToClient(user, ERR_ALREADYINCHANNEL(user.getName(), it->first));
 }
 
