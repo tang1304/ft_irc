@@ -40,18 +40,20 @@ static void	user_join_chan(itVecPair &it, Server &serv, Client &user)
 	}
 	if (it->second != itc->getPassword())
 	{
-		user.setBufferSend(ERR_BADCHANNELKEY(user.getName(), it->first));
-		send(user.getClientFd(), user.getBufferSend().c_str(), user.getBufferSend().length(), 0);
-		user.setBufferSend("");
+		// user.setBufferSend(ERR_BADCHANNELKEY(user.getName(), it->first));
+		// send(user.getClientFd(), user.getBufferSend().c_str(), user.getBufferSend().length(), 0);
+		// user.setBufferSend("");
+		sendToClient(user, ERR_BADCHANNELKEY(user.getName(), it->first));
 		return ;
 	}
 	for (itCli = itc->getBanned().begin(); itCli != itc->getBanned().end(); itCli++)
 	{
 		if (user == *itCli)
 		{
-			user.setBufferSend(ERR_BANNEDFROMCHAN(user.getName(), it->first));
-			send(user.getClientFd(), user.getBufferSend().c_str(), user.getBufferSend().length(), 0);
-			user.setBufferSend("");
+			// user.setBufferSend(ERR_BANNEDFROMCHAN(user.getName(), it->first));
+			// send(user.getClientFd(), user.getBufferSend().c_str(), user.getBufferSend().length(), 0);
+			// user.setBufferSend("");
+			sendToClient(user, ERR_BANNEDFROMCHAN(user.getName(), it->first));
 			return ;
 		}
 	}
