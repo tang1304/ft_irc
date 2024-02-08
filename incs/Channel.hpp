@@ -6,7 +6,7 @@
 /*   By: rrebois <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:15:06 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/08 14:10:07 by rrebois          ###   ########.fr       */
+/*   Updated: 2024/02/08 15:28:35 by rrebois          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,6 @@ private:
 	bool		_changeTopic; // false = anyone true = chanops only / false
 	bool		_limitUserOnOff;
 	int			_limitUser;
-//	bool		_passOnOff; // on?
 	int			_connected; //number of users/chanops connected
 	int			_id;
 
@@ -38,7 +37,7 @@ public:
 	void				setId(int i);
 	void				setPassword(char c, std::string &key);
 	void				setPrivated(char c);
-	void				setChangeTopic();
+	void				setChangeTopic(char c, Client &user);
 	void				setLimitUserOnOff(char c, unsigned int i);
 	void				addUser(Client &user);
 	void				addChanop(Client &user);
