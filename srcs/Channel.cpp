@@ -6,7 +6,7 @@
 /*   By: rrebois <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/29 15:40:11 by rrebois           #+#    #+#             */
-/*   Updated: 2024/02/07 17:44:44 by rrebois          ###   ########.fr       */
+/*   Updated: 2024/02/08 10:09:20 by rrebois          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,12 +137,7 @@ void	Channel::promoteFirstUserToChanop(Client &user)
 
 void	Channel::promoteDemoteUsers(char c, Client &user, Client &target)
 {
-	if (c == '+' && isItIn(target, getChanop()))
-	{
-		sendToClient(user, ERR_USERALREADYOP(user.getName(), target.getName(), getName()));
-		return ;
-	}
-	else if (c == '+' && !isItIn(target, getChanop()))
+	if (c == '+')
 	{
 		int index = 0;
 
@@ -155,13 +150,9 @@ void	Channel::promoteDemoteUsers(char c, Client &user, Client &target)
 		}
 		_usersJoin.erase(_usersJoin.begin() + index);
 		sendToChan(*this, RPL_USERPROMOTED(user.getName(), target.getName()));
-	}
-	if (c == '-' && isItIn(target, getUsersJoin()))
-	{
-		sendToClient(user, ERR_USERALREADYBASICU(user.getName(), target.getName(), getName()));
 		return ;
 	}
-	else if (c == '-' && !isItIn(target, getUsersJoin()))
+	if (c == '-')
 	{
 		_usersJoin.push_back(target);
 		int	index = 0;
