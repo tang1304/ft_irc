@@ -18,7 +18,8 @@ SRCS =	main.cpp \
 		part.cpp \
 		ping.cpp \
 		invite.cpp \
-		mode.cpp
+		mode.cpp \
+		kick.cpp
 OBJ_DIR = objs/
 OBJ = ${SRCS:%.cpp=${OBJ_DIR}%.o}
 NAME = ircserv

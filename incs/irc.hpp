@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   irc.hpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: rrebois <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 10:20:16 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/08 10:53:23 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/08 17:17:17 by rrebois          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ int			pingCmd(int fd, vecStr &cmd, Server &serv);
 int			mode_cmd(int fd, vecStr &cmd, Server &serv);
 int			checkArgs(const std::string &port, const std::string &password);
 size_t		len(std::string s);
+vecStr		split(std::string &input, const std::string &delimiter);
 vecStr		splitCmds(std::string &input, const std::string &delimiter);
 vecVecStr	splitCmd(vecStr &cmds, const std::string &delimiter);
 vecPair		create_pair_cmd(vecStr &cmd);

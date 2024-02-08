@@ -6,7 +6,7 @@
 /*   By: rrebois <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 16:21:25 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/08 16:17:04 by rrebois          ###   ########.fr       */
+/*   Updated: 2024/02/08 17:48:51 by rrebois          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -158,5 +158,6 @@
 # define RPL_UNSETTOPICCHANOP(client, channel) (":" + SERVERNAME + " " + client + " " + channel + " :Topic can be modified by any user\r\n")
 # define RPL_USERJOIN(client, channel) (client + " is joining the channel " + channel + "\r\n")
 # define RPL_USERLEFT(client, channel) (client + " has left the channel " + channel + "\r\n")
-
+# define RPL_USERKICKED(client, nick, channel, comment) (":" + SERVERNAME + " " + client + " kicked " + nick + " from " + channel + " :" + comment + "\r\n")
+# define RPL_COMMENTKICKED(nick, channel, comment) (":" + SERVERNAME + " " + nick + " kicked from " + channel + " :" + comment + "\r\n")
 #endif
