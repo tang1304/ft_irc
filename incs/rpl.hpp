@@ -6,7 +6,7 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 16:21:25 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/07 15:19:48 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/08 10:18:36 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,4 +92,5 @@
 # define RPL_USERLEFT(client, channel) (client + " has left the channel " + channel + "\r\n")
 # define RPL_QUIT(client, reason) (":" + SERVERNAME + " " + client + " :Quit :" + reason + "\r\n")
 # define RPL_TOPIC(client, channel, topic) (client + " " + channel + " :" + topic + "\r\n")
+
 #endif

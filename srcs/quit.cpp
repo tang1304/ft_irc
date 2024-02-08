@@ -6,7 +6,7 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/29 10:41:49 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/08 10:09:21 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/08 10:18:07 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int	quit_cmd(int fd, vecStr &cmd, Server &serv){
 	if (cmd.size() > 1)
 		reason = cmd[1];
 	else
-		reason = "";
+		reason = "No reason given";
 	for (itVecChan itChan = serv.getChanList().begin(); itChan != serv.getChanList().end(); itChan++){
 		if ((itClient = findIt(userName, itChan->getUsersJoin())) != itChan->getUsersJoin().end()){
 			sendToChan(*itChan, RPL_QUIT(itClient->getName(), reason));
