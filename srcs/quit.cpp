@@ -6,7 +6,7 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/29 10:41:49 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/07 15:58:27 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/08 10:09:21 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,17 +22,17 @@ int	quit_cmd(int fd, vecStr &cmd, Server &serv){
 		reason = cmd[1];
 	else
 		reason = "";
-	sendToClient(user, ERROR(std::string("Disconnected from server")));
 	for (itVecChan itChan = serv.getChanList().begin(); itChan != serv.getChanList().end(); itChan++){
 		if ((itClient = findIt(userName, itChan->getUsersJoin())) != itChan->getUsersJoin().end()){
+			sendToChan(*itChan, RPL_QUIT(itClient->getName(), reason));
 			itChan->removeUser(*itClient);
-			sendToChan(*itChan, RPL_QUIT(itClient->getName(), itChan->getName()));
 		}
 		else if ((itClient = findIt(userName, itChan->getChanop())) != itChan->getChanop().end()){
+			sendToChan(*itChan, RPL_QUIT(itClient->getName(), reason));
 			itChan->removeChanop(*itClient);
-			sendToChan(*itChan, RPL_QUIT(itClient->getName(), itChan->getName()));
 		}
 	}
+	sendToClient(user, ERROR(std::string("Disconnected from server")));
 	serv.clientDisconnection(fd);
 	return (1);
 }

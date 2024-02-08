@@ -6,7 +6,7 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/25 13:22:51 by rrebois           #+#    #+#             */
-/*   Updated: 2024/02/07 09:28:36 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/08 10:10:21 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ int user_cmd(int fd, vecStr &cmd, Server &serv)
 		return (serv.getClientMap()[fd].setBufferSend(ERR_PASSFIRST(ERR)), 1);
 	if (serv.getClientMap()[fd].getName().empty())
 		return (serv.getClientMap()[fd].setBufferSend(ERR_NICKFIRST(ERR)), 1);
-	if (cmd.size() < 4 || cmd[1].empty())
+	if (cmd.size() < 5 || cmd[1].empty())
 		return (serv.getClientMap()[fd].setBufferSend(ERR_NEEDMOREPARAMS(ERR, cmd[0])), 1);
 	serv.getClientMap()[fd].setUsername(cmd[1]);
 	serv.getClientMap()[fd].setRealName(cmd[4]);

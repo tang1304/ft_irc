@@ -6,7 +6,7 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:03:01 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/07 15:50:45 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/08 09:40:58 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -217,7 +217,7 @@ void	Server:: parseInput(const int &fd, std::string &input){
 
 	command = splitCmds(input, "\r\n");
 	vecCommand = splitCmd(command, " ");
-	if (vecCommand.empty())
+	if (vecCommand.empty() || vecCommand.begin()->empty())
 		return ;
 	itVecVecStr	itvv = vecCommand.begin();
 	for (; itvv != vecCommand.end(); itvv++)
