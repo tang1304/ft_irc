@@ -6,14 +6,14 @@
 /*   By: rrebois <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 16:18:54 by rrebois           #+#    #+#             */
-/*   Updated: 2024/02/08 17:53:38 by rrebois          ###   ########.fr       */
+/*   Updated: 2024/02/08 18:16:29 by rrebois          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../incs/irc.hpp"
 
-int	kick_cmd(int fd, vecStr &cmd, Server &serv) // les coms sont avec :comment here so reason is co;;ent here for all or not??
-{
+int	kickCmd(int fd, vecStr &cmd, Server &serv) // les coms sont avec :comment here so reason is co;;ent here for all or not??
+{//segf if KICK #abc t,y "Horrible person" RPLS seem ok but parsong od comment needs more check.
 	Client		user = serv.getClient(fd);
 
 	itVecChan	itChan;
@@ -67,20 +67,21 @@ int	kick_cmd(int fd, vecStr &cmd, Server &serv) // les coms sont avec :comment h
 		return (sendToClient(user, ERR_NOTONCHANNEL(user.getName(), itChan->getName())), 1);
 	for (itVecPair it = kickUser.begin(); it != kickUser.end(); it++)
 	{
+		std::cout << it->first << ": " << it->second << std::endl;
 		itClient = findIt(it->first, itChan->getUsersJoin());
 		itChanop = findIt(it->first, itChan->getChanop());
 		if (itClient != itChan->getUsersJoin().end())
 		{
 			sendToClient(*itClient, RPL_COMMENTKICKED(itClient->getName(), itChan->getName(), it->second));
 			itChan->removeUser(*itClient);
-			sendToChan(*itChan, RPL_USERKICKED(user.getName(), itClient->getName(), itChan->getName(), it->second));
 		}
-		else if (itChanop != itChan->getChanop().end())
+		else
 		{
 			sendToClient(*itChanop, RPL_COMMENTKICKED(itChanop->getName(), itChan->getName(), it->second));
-			itChan->removeUser(*itChanop);
-			sendToChan(*itChan, RPL_USERKICKED(user.getName(), itChanop->getName(), itChan->getName(), it->second));
+			itChan->removeChanop(*itChanop);
+//			sendToChan(*itChan, RPL_USERKICKED(user.getName(), itChanop->getName(), itChan->getName(), it->second));
 		}
+		sendToChan(*itChan, RPL_USERKICKED(user.getName(), it->first, itChan->getName(), it->second));
 	}
 	return (0);
 }

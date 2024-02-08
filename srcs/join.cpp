@@ -6,7 +6,7 @@
 /*   By: rrebois <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/29 09:13:54 by rrebois           #+#    #+#             */
-/*   Updated: 2024/02/07 13:47:37 by rrebois          ###   ########.fr       */
+/*   Updated: 2024/02/08 10:59:32 by rrebois          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,7 @@ static void	user_create_chan(itVecPair &it, Server &serv, Client &user)
 	serv.addChan(it->first, it->second, user); //+ replies
 }
 
-int	join_cmd(int fd, vecStr &cmd, Server &serv)
+int	joinCmd(int fd, vecStr &cmd, Server &serv)
 {
 	Client	user;
 	vecPair	chanPass;

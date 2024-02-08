@@ -6,7 +6,7 @@
 /*   By: rrebois <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 13:14:23 by rrebois           #+#    #+#             */
-/*   Updated: 2024/02/08 16:08:15 by rrebois          ###   ########.fr       */
+/*   Updated: 2024/02/08 16:08:32 by rrebois          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -156,7 +156,7 @@ static void	modeTopic(char c, std::string target, Client &user, Channel &chan)
 	chan.setChangeTopic(c, user);
 }
 
-int	mode_cmd(int fd, vecStr &cmd, Server &serv) // A verifier
+int	modeCmd(int fd, vecStr &cmd, Server &serv) // A verifier
 {
 	Client			user = serv.getClient(fd);
 	itVecChan		itChan;
