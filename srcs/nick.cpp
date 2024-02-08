@@ -6,7 +6,7 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 15:06:38 by rrebois           #+#    #+#             */
-/*   Updated: 2024/02/07 09:28:36 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/08 10:41:39 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,6 @@ int	nick_cmd(int fd, vecStr& cmd, Server &serv)
 		return (serv.getClientMap()[fd].setBufferSend(ERR_ERRONEUSNICKNAME(ERR, cmd[1])), 1);
 	if (!check_password_used(cmd[1], serv))
 		return (serv.getClientMap()[fd].setBufferSend(ERR_NICKNAMEINUSE(ERR, cmd[1])), 1);
-	serv.getClientMap()[fd].setNickName(cmd[1]);
+	serv.getClientMap()[fd].setName(cmd[1]);
 return (0);
 }

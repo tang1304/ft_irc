@@ -6,7 +6,7 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 16:21:25 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/08 10:26:48 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/08 10:49:20 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 
 //	1
 # define RPL_WELCOME( nickname, user_id) (":" + SERVERNAME + " 001 " + nickname + \
-	" :Welcome to the" + SERVERNAME + " Network, " + user_id + "[!" + user_id + "@" + LOCALHOST + "]\r\n")
+	" :Welcome to the " + SERVERNAME + " Network, " + user_id + "[!" + user_id + "@" + LOCALHOST + "]\r\n")
 
 // 2
 # define RPL_YOURHOST(client) (":" + SERVERNAME + " 002 " + client + " :Your host is " + SERVERNAME \
@@ -46,11 +46,27 @@
 //401
 # define ERR_NOSUCHNICK(client, nick) (":" + SERVERNAME + " 401 " + client + " '" + nick + "' :No such nick/channel\r\n")
 
-//403
-# define ERR_NOSUCHCHANNEL(client, chan) (":" + SERVERNAME + " 403 " + client + " " + chan + " :No such channel\r\n")
-
 //404
 # define ERR_CANNOTSENDTOCHAN(client, channel) (":" + SERVERNAME + " 404 " + client + " :Cannot send to channel\r\n")
+
+# define RPL_USERPROMOTED(client, nick) (":" + SERVERNAME + " " + client + " promoted " + nick + " chanop\r\n")
+
+# define RPL_USERDEMOTED(client, nick) (":" + SERVERNAME + " " + client + " demoted chanop " + nick + "\r\n")
+
+//324 -> needs to be completed
+# define RPL_CHANNELMODEIS(client, channel) (":" + SERVERNAME + " 324 " + client + " " + channel + "\r\n")
+
+// 332
+# define RPL_TOPIC(client, channel, topic) (":" + SERVERNAME + " 332 " + client + " " + channel + " :" + topic + "\r\n")
+
+//341
+# define RPL_INVITING(client, nick, channel) (":" + SERVERNAME + " 341 " + client + " invited " + nick + " to the channel " + channel + "\r\n")
+
+//403
+# define ERR_NOSUCHCHANNEL(client, channel) (":" + SERVERNAME + " 403 " + client + " " + channel + " :No such channel\r\n")
+
+//405
+# define ERR_TOOMANYCHANNELS(client, channel) (":" + SERVERNAME + " 405 " + client + " " + channel + " :You have joined too many channels\r\n")
 
 //407
 # define ERR_TOOMANYTARGETS(client) (":" + SERVERNAME + " 407 " + client + " :Duplicate recipients. No message delivered\r\n")
@@ -61,11 +77,41 @@
 //412
 # define ERR_NOTEXTTOSEND(client) (":" + SERVERNAME + " 412 " + client + " :No text to send\r\n")
 
-//442
-# define ERR_NOTONCHANNEL(client, chan) (":" + SERVERNAME + " 442 " + client + " " + chan + " :You're not on that channel\r\n")
+//421
+# define ERR_UNKNOWNCOMMAND(client, command) (":" + SERVERNAME + " 421 " + client + " " + command + " :Unknown command\r\n")
 
-//461
+//431
+# define ERR_NONICKNAMEGIVEN(client) (":" + SERVERNAME + " 431 " + client + " :No nickname given\r\n")
+
+//432
+# define ERR_ERRONEUSNICKNAME(client, nick) (":" + SERVERNAME + " 432 " + client + " " + nick + " :Erroneus nickname\r\n")
+
+//433
+# define ERR_NICKNAMEINUSE(client, nick) (":" + SERVERNAME + " 433 " + client + " " + nick + " :Nickname is already in use\r\n")
+
+//441
+# define ERR_USERNOTINCHANNEL(client, nick, channel) (":" + SERVERNAME + " 441 " + client + " " + nick + " " + channel + " :They aren't on that channel\r\n")
+
+//442
+# define ERR_NOTONCHANNEL(client, channel) (":" + SERVERNAME + " 442 " + client + " " + channel + " :You're not on that channel\r\n")
+
+//443
+# define ERR_USERONCHANNEL(client, nick, channel) (":" + SERVERNAME + " 443 " + client + " " + nick + " " + channel + " :is already on channel\r\n")
+
+// 461
 # define ERR_NEEDMOREPARAMS(client, cmd) (":" + SERVERNAME + " 461 " + client + " " + cmd + " :Not enough parameters\r\n")
+
+//462
+# define ERR_ALREADYREGISTERED(client) (":" + SERVERNAME + " 462 " + client + " :You may not reregister\r\n")
+
+//464
+# define ERR_PASSWDMISMATCH(client) (":" + SERVERNAME + " 464 " + client + " :Password incorrect\r\n")
+
+//471
+# define ERR_CHANNELISFULL(client, channel) (":" + SERVERNAME + " 471 " + client + " " + channel + " :Cannot join channel (+l)\r\n")
+
+//473
+# define ERR_INVITEONLYCHAN(client, channel) (":" + SERVERNAME + " 473 " + client + " " + channel + " :Cannot join channel (+i)\r\n")
 
 //474
 # define ERR_BANNEDFROMCHAN(client, channel) (":" + SERVERNAME + " 474 " + client + " " + channel + " :Cannot join channel (+b)\r\n")
@@ -74,27 +120,34 @@
 # define ERR_BADCHANNELKEY(client, channel) (":" + SERVERNAME + " 475 " + client + " " + channel + " :Cannot join channel (+k)\r\n")
 
 # define ERROR(error) ("ERROR: " + error + "\r\n")
-# define ERR_NEEDLESSPARAMS " :Too many parameters\n"
-# define ERR_UNKNOWNCOMMAND(client, command) (client + " " + command + " :Unknown command\r\n")
-# define ERR_PASSWDMISMATCH(client) (client + " :Password incorrect\r\n")
-# define ERR_ALREADYREGISTERED(client) (client + " :You may not reregister\r\n")
-# define ERR_NONICKNAMEGIVEN(client) (client + " :No nickname given\r\n")
-# define ERR_ERRONEUSNICKNAME(client, nick) (client + " " + nick + " :Erroneus nickname\r\n")
-# define ERR_NICKNAMEINUSE(client, nick) (client + " " + nick + " :Nickname is already in use\r\n")
-# define ERR_TOOMANYCHANNELS(client, channel) (client + " " + channel + " :You have joined too many channels\r\n")
-# define ERR_CHANNELISFULL(client, channel) (client + " " + channel + " :Cannot join channel (+l)\r\n")
-# define ERR_INVITEONLYCHAN(client, channel) (client + " " + channel + " :Cannot join channel (+i)\r\n")
-# define ERR_BADCHANMASK(channel) (channel + " :Bad Channel Mask\r\n")
-# define ERR_CHANOPRIVSNEEDED(client, channel) (client + " " + channel + " :You're not channel operator\r\n")
-# define ERR_USERONCHANNEL(client, nick, channel) (client + " " + nick + " " + channel + " :is already on channel\r\n")
+# define RPL_QUIT(client, reason) (":" + SERVERNAME + " " + client + " :Quit :" + reason + "\r\n")
 
-# define ERR_PASSFIRST(client) (client + " :Must confirm password first\r\n")
-# define ERR_NICKFIRST(client) (client + " :Must set nickname first\r\n")
-# define ERR_NOTREGISTERED(client) (client + " :You may register first\r\n")
+
+//476
+# define ERR_BADCHANMASK(channel) (":" + SERVERNAME + " 476 " + channel + " :Bad Channel Mask\r\n")
+
+//482
+# define ERR_CHANOPRIVSNEEDED(client, channel) (":" + SERVERNAME + " 482 " + client + " " + channel + " :You're not channel operator\r\n")
+
+# define ERROR(error) ("ERROR: " + error + "\r\n")
+
+//525
+# define ERR_INVALIDKEY(client, channel) (":" + SERVERNAME + " 525 " + client + " " + channel + " :Key is not well-formed (alphanumeric characters only)\r\n")
+
+// 696
+# define ERR_INVALIDMODEPARAM(client, channel, mode, param) (":" + SERVERNAME + " 696 " + client + " " + \
+			channel + " " + mode + " " + param + " :Invalid parameter\r\n")
+
+# define ERR_NOEXISTINGUSER(client, nick) (":" + SERVERNAME +client + " " + nick + " :No existing user\r\n")
+# define ERR_PASSFIRST(client) (":" + SERVERNAME +client + " :Must confirm password first\r\n")
+# define ERR_NICKFIRST(client) (":" + SERVERNAME +client + " :Must set nickname first\r\n")
+# define ERR_NOTREGISTERED(client) (":" + SERVERNAME + " " + client + " :You may register first\r\n")
+# define ERR_ALREADYINCHANNEL(client, channel) (":" + SERVERNAME + " " + client + " " + channel + " :User already in channel\r\n")
+# define ERR_CMODEUNKNOWNFLAG(channel) (":" + SERVERNAME + " " + channel + " :Unknown MODE flag\r\n")
+# define ERR_USERALREADYOP(client, nick, channel) (":" + SERVERNAME + " " + client + " " + nick + " " + channel + " :User already chanop\r\n")
+# define ERR_USERALREADYBASICU(client, nick, channel) (":" + SERVERNAME + " " + client + " " + nick + " " + channel + " :User already basic user\r\n")
 
 # define RPL_USERJOIN(client, channel) (client + " is joining the channel " + channel + "\r\n")
 # define RPL_USERLEFT(client, channel) (client + " has left the channel " + channel + "\r\n")
-# define RPL_QUIT(client, reason) (":" + SERVERNAME + " " + client + " :Quit :" + reason + "\r\n")
-# define RPL_TOPIC(client, channel, topic) (client + " " + channel + " :" + topic + "\r\n")
 
 #endif

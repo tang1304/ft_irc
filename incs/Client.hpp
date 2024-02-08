@@ -6,7 +6,7 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:14:10 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/07 09:28:36 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/08 10:31:10 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 
 class Client{
 private:
-	std::string	_nickName;
+	std::string	_name;
 	std::string _userName;
 	std::string	_realName;
 	std::string	_bufferRead;
@@ -33,7 +33,7 @@ public:
 	Client();
 	~Client();
 	Client(const Client &other);
-	bool			operator==(Client &rhs);
+	bool				operator==(Client &rhs);
 
 	const std::string	&getName() const;
 	const std::string	&getUserName() const;
@@ -47,7 +47,7 @@ public:
 	const int			&getChanCount() const;
 	const int			&getClientFd() const;
 
-	void				setNickName(const std::string &nickName);
+	void				setName(const std::string &nickName);
 	void				setUsername(const std::string &userName);
 	void				setRealName(const std::string &realName);
 	void				setBufferSend(const std::string& msg);
