@@ -6,7 +6,7 @@
 /*   By: rrebois <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 13:14:23 by rrebois           #+#    #+#             */
-/*   Updated: 2024/02/08 15:50:00 by rrebois          ###   ########.fr       */
+/*   Updated: 2024/02/08 16:08:15 by rrebois          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -149,6 +149,13 @@ static void	modeBan(char c, std::string target, Client &user, Channel &chan)
 //	sendToChan(); a mettre dans setPrivate
 }
 
+static void	modeTopic(char c, std::string target, Client &user, Channel &chan)
+{
+	(void)target;
+
+	chan.setChangeTopic(c, user);
+}
+
 int	mode_cmd(int fd, vecStr &cmd, Server &serv) // A verifier
 {
 	Client			user = serv.getClient(fd);
@@ -164,7 +171,7 @@ int	mode_cmd(int fd, vecStr &cmd, Server &serv) // A verifier
 	modeList['k'] = &modeKey;
 	modeList['l'] = &modeLimitUser;
 	modeList['o'] = &modeOperator;
-//	_modeList['t'] = &modeTopic;
+	modeList['t'] = &modeTopic;
 	if (cmd.size() < 3)
 	{
 		if (cmd.size() > 2)

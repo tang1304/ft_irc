@@ -6,7 +6,7 @@
 /*   By: rrebois <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/29 15:40:11 by rrebois           #+#    #+#             */
-/*   Updated: 2024/02/08 15:41:13 by rrebois          ###   ########.fr       */
+/*   Updated: 2024/02/08 16:15:18 by rrebois          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,12 +40,18 @@ void	Channel::setPrivated(char c)
 		_privated = false;
 }
 
-void	Channel::setChangeTopic()
+void	Channel::setChangeTopic(char c, Client &user)
 {
-	if (_changeTopic)
-		_changeTopic = false;
-	else
+	if (c == '+')
+	{
 		_changeTopic = true;
+		sendToChan(*this, RPL_SETTOPICCHANOP(user.getName(), getName()));
+	}
+	else
+	{
+		_changeTopic = false;
+		sendToChan(*this, RPL_UNSETTOPICCHANOP(user.getName(), getName()));
+	}
 }
 
 void	Channel::setLimitUserOnOff(char c, unsigned int i)

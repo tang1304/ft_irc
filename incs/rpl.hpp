@@ -6,7 +6,7 @@
 /*   By: rrebois <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 16:21:25 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/08 15:50:31 by rrebois          ###   ########.fr       */
+/*   Updated: 2024/02/08 16:17:04 by rrebois          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -154,6 +154,8 @@
 # define RPL_USERNOTBANNED(nick, channel) (":" + SERVERNAME + " " + nick + " " + channel + " :User not banned in this channel\r\n")
 # define RPL_USERBANNED(client, nick, channel) (":" + SERVERNAME + " " + client + " banned " + nick + " from channel " + channel + "\r\n")
 # define RPL_USERUNBANNED(client, nick, channel) (":" + SERVERNAME + " " + client + " unbanned " + nick + " from channel " + channel + "\r\n")
+# define RPL_SETTOPICCHANOP(client, channel) (":" + SERVERNAME + " " + client + " " + channel + " :Topic can be modified only by chanop users\r\n")
+# define RPL_UNSETTOPICCHANOP(client, channel) (":" + SERVERNAME + " " + client + " " + channel + " :Topic can be modified by any user\r\n")
 # define RPL_USERJOIN(client, channel) (client + " is joining the channel " + channel + "\r\n")
 # define RPL_USERLEFT(client, channel) (client + " has left the channel " + channel + "\r\n")
 
