@@ -6,7 +6,7 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:15:06 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/08 10:30:15 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/08 15:16:58 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@ public:
 	const int			&getConnected() const;
 	const std::string	&getPassword() const;
 	const std::string	&getName() const;
+	const std::string	&getTopic() const;
 	vecClient			&getUsersJoin();
 	vecClient			&getChanop();
 	vecClient			&getBanned();
