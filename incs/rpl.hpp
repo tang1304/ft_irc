@@ -6,7 +6,7 @@
 /*   By: rrebois <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 16:21:25 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/07 17:37:20 by rrebois          ###   ########.fr       */
+/*   Updated: 2024/02/08 10:17:41 by rrebois          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,9 @@
 
 //433
 # define ERR_NICKNAMEINUSE(client, nick) (":" + SERVERNAME + " 433 " + client + " " + nick + " :Nickname is already in use\r\n")
+
+//441
+# define ERR_USERNOTINCHANNEL(client, nick, channel) (":" + SERVERNAME + " 441 " + client + " " + nick + " " + channel + " :They aren't on that channel\r\n")
 
 //442
 # define ERR_NOTONCHANNEL(client, channel) (":" + SERVERNAME + " 442 " + client + " " + channel + " :You're not on that channel\r\n")
