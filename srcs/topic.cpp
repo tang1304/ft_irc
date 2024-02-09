@@ -6,7 +6,7 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 15:28:56 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/08 16:34:05 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/09 09:52:07 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ int	topicCmd(int fd, vecStr &cmd, Server &serv){
 	else{
 		if (it->getTopic().size() > 0){
 			sendToClient(user, RPL_TOPIC(user.getName(), it->getName(), it->getTopic()));
-			sendToClient(user, RPL_TOPICWHOTIME(user.getName(), it->getName(), it->getTopicChanger(), time));
+			// sendToClient(user, RPL_TOPICWHOTIME(user.getName(), it->getName(), it->getTopicChanger(), time));
 		}
 		else
 			sendToClient(user, RPL_NOTOPIC(user.getName(), it->getName()));

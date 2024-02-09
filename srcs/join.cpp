@@ -111,7 +111,7 @@ int	join_cmd(int fd, vecStr &cmd, Server &serv)
 	vecPair	chanPass;
 	bool	exists;
 
-std::cout << "In join" << std::endl;
+// std::cout << "In join" << std::endl;
 	chanPass = create_pair_cmd(cmd);
 	user = serv.getClient(fd);
 	if (!check_chan_first_char(chanPass) && cmd.size() < 3)
@@ -133,19 +133,19 @@ std::cout << "In join" << std::endl;
 			user_create_chan(it, serv, user);
 	}
 	// TEST
-for (itVecChan itc = serv.getChanList().begin(); itc != serv.getChanList().end(); itc++)
-{
-	std::cout << "Chan " << itc->getName() << " created." << std::endl;
-	if (!itc->getPassword().empty())
-		std::cout << "Chan password " << itc->getPassword() << "." << std::endl;
-	else
-		std::cout << "No password set for this channel." << std::endl;
-	std::cout << "Users connected " << itc->getConnected() << "." << std::endl;
-	for (itVecClient ut = itc->getUsersJoin().begin(); ut != itc->getUsersJoin().end(); ut++)
-		std::cout << "user " << ut->getName() << " connected." << std::endl;
-	for (itVecClient ut = itc->getChanop().begin(); ut != itc->getChanop().end(); ut++)
-		std::cout << "Chanop " << ut->getName() << " connected." << std::endl;
-}
+// for (itVecChan itc = serv.getChanList().begin(); itc != serv.getChanList().end(); itc++)
+// {
+// 	std::cout << "Chan " << itc->getName() << " created." << std::endl;
+// 	if (!itc->getPassword().empty())
+// 		std::cout << "Chan password " << itc->getPassword() << "." << std::endl;
+// 	else
+// 		std::cout << "No password set for this channel." << std::endl;
+// 	std::cout << "Users connected " << itc->getConnected() << "." << std::endl;
+// 	for (itVecClient ut = itc->getUsersJoin().begin(); ut != itc->getUsersJoin().end(); ut++)
+// 		std::cout << "user " << ut->getName() << " connected." << std::endl;
+// 	for (itVecClient ut = itc->getChanop().begin(); ut != itc->getChanop().end(); ut++)
+// 		std::cout << "Chanop " << ut->getName() << " connected." << std::endl;
+// }
 // END TEST
 	return (0);
 }
