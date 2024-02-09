@@ -6,7 +6,7 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:15:06 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/08 16:23:05 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/09 11:46:50 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ private:
 	std::string	_topic; // add timestamp of when it has been created and update it when changed
 	std::string	_topicChanger; 
 	std::string	_password;
+	std::string	_modes;
 	vecClient	_usersJoin;
 	vecClient	_chanop; // Channel moderators are identified by the channel member prefix ('@' for standard channel operators, '%' for halfops) next to their nickname whenever it is associated with a channel (e.g. replies to the NAMES, WHO, and WHOIS commands).
 	vecClient	_banned; // peut etre a mettre dans client
@@ -43,6 +44,7 @@ public:
 	void				setLimitUserOnOff(char c, unsigned int i);
 	void				setTopic(std::string &topic);
 	void				setTopicChanger(const std::string &user);
+	void				setModes(const std::string &mode);
 	void				addUser(Client &user);
 	void				addChanop(Client &user);
 	void				addBanned(Client &user);
@@ -57,6 +59,7 @@ public:
 	const std::string	&getName() const;
 	const std::string	&getTopic() const;
 	const std::string	&getTopicChanger() const;
+	const std::string	&getModes() const;
 	vecClient			&getUsersJoin();
 	vecClient			&getChanop();
 	vecClient			&getBanned();

@@ -6,15 +6,15 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/29 15:40:11 by rrebois           #+#    #+#             */
-/*   Updated: 2024/02/08 16:22:55 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/09 14:29:20 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../incs/Channel.hpp"
 
 Channel::Channel(std::string name, std::string key) :
-		_name(name), _topic(""), _topicChanger(""), _password(key), _privated(false),
-		_changeTopic(false), _limitUserOnOff(true), _limitUser(USERPERCHAN),
+		_name(name), _topic(""), _topicChanger(""), _password(key), _modes(""), \
+		_privated(false), _changeTopic(false), _limitUserOnOff(true), _limitUser(USERPERCHAN), \
 		_connected(0) { }
 
 Channel::~Channel() {}
@@ -68,6 +68,15 @@ void	Channel::setTopic(std::string &topic){
 
 void	Channel::setTopicChanger(const std::string &user){
 		_topicChanger = user;
+}
+
+void	Channel::setModes(const std::string &mode){
+	if (mode.find('+')){
+		_modes += mode[1];
+	}
+	else if (mode.find('-')){
+		_modes.erase(_modes.find(mode[1]), 1);
+	}
 }
 
 void	Channel::addUser(Client &user)
@@ -208,6 +217,11 @@ const std::string	&Channel::getTopic() const
 const std::string	&Channel::getTopicChanger() const
 {
 	return (_topicChanger);
+}
+
+const std::string	&Channel::getModes() const
+{
+	return (_modes);
 }
 
 vecClient	&Channel::getBanned()

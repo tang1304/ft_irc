@@ -6,7 +6,7 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 16:21:25 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/08 16:30:35 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/09 15:27:21 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,8 +53,11 @@
 
 # define RPL_USERDEMOTED(client, nick) (":" + SERVERNAME + " " + client + " demoted chanop " + nick + "\r\n")
 
+//315
+# define RPL_ENDOFWHO(client, mask) (":" + SERVERNAME + " 315 " + client + " "+ mask + " :End of WHO list\r\n")
+
 //324 -> needs to be completed
-# define RPL_CHANNELMODEIS(client, channel) (":" + SERVERNAME + " 324 " + client + " " + channel + "\r\n")
+# define RPL_CHANNELMODEIS(client, channel, modes) (":" + SERVERNAME + " 324 " + client + " " + channel + "\r\n")
 
 //331
 # define RPL_NOTOPIC(client, channel) (":" + SERVERNAME + " 331 " + client + " " + channel + " :No topic is set\r\n")
@@ -68,8 +71,12 @@
 //341
 # define RPL_INVITING(client, nick, channel) (":" + SERVERNAME + " 341 " + client + " invited " + nick + " to the channel " + channel + "\r\n")
 
+//352
+# define RPL_WHOREPLY(client, channel, userName, nick, flags, realName) (":" + SERVERNAME + " 352 " + client + " " + channel + \
+	" " + userName + " " + LOCALHOST + " " + SERVERNAME + " " + nick + " " + flags + " " + realName + "\r\n")
+
 //353
-# define RPL_NAMREPLY(client, chan, list) (":" + SERVERNAME + " 353 " + client + " = " + chan + list + "\r\n")
+# define RPL_NAMREPLY(client, chan, list) (":" + SERVERNAME + " 353 " + client + " = " + chan + " " + list + "\r\n")
 
 //366
 # define RPL_ENDOFNAMES(client, chan) (":" + SERVERNAME + " 366 " + client + " :End of /NAMES list\r\n")
@@ -158,8 +165,17 @@
 # define ERR_CMODEUNKNOWNFLAG(channel) (":" + SERVERNAME + " " + channel + " :Unknown MODE flag\r\n")
 # define ERR_USERALREADYOP(client, nick, channel) (":" + SERVERNAME + " " + client + " " + nick + " " + channel + " :User already chanop\r\n")
 # define ERR_USERALREADYBASICU(client, nick, channel) (":" + SERVERNAME + " " + client + " " + nick + " " + channel + " :User already basic user\r\n")
+# define ERR_CANNOTAUTODEMOTE(client, channel) (":" + SERVERNAME + " " + client + " " + channel + " :Cannot demote yourself\r\n")
+# define ERR_CANNOTAUTOBAN(client, channel) (":" + SERVERNAME + " " + client + " " + channel + " :Cannot ban yourself\r\n")
 
+# define RPL_USERNOTBANNED(nick, channel) (":" + SERVERNAME + " " + nick + " " + channel + " :User not banned in this channel\r\n")
+# define RPL_USERBANNED(client, nick, channel) (":" + SERVERNAME + " " + client + " banned " + nick + " from channel " + channel + "\r\n")
+# define RPL_USERUNBANNED(client, nick, channel) (":" + SERVERNAME + " " + client + " unbanned " + nick + " from channel " + channel + "\r\n")
+# define RPL_SETTOPICCHANOP(client, channel) (":" + SERVERNAME + " " + client + " " + channel + " :Topic can be modified only by chanop users\r\n")
+# define RPL_UNSETTOPICCHANOP(client, channel) (":" + SERVERNAME + " " + client + " " + channel + " :Topic can be modified by any user\r\n")
 # define RPL_USERJOIN(client, channel) (client + " is joining the channel " + channel + "\r\n")
 # define RPL_USERLEFT(client, channel) (client + " has left the channel " + channel + "\r\n")
+# define RPL_USERKICKED(client, nick, channel, comment) (":" + SERVERNAME + " " + client + " kicked " + nick + " from " + channel + " :" + comment + "\r\n")
+# define RPL_COMMENTKICKED(nick, channel, comment) (":" + SERVERNAME + " " + nick + " kicked from " + channel + " :" + comment + "\r\n")
 
 #endif
