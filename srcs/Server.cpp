@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: rrebois <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:03:01 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/12 13:53:30 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/12 17:39:29 by rrebois          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -234,9 +234,21 @@ void	Server::clientHandle(const int &fd){
 void	Server:: parseInput(const int &fd, std::string &input){
 	vecStr		command;
 	vecVecStr	vecCommand;
-
+std::cout << input << std::endl;
 	command = splitCmds(input, "\r\n");
+for (itVecStr it = command.begin(); it != command.end(); it++)
+{
+	std::cout << *it << std::endl;
+
+}
+
 	vecCommand = splitCmd(command, " ");
+for (itVecVecStr itv = vecCommand.begin(); itv != vecCommand.end(); itv++)
+{
+	for (itVecStr it = itv->begin(); it != itv->end(); it++)
+		std::cout << *it << std::endl;
+
+}
 	if (vecCommand.empty() || vecCommand.begin()->empty())
 		return ;
 	itVecVecStr	itvv = vecCommand.begin();
