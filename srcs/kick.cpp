@@ -3,17 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   kick.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rrebois <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 16:18:54 by rrebois           #+#    #+#             */
-/*   Updated: 2024/02/12 09:26:30 by rrebois          ###   ########.fr       */
+/*   Updated: 2024/02/12 10:41:46 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../incs/irc.hpp"
 
 int	kickCmd(int fd, vecStr &cmd, Server &serv) // les coms sont avec :comment here so reason is co;;ent here for all or not??
-{//segf if KICK #abc t,y "Horrible person" RPLS seem ok but parsong od comment needs more check.
+{
 	Client		user = serv.getClient(fd);
 
 	itVecChan	itChan;

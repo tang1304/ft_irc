@@ -6,30 +6,13 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/09 12:00:25 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/12 10:20:29 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/12 11:56:39 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "irc.hpp"
 
 static void	noMask(Client &user, Server &serv){
-	// itVecChan	itChan;
-	// for (itChan = serv.getChanList().begin(); itChan != serv.getChanList().end(); itChan++){
-	// 	if (isItIn(user, itChan->getUsersJoin()) == false && \
-	// 	isItIn(user, itChan->getChanop()) == false){
-	// 		itVecClient	itClient;
-	// 		for (itClient = itChan->getChanop().begin(); itClient != itChan->getChanop().end(); itClient++){
-	// 			sendToClient(*itClient, RPL_WHOREPLY(user.getName(), itChan->getName()\
-	// 			, itClient->getUserName(), itClient->getName(), "H@", itClient->getRealName()));
-	// 		}
-	// 		for (itClient = itChan->getUsersJoin().begin(); itClient != itChan->getUsersJoin().end(); itClient++){
-	// 			sendToClient(*itClient, RPL_WHOREPLY(user.getName(), itChan->getName()\
-	// 			, itClient->getUserName(), itClient->getName(), "H", itClient->getRealName()));
-	// 		}
-	// 	}
-	// 	else
-	// 		continue ;
-	// }
 	itClientMap	itClientServ;
 	for (itClientServ = serv.getClientMap().begin(); itClientServ != serv.getClientMap().end(); itClientServ++){
 		if (itClientServ->second.getName() == user.getName())
@@ -37,18 +20,22 @@ static void	noMask(Client &user, Server &serv){
 		if (serv.getChanList().empty()){
 			sendToClient(user, RPL_WHOREPLY(user.getName(), itClientServ->second.getName()\
 				, itClientServ->second.getUserName(), itClientServ->second.getName(), "H", itClientServ->second.getRealName()));
+			continue ;
 		}
-		else{
-			itVecChan itChan;
-			for (itChan = serv.getChanList().begin(); itChan != serv.getChanList().end(); itChan++){
-				if (isItIn(user, itChan->getUsersJoin()) == false && isItIn(user, itChan->getChanop()) == false){
-					sendToClient(user, RPL_WHOREPLY(user.getName(), itChan->getName()\
-					, itClientServ->second.getUserName(), itClientServ->second.getName(), "H", itClientServ->second.getRealName()));
-				}
-				else
-					continue ;
+		bool	sent = 0;
+		itVecChan itChan;
+		for (itChan = serv.getChanList().begin(); itChan != serv.getChanList().end(); itChan++){
+			if (isItIn(user, itChan->getUsersJoin()) == false && isItIn(user, itChan->getChanop()) == false && sent == 0){
+				sendToClient(user, RPL_WHOREPLY(user.getName(), itChan->getName()\
+				, itClientServ->second.getUserName(), itClientServ->second.getName(), "H", itClientServ->second.getRealName()));
+				sent = 1;
 			}
+			else
+				continue ;
 		}
+		if (sent == 0)
+			sendToClient(user, RPL_WHOREPLY(user.getName(), itClientServ->second.getName()\
+			, itClientServ->second.getUserName(), itClientServ->second.getName(), "H", itClientServ->second.getRealName()));
 	}
 	sendToClient(user, RPL_ENDOFWHO(user.getName(), ""));
 }
