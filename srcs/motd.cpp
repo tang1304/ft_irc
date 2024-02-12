@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "irc.hpp"
+#include "../incs/irc.hpp"
 
 int	motdCmd(int fd, vecStr& cmd, Server &serv){
 	(void)cmd;

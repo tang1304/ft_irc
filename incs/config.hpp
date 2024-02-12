@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   config.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: rrebois <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/17 15:45:59 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/08 10:30:46 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/12 09:24:10 by rrebois          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,9 @@
 # define USERLEN 12
 # define USERPERCHAN 10
 # define CHANUSERCANJOIN 5
+# define MAXKICKUSERLIMIT 3
 
+# define STDKICKMSG "Bad behavior"
 # define USAGE "Error\nThere must be 2 arguments : ./ircserv <port> <password>"
 
 class Server;
