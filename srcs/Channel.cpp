@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: rrebois <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/29 15:40:11 by rrebois           #+#    #+#             */
-/*   Updated: 2024/02/12 14:35:42 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/12 15:45:30 by rrebois          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,7 +121,7 @@ void	Channel::addBanned(Client &user, Client &target)
 		sendToClient(target, RPL_COMMENTBANNED(target.getName(), _name));
 		_usersJoin.erase(_usersJoin.begin() + index);
 		_connected--;
-		sendToChan(*this, RPL_USERBANNED(user.getName(), target.getName(), getName()));
+//		sendToChan(*this, RPL_USERBANNED(user.getName(), target.getName(), getName()));
 	}
 	else
 	{
@@ -132,10 +132,12 @@ void	Channel::addBanned(Client &user, Client &target)
 				break ;
 			index++;
 		}
-		sendToClient(target, RPL_COMMENTUNBANNED(target.getName(), _name));
+std::cout << "user " << user.getName() << std::endl;
+std::cout << "target " << target.getName() << std::endl;
+		sendToClient(target, RPL_COMMENTBANNED(target.getName(), _name));
 		_chanop.erase(_chanop.begin() + index);
 		_connected--;
-		sendToChan(*this, RPL_USERBANNED(user.getName(), target.getName(), getName()));
+//		sendToChan(*this, RPL_USERBANNED(user.getName(), target.getName(), getName()));
 	}
 }
 
@@ -183,6 +185,7 @@ void	Channel::removeBan(Client &user, Client &target)
 		index++;
 	}
 	_banned.erase(_banned.begin() + index);
+	sendToClient(target, RPL_COMMENTUNBANNED(target.getName(), _name));
 	sendToChan(*this, RPL_USERUNBANNED(user.getName(), target.getName(), getName()));
 }
 

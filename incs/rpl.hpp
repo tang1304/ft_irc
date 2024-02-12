@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   rpl.hpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: rrebois <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 16:21:25 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/12 14:35:20 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/12 14:51:50 by rrebois          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 # define RPL_CMD(nick, username, cmd, args) (":" + nick + "!" + username + "@" + LOCALHOST + " " + cmd + " " + args + "\r\n")
 
 //	1
-# define RPL_WELCOME( nickname, user_id) (":" + SERVERNAME + " 001 " + nickname + \
+# define RPL_WELCOME(nickname, user_id) (":" + SERVERNAME + " 001 " + nickname + \
 	" :Welcome to the " + SERVERNAME + " Network, " + user_id + "[!" + user_id + "@" + LOCALHOST + "]\r\n")
 
 // 2
@@ -44,14 +44,6 @@
 //341
 # define RPL_INVITING(client, nick, channel) (":" + SERVERNAME + " 341 " + client + " invited " + nick + " to the channel " + channel + "\r\n")
 
-//372
-# define RPL_MOTD(client) (":" + SERVERNAME + " 372 " + client + " : " + MOTD + "\r\n")
-
-//375
-# define RPL_MOTDSTART(client) (":" + SERVERNAME + " 375 " + client + " :- " + SERVERNAME + " Message of the day - \r\n")
-
-//376
-# define RPL_ENDOFMOTD(client) (":" + SERVERNAME + " 376 " + client +  " :End of /MOTD command.\r\n")
 
 //315
 # define RPL_ENDOFWHO(client, mask) (":" + SERVERNAME + " 315 " + client + " "+ mask + " :End of WHO list\r\n")
@@ -81,8 +73,24 @@
 //353
 # define RPL_NAMREPLY(client, chan, list) (":" + SERVERNAME + " 353 " + client + " = " + chan + " " + list + "\r\n")
 
+
 //366
 # define RPL_ENDOFNAMES(client, chan) (":" + SERVERNAME + " 366 " + client + " :End of /NAMES list\r\n")
+
+// 367
+# define RPL_BANLIST(client, channel, id) (":" + SERVERNAME + " 367 " + client + " " + channel + " [!" + id + "@" + LOCALHOST + "]\r\n")
+
+// 368
+# define RPL_ENDOFBANLIST(client, channel) (":" + SERVERNAME + " 368 " + client + " " + channel + " :End of channel ban list\r\n")
+
+//372
+# define RPL_MOTD(client) (":" + SERVERNAME + " 372 " + client + " : " + MOTD + "\r\n")
+
+//375
+# define RPL_MOTDSTART(client) (":" + SERVERNAME + " 375 " + client + " :- " + SERVERNAME + " Message of the day - \r\n")
+
+//376
+# define RPL_ENDOFMOTD(client) (":" + SERVERNAME + " 376 " + client +  " :End of /MOTD command.\r\n")
 
 //401
 # define ERR_NOSUCHNICK(client, nick) (":" + SERVERNAME + " 401 " + client + " '" + nick + "' :No such nick/channel\r\n")
