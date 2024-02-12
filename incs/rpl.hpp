@@ -6,7 +6,7 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 16:21:25 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/12 10:25:57 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/12 11:28:38 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -157,7 +157,7 @@
 			channel + " " + mode + " " + param + " :Invalid parameter\r\n")
 
 # define ERROR(error) ("ERROR: " + error + "\r\n")
-# define RPL_QUIT(client, reason) (":" + SERVERNAME + " " + client + " :Quit :" + reason + "\r\n")
+# define RPL_QUIT(client, reason) (":" + SERVERNAME + " " + client + " :Quit " + reason + "\r\n")
 # define ERR_NOEXISTINGUSER(client, nick) (":" + SERVERNAME +client + " " + nick + " :No existing user\r\n")
 # define ERR_PASSFIRST(client) (":" + SERVERNAME +client + " :Must confirm password first\r\n")
 # define ERR_NICKFIRST(client) (":" + SERVERNAME +client + " :Must set nickname first\r\n")

@@ -6,7 +6,7 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/29 15:40:11 by rrebois           #+#    #+#             */
-/*   Updated: 2024/02/12 10:26:09 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/12 12:29:42 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,8 +87,8 @@ void	Channel::setModes(const std::string &mode){
 
 void	Channel::addUser(Client &user)
 {
-	sendToChan(*this, RPL_USERJOIN(user.getName(), _name));
 	_usersJoin.push_back(user);
+	sendToChan(*this, RPL_USERJOIN(user.getName(), _name));
 	_connected++;
 	send(user.getClientFd(), user.getBufferSend().c_str(), user.getBufferSend().length(), 0);
 	user.setBufferSend("");
