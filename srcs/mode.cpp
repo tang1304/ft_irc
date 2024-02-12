@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mode.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: rrebois <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 13:14:23 by rrebois           #+#    #+#             */
-/*   Updated: 2024/02/12 14:33:14 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/12 15:39:33 by rrebois          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,7 +118,9 @@ static void	modeBan(char c, std::string target, Client &user, Channel &chan)
 
 	if (target.empty())
 	{
-		sendToClient(user, ERR_INVALIDMODEPARAM(user.getName(), chan.getName(), c+"b", target));
+		for (itBan = chan.getBanned().begin(); itBan != chan.getBanned().end(); itBan++)
+			sendToClient(user, RPL_BANLIST(user.getName(), chan.getName(), itBan->getName()));
+		sendToClient(user, RPL_ENDOFBANLIST(user.getName(), chan.getName()));
 		return ;
 	}
 	if (itClient == chan.getUsersJoin().end() && itChanop == chan.getChanop().end() && c == '+')
@@ -133,9 +135,15 @@ static void	modeBan(char c, std::string target, Client &user, Channel &chan)
 		return ;
 	}
 	if (itClient != chan.getUsersJoin().end() && c == '+')
+	{
 		chan.addBanned(user, *itClient);
+		sendToChan(chan, RPL_USERBANNED(user.getName(), target, chan.getName()));
+	}
 	else if (itClient == chan.getUsersJoin().end() && c == '+')
+	{
 		chan.addBanned(user, *itChanop);
+		sendToChan(chan, RPL_USERBANNED(user.getName(), target, chan.getName()));
+	}
 	if (c == '-')
 	{
 		itBan = findIt(target, chan.getBanned());
