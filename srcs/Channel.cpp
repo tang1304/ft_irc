@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rrebois <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/29 15:40:11 by rrebois           #+#    #+#             */
-/*   Updated: 2024/02/12 11:15:07 by rrebois          ###   ########.fr       */
+/*   Updated: 2024/02/12 14:35:42 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,8 +90,8 @@ void	Channel::setModes(const std::string &mode){
 
 void	Channel::addUser(Client &user)
 {
-	sendToChan(*this, RPL_USERJOIN(user.getName(), _name));
 	_usersJoin.push_back(user);
+	sendToChan(*this, RPL_CMD(user.getName(), user.getUserName(), "JOIN", this->_name));
 	_connected++;
 	send(user.getClientFd(), user.getBufferSend().c_str(), user.getBufferSend().length(), 0);
 	user.setBufferSend("");
@@ -118,6 +118,7 @@ void	Channel::addBanned(Client &user, Client &target)
 	}
 	if (itClient != getUsersJoin().end())
 	{
+		sendToClient(target, RPL_COMMENTBANNED(target.getName(), _name));
 		_usersJoin.erase(_usersJoin.begin() + index);
 		_connected--;
 		sendToChan(*this, RPL_USERBANNED(user.getName(), target.getName(), getName()));
@@ -131,6 +132,7 @@ void	Channel::addBanned(Client &user, Client &target)
 				break ;
 			index++;
 		}
+		sendToClient(target, RPL_COMMENTUNBANNED(target.getName(), _name));
 		_chanop.erase(_chanop.begin() + index);
 		_connected--;
 		sendToChan(*this, RPL_USERBANNED(user.getName(), target.getName(), getName()));
