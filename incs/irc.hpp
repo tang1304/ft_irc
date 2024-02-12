@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   irc.hpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rrebois <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 10:20:16 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/12 09:02:20 by rrebois          ###   ########.fr       */
+/*   Updated: 2024/02/12 10:24:40 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,9 @@ int			partCmd(int fd, vecStr &cmd, Server &serv);
 int			motdCmd(int fd, vecStr &cmd, Server &serv);
 int			pingCmd(int fd, vecStr &cmd, Server &serv);
 int			modeCmd(int fd, vecStr &cmd, Server &serv);
+int			whoCmd(int fd, vecStr &cmd, Server &serv);
+int			topicCmd(int fd, vecStr &cmd, Server &serv);
+int			whoCmd(int fd, vecStr &cmd, Server &serv);
 int			checkArgs(const std::string &port, const std::string &password);
 size_t		len(std::string s);
 vecStr		split(std::string &input, const std::string &delimiter);

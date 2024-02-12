@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   rpl.hpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rrebois <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 16:21:25 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/08 14:39:14 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/12 10:25:57 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,9 +38,6 @@
 
 # define RPL_USERDEMOTED(client, nick) (":" + SERVERNAME + " " + client + " demoted chanop " + nick + "\r\n")
 
-//324 -> needs to be completed
-# define RPL_CHANNELMODEIS(client, channel) (":" + SERVERNAME + " 324 " + client + " " + channel + "\r\n")
-
 //332
 # define RPL_TOPIC(client, channel, topic) (":" + SERVERNAME + " 332 " + client + " " + channel + " :" + topic + "\r\n")
 
@@ -56,18 +53,33 @@
 //376
 # define RPL_ENDOFMOTD(client) (":" + SERVERNAME + " 376 " + client +  " :End of /MOTD command.\r\n")
 
+//315
+# define RPL_ENDOFWHO(client, mask) (":" + SERVERNAME + " 315 " + client + " "+ mask + " :End of WHO list\r\n")
 
+//324 -> needs to be completed
+# define RPL_CHANNELMODEIS(client, channel, modes) (":" + SERVERNAME + " 324 " + client + " " + channel + "\r\n")
 
+//331
+# define RPL_NOTOPIC(client, channel) (":" + SERVERNAME + " 331 " + client + " " + channel + " :No topic is set\r\n")
 
+//333
+# define RPL_TOPICWHOTIME(client, chan, nick, setat) (":" + SERVERNAME + " 333 " + client + " " + chan + " " + nick + " " + setat + "\r\n")
 
-//401
-# define ERR_NOSUCHNICK(client, nick) (":" + SERVERNAME + " 401 " + client + " '" + nick + "' :No such nick/channel\r\n")
+//341
+# define RPL_INVITING(client, nick, channel) (":" + SERVERNAME + " 341 " + client + " invited " + nick + " to the channel " + channel + "\r\n")
+
+//352
+# define RPL_WHOREPLY(client, channel, userName, nick, flags, realName) (":" + SERVERNAME + " 352 " + client + " " + channel + \
+	" " + userName + " " + LOCALHOST + " " + SERVERNAME + " " + nick + " " + flags + " " + realName + "\r\n")
 
 //353
-# define RPL_NAMREPLY(client, chan, list) (":" + SERVERNAME + " 353 " + client + " = " + chan + list + "\r\n")
+# define RPL_NAMREPLY(client, chan, list) (":" + SERVERNAME + " 353 " + client + " = " + chan + " " + list + "\r\n")
 
 //366
 # define RPL_ENDOFNAMES(client, chan) (":" + SERVERNAME + " 366 " + client + " :End of /NAMES list\r\n")
+
+//401
+# define ERR_NOSUCHNICK(client, nick) (":" + SERVERNAME + " 401 " + client + " '" + nick + "' :No such nick/channel\r\n")
 
 //403
 # define ERR_NOSUCHCHANNEL(client, channel) (":" + SERVERNAME + " 403 " + client + " " + channel + " :No such channel\r\n")
@@ -166,4 +178,5 @@
 # define RPL_USERLEFT(client, channel) (client + " has left the channel " + channel + "\r\n")
 # define RPL_USERKICKED(client, nick, channel, comment) (":" + SERVERNAME + " " + client + " kicked " + nick + " from " + channel + " :" + comment + "\r\n")
 # define RPL_COMMENTKICKED(nick, channel, comment) (":" + SERVERNAME + " " + nick + " kicked from " + channel + " :" + comment + "\r\n")
+
 #endif

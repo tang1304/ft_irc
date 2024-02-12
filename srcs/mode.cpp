@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mode.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rrebois <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 13:14:23 by rrebois           #+#    #+#             */
-/*   Updated: 2024/02/08 16:08:32 by rrebois          ###   ########.fr       */
+/*   Updated: 2024/02/12 10:28:41 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -172,18 +172,15 @@ int	modeCmd(int fd, vecStr &cmd, Server &serv) // A verifier
 	modeList['l'] = &modeLimitUser;
 	modeList['o'] = &modeOperator;
 	modeList['t'] = &modeTopic;
-	if (cmd.size() < 3)
-	{
-		if (cmd.size() > 2)
-			return (sendToClient(user, ERR_NEEDMOREPARAMS(user.getName(), cmd[1])), 1);
-		else
-			return (sendToClient(user, ERR_NEEDMOREPARAMS(user.getName(), "")), 1);
-	}
+	if (cmd.size() < 2)
+		return (sendToClient(user, ERR_NEEDMOREPARAMS(user.getName(), cmd[0])), 1);
 	itChan = findIt(cmd[1], serv.getChanList());
 	if (itChan == serv.getChanList().end())
 		return (sendToClient(user, ERR_NOSUCHCHANNEL(user.getName(), cmd[1])), 1);
+	if (cmd.size() == 2)
+		return (sendToClient(user, RPL_CHANNELMODEIS(user.getName(), cmd[1], itChan->getModes())), 1);
 	if (cmd.size() >= 3 && (cmd[2][0] != '+' && cmd[2][0] != '-'))
-		return (sendToClient(user, RPL_CHANNELMODEIS(user.getName(), cmd[1])), 1);
+		return (sendToClient(user, RPL_CHANNELMODEIS(user.getName(), cmd[1], itChan->getModes())), 1);
 	if (!isItIn(user, itChan->getChanop()))
 		return (sendToClient(user, ERR_CHANOPRIVSNEEDED(user.getName(), cmd[1])), 1);
 	for (size_t i = 0; i < cmd[2].size(); i++)

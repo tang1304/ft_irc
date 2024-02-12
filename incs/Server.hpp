@@ -6,7 +6,7 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:03:20 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/02 12:17:54 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/12 08:50:12 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@ public:
 	void				addChan(std::string chan, std::string key, Client &user);
 	void				removeChan(int id);
 	void				registrationDone(int &fd);
+	itClientMap			findClient(std::string name);
 };
 
 #endif

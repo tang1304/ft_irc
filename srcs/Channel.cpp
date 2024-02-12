@@ -3,18 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rrebois <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/29 15:40:11 by rrebois           #+#    #+#             */
-/*   Updated: 2024/02/08 16:15:18 by rrebois          ###   ########.fr       */
+/*   Updated: 2024/02/12 10:26:09 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../incs/Channel.hpp"
 
 Channel::Channel(std::string name, std::string key) :
-		_name(name), _topic(""), _password(key), _privated(false),
-		_changeTopic(false), _limitUserOnOff(true), _limitUser(USERPERCHAN),
+		_name(name), _topic(""), _topicChanger(""), _password(key), _modes(""), \
+		_privated(false), _changeTopic(false), _limitUserOnOff(true), _limitUser(USERPERCHAN), \
 		_connected(0) { }
 
 Channel::~Channel() {}
@@ -63,6 +63,26 @@ void	Channel::setLimitUserOnOff(char c, unsigned int i)
 	}
 	else if (c == '-')
 		_limitUserOnOff = false;
+}
+
+void	Channel::setTopic(std::string &topic){
+	if (topic == "")
+		_topic.clear();
+	else
+		_topic = topic;
+}
+
+void	Channel::setTopicChanger(const std::string &user){
+		_topicChanger = user;
+}
+
+void	Channel::setModes(const std::string &mode){
+	if (mode.find('+')){
+		_modes += mode[1];
+	}
+	else if (mode.find('-')){
+		_modes.erase(_modes.find(mode[1]), 1);
+	}
 }
 
 void	Channel::addUser(Client &user)
@@ -228,6 +248,16 @@ const std::string	&Channel::getTopic() const
 	return (_topic);
 }
 
+const std::string	&Channel::getTopicChanger() const
+{
+	return (_topicChanger);
+}
+
+const std::string	&Channel::getModes() const
+{
+	return (_modes);
+}
+
 vecClient	&Channel::getBanned()
 {
 	return (_banned);
@@ -246,6 +276,11 @@ const bool	&Channel::getLimitUserOnOff() const
 const bool	&Channel::getPrivated() const
 {
 	return (_privated);
+}
+
+const bool	&Channel::getChangeTopic() const
+{
+	return (_changeTopic);
 }
 
 const int	&Channel::getId() const

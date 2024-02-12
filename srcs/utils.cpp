@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rrebois <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 10:16:34 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/12 09:01:51 by rrebois          ###   ########.fr       */
+/*   Updated: 2024/02/12 10:30:06 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -159,6 +159,7 @@ void	sendToClient(Client &user, const std::string &msg){
 	if (user.getDisconnect() == 0){
 		user.setBufferSend(msg);
 		send(user.getClientFd(), user.getBufferSend().c_str(), user.getBufferSend().length(), 0);
+		std::cout << BLUE << "-> " << user.getFd() << ": " << msg << DEFAULT;
 		user.setBufferSend("");
 	}
 }
@@ -168,38 +169,30 @@ void	sendToChan(Channel &chan, const std::string &msg){
 
 	for (; it != chan.getUsersJoin().end(); it++){
 		if (it->getDisconnect() == 0){
-			it->setBufferSend(msg);
-			send(it->getClientFd(), it->getBufferSend().c_str(), it->getBufferSend().length(), 0);
-			it->setBufferSend("");
+			sendToClient(*it, msg);
 		}
 	}
 	it = chan.getChanop().begin();
 	for (; it != chan.getChanop().end(); it++){
 		if (it->getDisconnect() == 0){
-			it->setBufferSend(msg);
-			send(it->getClientFd(), it->getBufferSend().c_str(), it->getBufferSend().length(), 0);
-			it->setBufferSend("");
+			sendToClient(*it, msg);
 		}
 	}
 }
 
 void	sendToChanNotUser(Client &user, Channel &chan, const std::string &msg){
 	itVecClient	it = chan.getUsersJoin().begin();
-	for (; it != chan.getUsersJoin().end(); it++)
+	for (; it != chan.getUsersJoin().end(); it++){
 		if (it->getFd() == user.getFd())
 			continue ;
-		else
-			if (it->getDisconnect() == 0){
-					it->setBufferSend(msg);
-					send(it->getClientFd(), it->getBufferSend().c_str(), it->getBufferSend().length(), 0);
-					it->setBufferSend("");
-				}
+		if (it->getDisconnect() == 0)
+			sendToClient(*it, msg);
+	}
 	it = chan.getChanop().begin();
 	for (; it != chan.getChanop().end(); it++){
-		if (it->getDisconnect() == 0){
-			it->setBufferSend(msg);
-			send(it->getClientFd(), it->getBufferSend().c_str(), it->getBufferSend().length(), 0);
-			it->setBufferSend("");
-		}
+		if (it->getFd() == user.getFd())
+			continue ;
+		if (it->getDisconnect() == 0)
+			sendToClient(*it, msg);
 	}
 }

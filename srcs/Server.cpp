@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rrebois <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:03:01 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/08 17:55:08 by rrebois          ###   ########.fr       */
+/*   Updated: 2024/02/12 10:29:37 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,9 +52,10 @@ void	Server::cmdInit(){
 	_commandsList["PRIVMSG"] = &privmsgCmd;
 	_commandsList["JOIN"] = &joinCmd;
 	_commandsList["PART"] = &partCmd;
-	// _commandsList["TOPIC"] = &topic;
 	_commandsList["KICK"] = &kickCmd;
 	_commandsList["INVITE"] = &inviteCmd;
+	_commandsList["TOPIC"] = &topicCmd;
+	_commandsList["WHO"] = &whoCmd;
 	_commandsList["MODE"] = &modeCmd;
 	// _commandsList["LIST"] = &list;
 }
@@ -209,14 +210,14 @@ void	Server::clientHandle(const int &fd){
 	else if (bytesRead == 0)
 		clientDisconnection(fd);
 	else{
-		std::cout << PURPLE << "[Client] Received data from client #" << fd << ": " << buffer << DEFAULT << std::endl;
+		std::cout << std::endl << PURPLE << "[Client] Received data from client #" << fd << ": " << buffer << DEFAULT;
 // std::cout << GREEN << "buffer: " << buffer << ". Size: " << BUFFER_SIZE << DEFAULT << std::endl;
 		std::string	buf(buffer);
 		_clients[fd].setBufferRead(std::string(buf), 1);
 		if ((buf.empty() || buf == "\r\n") && _clients[fd].getBufferRead().empty())
 			return ;
 		size_t pos = _clients[fd].getBufferRead().find("\r\n");
-		if (pos != std::string::npos){
+		if (pos != std::string::npos){  
 			buf = _clients[fd].getBufferRead();
 			parseInput((fd), buf);
 			_clients[fd].setBufferRead("", 0);
@@ -239,10 +240,10 @@ void	Server:: parseInput(const int &fd, std::string &input){
 	itVecVecStr	itvv = vecCommand.begin();
 	for (; itvv != vecCommand.end(); itvv++)
 	{
-itVecStr	i = itvv->begin();
-for (; i < itvv->end(); i++){
-	std::cout << BLUE << "[SERV] cmd: " << *i << "." << DEFAULT << std::endl;
-}
+// itVecStr	i = itvv->begin();
+// for (; i < itvv->end(); i++){
+// 	std::cout << BLUE << "[SERV] cmd: " << *i << "." << DEFAULT << std::endl;
+// }
 		itMapCmds	it = _commandsList.find(*itvv->begin());
 		if (it != _commandsList.end() && (*itvv->begin() != "PASS" && *itvv->begin() != "USER" && *itvv->begin() != "NICK")\
 		&& !_clients[fd].getRegistered()){
@@ -267,4 +268,14 @@ void	Server::registrationDone(int &fd){
 	_clients[fd].setBufferSend(RPL_MOTDSTART(_clients[fd].getName()));
 	_clients[fd].setBufferSend(RPL_MOTD(_clients[fd].getName()));
 	_clients[fd].setBufferSend(RPL_ENDOFMOTD(_clients[fd].getName()));
+}
+
+itClientMap			Server::findClient(std::string name){
+	itClientMap	it;
+
+	for (it = _clients.begin(); it != _clients.end(); it++){
+		if (it->second.getName() == name)
+			break ;
+	}
+	return (it);
 }
