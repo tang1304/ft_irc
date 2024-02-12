@@ -6,7 +6,7 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 16:21:25 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/12 11:28:38 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/12 14:33:38 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -172,10 +172,12 @@
 # define RPL_USERNOTBANNED(nick, channel) (":" + SERVERNAME + " " + nick + " " + channel + " :User not banned in this channel\r\n")
 # define RPL_USERBANNED(client, nick, channel) (":" + SERVERNAME + " " + client + " banned " + nick + " from channel " + channel + "\r\n")
 # define RPL_USERUNBANNED(client, nick, channel) (":" + SERVERNAME + " " + client + " unbanned " + nick + " from channel " + channel + "\r\n")
+# define RPL_COMMENTBANNED(nick, channel) (":" + SERVERNAME + " " + nick + " banned from " + channel + "\r\n")
+# define RPL_COMMENTUNBANNED(nick, channel) (":" + SERVERNAME + " " + nick + " unbanned from " + channel + "\r\n")
 # define RPL_SETTOPICCHANOP(client, channel) (":" + SERVERNAME + " " + client + " " + channel + " :Topic can be modified only by chanop users\r\n")
 # define RPL_UNSETTOPICCHANOP(client, channel) (":" + SERVERNAME + " " + client + " " + channel + " :Topic can be modified by any user\r\n")
-# define RPL_USERJOIN(client, channel) (client + " is joining the channel " + channel + "\r\n")
-# define RPL_USERLEFT(client, channel) (client + " has left the channel " + channel + "\r\n")
+# define RPL_USERJOIN(client, channel) (":" + client + " is joining the channel " + channel + "\r\n")
+# define RPL_USERLEFT(client, channel) (":" + client + " has left the channel " + channel + "\r\n")
 # define RPL_USERKICKED(client, nick, channel, comment) (":" + SERVERNAME + " " + client + " kicked " + nick + " from " + channel + " :" + comment + "\r\n")
 # define RPL_COMMENTKICKED(nick, channel, comment) (":" + SERVERNAME + " " + nick + " kicked from " + channel + " :" + comment + "\r\n")
 
