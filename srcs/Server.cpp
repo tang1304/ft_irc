@@ -6,7 +6,7 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:03:01 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/09 11:32:25 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/12 08:55:30 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,7 @@ void	Server::cmdInit(){
 	_commandsList["JOIN"] = &join_cmd;
 	_commandsList["PART"] = &partCmd;
 	_commandsList["TOPIC"] = &topicCmd;
+	_commandsList["WHO"] = &whoCmd;
 	// _commandsList["KICK"] = &kick;
 	_commandsList["INVITE"] = &invite_cmd;
 	_commandsList["MODE"] = &modeCmd;
@@ -267,4 +268,14 @@ void	Server::registrationDone(int &fd){
 	_clients[fd].setBufferSend(RPL_MOTDSTART(_clients[fd].getName()));
 	_clients[fd].setBufferSend(RPL_MOTD(_clients[fd].getName()));
 	_clients[fd].setBufferSend(RPL_ENDOFMOTD(_clients[fd].getName()));
+}
+
+itClientMap			Server::findClient(std::string name){
+	itClientMap	it;
+
+	for (it = _clients.begin(); it != _clients.end(); it++){
+		if (it->second.getName() == name)
+			break ;
+	}
+	return (it);
 }

@@ -6,7 +6,7 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 10:16:34 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/09 11:16:28 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/12 09:34:07 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -169,18 +169,12 @@ void	sendToChan(Channel &chan, const std::string &msg){
 
 	for (; it != chan.getUsersJoin().end(); it++){
 		if (it->getDisconnect() == 0){
-			// it->setBufferSend(msg);
-			// send(it->getClientFd(), it->getBufferSend().c_str(), it->getBufferSend().length(), 0);
-			// it->setBufferSend("");
 			sendToClient(*it, msg);
 		}
 	}
 	it = chan.getChanop().begin();
 	for (; it != chan.getChanop().end(); it++){
 		if (it->getDisconnect() == 0){
-			// it->setBufferSend(msg);
-			// send(it->getClientFd(), it->getBufferSend().c_str(), it->getBufferSend().length(), 0);
-			// it->setBufferSend("");
 			sendToClient(*it, msg);
 		}
 	}
@@ -188,14 +182,17 @@ void	sendToChan(Channel &chan, const std::string &msg){
 
 void	sendToChanNotUser(Client &user, Channel &chan, const std::string &msg){
 	itVecClient	it = chan.getUsersJoin().begin();
-	for (; it != chan.getUsersJoin().end(); it++)
-		if (it->getFd() == user.getFd()){
+	for (; it != chan.getUsersJoin().end(); it++){
+		if (it->getFd() == user.getFd())
 			continue ;
-		if (it->getDisconnect() == 0){
-			// it->setBufferSend(msg);
-			// send(it->getClientFd(), it->getBufferSend().c_str(), it->getBufferSend().length(), 0);
-			// it->setBufferSend("");
+		if (it->getDisconnect() == 0)
 			sendToClient(*it, msg);
-		}
+	}
+	it = chan.getChanop().begin();
+	for (; it != chan.getChanop().end(); it++){
+		if (it->getFd() == user.getFd())
+			continue ;
+		if (it->getDisconnect() == 0)
+			sendToClient(*it, msg);
 	}
 }
