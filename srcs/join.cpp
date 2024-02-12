@@ -28,7 +28,7 @@ static int	check_chan_first_char(vecPair pair)
 static void	user_join_chan(itVecPair &it, Server &serv, Client &user)
 {
 	itVecChan				itc;
-	itVecClient				itCli;
+	itVecClient				itBan;
 	itVecClient				itClient;
 	itVecClient				itChanop;
 
@@ -38,9 +38,9 @@ static void	user_join_chan(itVecPair &it, Server &serv, Client &user)
 		sendToClient(user, ERR_BADCHANNELKEY(user.getName(), it->first));
 		return ;
 	}
-	for (itCli = itc->getBanned().begin(); itCli != itc->getBanned().end(); itCli++)
+	for (itBan = itc->getBanned().begin(); itBan != itc->getBanned().end(); itBan++)
 	{
-		if (user == *itCli) // A CHANGERRRR!!!!!!!!
+		if (user == *itBan) // A CHANGERRRR!!!!!!!!
 		{
 			sendToClient(user, ERR_BANNEDFROMCHAN(user.getName(), it->first));
 			return ;
@@ -59,8 +59,19 @@ static void	user_join_chan(itVecPair &it, Server &serv, Client &user)
 	itClient = findIt(user.getName(), itc->getUsersJoin());
 	itChanop = findIt(user.getName(), itc->getChanop());
 	if (itClient == itc->getUsersJoin().end() && itChanop == itc->getChanop().end())
+  {
+		std::string	allUsers;
 		itc->addUser(user); // + replies
-	else if (itClient != itc->getUsersJoin().end() || itChanop != itc->getChanop().end())
+		if (itc->getTopic().size() > 0)
+			sendToClient(user, RPL_TOPIC(user.getName(), itc->getName(), itc->getTopic()));
+		for (itVecClient it = itc->getUsersJoin().begin(); it != itc->getUsersJoin().end(); it++)
+			allUsers += " " + it->getName();
+		for (itVecClient it = itc->getChanop().begin(); it != itc->getChanop().end(); it++)
+			allUsers += " @" + it->getName();
+		sendToClient(user, RPL_NAMREPLY(user.getName(), itc->getName(), allUsers));
+		sendToClient(user, RPL_ENDOFNAMES(user.getName(), itc->getName()));
+	}
+	else
 		sendToClient(user, ERR_ALREADYINCHANNEL(user.getName(), it->first));
 }
 
@@ -89,6 +100,10 @@ static void	user_create_chan(itVecPair &it, Server &serv, Client &user)
 		return ;
 	}
 	serv.addChan(it->first, it->second, user); //+ replies
+	Channel	chan = serv.getChanList().back();
+	std::string	userName = "@" + user.getName();
+	sendToClient(user, RPL_NAMREPLY(user.getName(), chan.getName(), userName));
+	sendToClient(user, RPL_ENDOFNAMES(user.getName(), chan.getName()));
 }
 
 int	joinCmd(int fd, vecStr &cmd, Server &serv)
@@ -100,8 +115,6 @@ int	joinCmd(int fd, vecStr &cmd, Server &serv)
 std::cout << "In join" << std::endl;
 	chanPass = create_pair_cmd(cmd);
 	user = serv.getClient(fd);
-	// if (!user.getRegistered())
-	// 	return (user.setBufferSend(ERR_NOTREGISTERED(user.getName())), 1);
 	if (!check_chan_first_char(chanPass) && cmd.size() < 3)
 	{
 		sendToClient(user, ERR_NEEDMOREPARAMS(user.getName(), cmd[1]));
