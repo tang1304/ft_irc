@@ -6,7 +6,7 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 16:21:25 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/12 14:35:20 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/12 15:27:12 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,9 @@
 # include "config.hpp"
 
 # define RPL_CMD(nick, username, cmd, args) (":" + nick + "!" + username + "@" + LOCALHOST + " " + cmd + " " + args + "\r\n")
+
+# define RPL_MODE(nick, username, chan, sign, mode ,args) (":" + nick + "!" + username + "@" + LOCALHOST + " MODE " + chan + " " \
++ sign + mode + " " + args + "\r\n")
 
 //	1
 # define RPL_WELCOME( nickname, user_id) (":" + SERVERNAME + " 001 " + nickname + \
