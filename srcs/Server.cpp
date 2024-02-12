@@ -6,7 +6,7 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:03:01 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/12 12:31:58 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/12 13:53:30 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,8 @@ void	Server::addChan(std::string chan, std::string key, Client &user)
 
 	newChan.setId(j);
 	newChan.addChanop(user);
-	sendToChan(newChan, RPL_USERJOIN(user.getName(), chan));
+	// sendToChan(newChan, RPL_USERJOIN(user.getName(), chan));
+	sendToChan(newChan, RPL_CMD(user.getName(), user.getUserName(), "JOIN" ,chan));
 	user.setChanCount(1);
 	_chanList.push_back(newChan);
 }
