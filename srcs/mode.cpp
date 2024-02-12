@@ -6,7 +6,7 @@
 /*   By: rrebois <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 13:14:23 by rrebois           #+#    #+#             */
-/*   Updated: 2024/02/12 15:39:33 by rrebois          ###   ########.fr       */
+/*   Updated: 2024/02/12 15:47:57 by rrebois          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -154,7 +154,6 @@ static void	modeBan(char c, std::string target, Client &user, Channel &chan)
 		}
 		chan.removeBan(user, *itBan);
 	}
-//	sendToChan(); a mettre dans setPrivate
 }
 
 static void	modeTopic(char c, std::string target, Client &user, Channel &chan)
