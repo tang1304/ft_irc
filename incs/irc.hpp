@@ -36,6 +36,7 @@ int			modeCmd(int fd, vecStr &cmd, Server &serv);
 int			whoCmd(int fd, vecStr &cmd, Server &serv);
 int			topicCmd(int fd, vecStr &cmd, Server &serv);
 int			whoCmd(int fd, vecStr &cmd, Server &serv);
+int			listCmd(int fd, vecStr &cmd, Server &serv);
 int			checkArgs(const std::string &port, const std::string &password);
 size_t		len(std::string s);
 vecStr		split(std::string &input, const std::string &delimiter);

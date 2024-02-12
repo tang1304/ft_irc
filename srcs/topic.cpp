@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   topic.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: rrebois <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 15:28:56 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/09 09:52:07 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/12 11:15:55 by rrebois          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "irc.hpp"
+#include "../incs/irc.hpp"
 
 int	topicCmd(int fd, vecStr &cmd, Server &serv){
 	Client		user = serv.getClientMap()[fd];
@@ -44,7 +44,8 @@ int	topicCmd(int fd, vecStr &cmd, Server &serv){
 	else{
 		if (it->getTopic().size() > 0){
 			sendToClient(user, RPL_TOPIC(user.getName(), it->getName(), it->getTopic()));
-			// sendToClient(user, RPL_TOPICWHOTIME(user.getName(), it->getName(), it->getTopicChanger(), time));
+			sendToClient(user, RPL_TOPICWHOTIME(user.getName(), it->getName(), it->getTopicChanger(),
+												std::asctime(std::localtime(&it->getTimeTopicChange()))));
 		}
 		else
 			sendToClient(user, RPL_NOTOPIC(user.getName(), it->getName()));

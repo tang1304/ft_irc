@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   rpl.hpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: rrebois <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 16:21:25 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/12 10:25:57 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/12 12:12:49 by rrebois          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,12 @@
 
 //315
 # define RPL_ENDOFWHO(client, mask) (":" + SERVERNAME + " 315 " + client + " "+ mask + " :End of WHO list\r\n")
+
+// 322
+# define RPL_LIST(client, channel, count, topic) (":" + SERVERNAME + " 322 " + client + " "+ channel + " " + count + " :" + topic + "\r\n")
+
+//323
+# define RPL_LISTEND(client) (":" + SERVERNAME+ " 323 " + client + " :End of /LIST\r\n")
 
 //324 -> needs to be completed
 # define RPL_CHANNELMODEIS(client, channel, modes) (":" + SERVERNAME + " 324 " + client + " " + channel + "\r\n")
