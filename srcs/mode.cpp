@@ -6,7 +6,7 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 13:14:23 by rrebois           #+#    #+#             */
-/*   Updated: 2024/02/12 14:33:14 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/12 15:44:35 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,8 @@ static void	modeOperator(char c, std::string target, Client &user, Channel &chan
 	if (c == '+' && itClient != chan.getUsersJoin().end())
 	{
 		chan.promoteDemoteUsers(c, *itClient);
-		sendToChan(chan, RPL_USERPROMOTED(user.getName(), target));
+		sendToChan(chan, RPL_MODE(user.getName(), user.getUserName(), chan.getName(), "+", + "o", target));
+		// sendToChan(chan, RPL_USERPROMOTED(user.getName(), target));
 		return ;
 	}
 	else if (c == '+' && itClient == chan.getUsersJoin().end())
@@ -100,7 +101,8 @@ static void	modeOperator(char c, std::string target, Client &user, Channel &chan
 	if (c == '-' && itChanop != chan.getChanop().end())
 	{
 		chan.promoteDemoteUsers(c, *itChanop);
-		sendToChan(chan, RPL_USERDEMOTED(user.getName(), target));
+		sendToChan(chan, RPL_MODE(user.getName(), user.getUserName(), chan.getName(), "-", + "o", target));
+		// sendToChan(chan, RPL_USERDEMOTED(user.getName(), target));
 		return ;
 	}
 	else if (c == '-' && itChanop == chan.getChanop().end())
@@ -217,19 +219,19 @@ std::cout << it->first << " " << it->second << std::endl;
 
 
 	// TEST
-	for (itVecChan itc = serv.getChanList().begin(); itc != serv.getChanList().end(); itc++)
-	{
-		std::cout << "Chan " << itc->getName() << " created." << std::endl;
-		if (!itc->getPassword().empty())
-			std::cout << "Chan password " << itc->getPassword() << "." << std::endl;
-		else
-			std::cout << "No password set for this channel." << std::endl;
-		std::cout << "Users connected " << itc->getConnected() << "." << std::endl;
-		for (itVecClient ut = itc->getUsersJoin().begin(); ut != itc->getUsersJoin().end(); ut++)
-			std::cout << "user " << ut->getName() << " connected." << std::endl;
-		for (itVecClient ut = itc->getChanop().begin(); ut != itc->getChanop().end(); ut++)
-			std::cout << "Chanop " << ut->getName() << " connected." << std::endl;
-	}
+	// for (itVecChan itc = serv.getChanList().begin(); itc != serv.getChanList().end(); itc++)
+	// {
+	// 	std::cout << "Chan " << itc->getName() << " created." << std::endl;
+	// 	if (!itc->getPassword().empty())
+	// 		std::cout << "Chan password " << itc->getPassword() << "." << std::endl;
+	// 	else
+	// 		std::cout << "No password set for this channel." << std::endl;
+	// 	std::cout << "Users connected " << itc->getConnected() << "." << std::endl;
+	// 	for (itVecClient ut = itc->getUsersJoin().begin(); ut != itc->getUsersJoin().end(); ut++)
+	// 		std::cout << "user " << ut->getName() << " connected." << std::endl;
+	// 	for (itVecClient ut = itc->getChanop().begin(); ut != itc->getChanop().end(); ut++)
+	// 		std::cout << "Chanop " << ut->getName() << " connected." << std::endl;
+	// }
 // END TEST
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/29 10:41:49 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/12 11:28:29 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/12 15:56:38 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,11 +24,11 @@ int	quitCmd(int fd, vecStr &cmd, Server &serv){
 		reason = ":No reason given";
 	for (itVecChan itChan = serv.getChanList().begin(); itChan != serv.getChanList().end(); itChan++){
 		if ((itClient = findIt(userName, itChan->getUsersJoin())) != itChan->getUsersJoin().end()){
-			sendToChan(*itChan, RPL_QUIT(itClient->getName(), reason));
+			sendToChan(*itChan, RPL_CMD(itClient->getName(), itClient->getUserName(), "QUIT", reason));
 			itChan->removeUser(*itClient);
 		}
 		else if ((itClient = findIt(userName, itChan->getChanop())) != itChan->getChanop().end()){
-			sendToChan(*itChan, RPL_QUIT(itClient->getName(), reason));
+			sendToChan(*itChan, RPL_CMD(itClient->getName(), itClient->getUserName(), "QUIT", reason));
 			itChan->removeChanop(*itClient);
 		}
 	}
