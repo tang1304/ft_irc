@@ -10,9 +10,9 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "irc.hpp"
+# include "../incs/irc.hpp"
 
-int	quit_cmd(int fd, vecStr &cmd, Server &serv){
+int	quitCmd(int fd, vecStr &cmd, Server &serv){
 	Client		user = serv.getClient(fd);
 	std::string	userName = user.getName();
 	itVecClient	itClient;

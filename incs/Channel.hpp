@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: rrebois <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:15:06 by tgellon           #+#    #+#             */
 /*   Updated: 2024/02/08 15:16:58 by tgellon          ###   ########lyon.fr   */
@@ -30,7 +30,6 @@ private:
 	bool		_changeTopic; // false = anyone true = chanops only / false
 	bool		_limitUserOnOff;
 	int			_limitUser;
-//	bool		_passOnOff; // on?
 	int			_connected; //number of users/chanops connected
 	int			_id;
 
@@ -38,16 +37,16 @@ public:
 	void				setId(int i);
 	void				setPassword(char c, std::string &key);
 	void				setPrivated(char c);
-	void				setChangeTopic();
+	void				setChangeTopic(char c, Client &user);
 	void				setLimitUserOnOff(char c, unsigned int i);
 	void				addUser(Client &user);
 	void				addChanop(Client &user);
-	void				addBanned(Client &user);
+	void				addBanned(Client &user, Client &target);
 	void				removeUser(Client &user);
 	void				removeChanop(Client &user);
-	void				removeBan(Client &user);
+	void				removeBan(Client &user, Client &target);
 	void				promoteFirstUserToChanop(Client &user);
-	void				promoteDemoteUsers(char c, Client &user, Client &target);
+	void				promoteDemoteUsers(char c, Client &target);
 
 	const int			&getConnected() const;
 	const std::string	&getPassword() const;

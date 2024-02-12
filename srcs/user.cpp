@@ -12,7 +12,7 @@
 
 #include "../incs/irc.hpp"
 
-int user_cmd(int fd, vecStr &cmd, Server &serv)
+int userCmd(int fd, vecStr &cmd, Server &serv)
 {// attention segfaut si USER t  * t
 	std::string 		ERR;
 	std::stringstream	ss;

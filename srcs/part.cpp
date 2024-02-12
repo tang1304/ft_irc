@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "irc.hpp"
+# include "../incs/irc.hpp"
 
 int partCmd(int fd, vecStr &cmd, Server &serv){
 	Client		user = serv.getClientMap()[fd];

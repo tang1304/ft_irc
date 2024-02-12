@@ -12,7 +12,7 @@
 
 #include "../incs/irc.hpp"
 
-int	pass_cmd(int fd, vecStr &cmd, Server &serv)
+int	passCmd(int fd, vecStr &cmd, Server &serv)
 {
 	std::string 		ERR;
 	std::stringstream	userFd;

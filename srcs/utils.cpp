@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: rrebois <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 10:16:34 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/08 10:52:23 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/12 09:01:51 by rrebois          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ int	checkArgs(const std::string &port, const std::string &password){
 	return (portValue);
 }
 
-static vecStr	split(std::string &input, const std::string &delimiter){
+vecStr	split(std::string &input, const std::string &delimiter){
 	vecStr		result;
 	size_t		colonPos = 0;
 	size_t		pos = 0;
@@ -186,8 +186,16 @@ void	sendToChan(Channel &chan, const std::string &msg){
 void	sendToChanNotUser(Client &user, Channel &chan, const std::string &msg){
 	itVecClient	it = chan.getUsersJoin().begin();
 	for (; it != chan.getUsersJoin().end(); it++)
-		if (it->getFd() == user.getFd()){
+		if (it->getFd() == user.getFd())
 			continue ;
+		else
+			if (it->getDisconnect() == 0){
+					it->setBufferSend(msg);
+					send(it->getClientFd(), it->getBufferSend().c_str(), it->getBufferSend().length(), 0);
+					it->setBufferSend("");
+				}
+	it = chan.getChanop().begin();
+	for (; it != chan.getChanop().end(); it++){
 		if (it->getDisconnect() == 0){
 			it->setBufferSend(msg);
 			send(it->getClientFd(), it->getBufferSend().c_str(), it->getBufferSend().length(), 0);

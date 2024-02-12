@@ -6,7 +6,7 @@
 /*   By: rrebois <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/29 09:13:54 by rrebois           #+#    #+#             */
-/*   Updated: 2024/02/07 13:47:37 by rrebois          ###   ########.fr       */
+/*   Updated: 2024/02/08 10:59:32 by rrebois          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,8 @@ static void	user_join_chan(itVecPair &it, Server &serv, Client &user)
 	}
 	itClient = findIt(user.getName(), itc->getUsersJoin());
 	itChanop = findIt(user.getName(), itc->getChanop());
-	if (itClient == itc->getUsersJoin().end() && itChanop == itc->getChanop().end()){
+	if (itClient == itc->getUsersJoin().end() && itChanop == itc->getChanop().end())
+  {
 		std::string	allUsers;
 		itc->addUser(user); // + replies
 		if (itc->getTopic().size() > 0)
@@ -105,7 +106,7 @@ static void	user_create_chan(itVecPair &it, Server &serv, Client &user)
 	sendToClient(user, RPL_ENDOFNAMES(user.getName(), chan.getName()));
 }
 
-int	join_cmd(int fd, vecStr &cmd, Server &serv)
+int	joinCmd(int fd, vecStr &cmd, Server &serv)
 {
 	Client	user;
 	vecPair	chanPass;
