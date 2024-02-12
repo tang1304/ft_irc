@@ -6,7 +6,7 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 10:20:16 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/09 12:00:43 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/12 08:55:03 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ int			pingCmd(int fd, vecStr &cmd, Server &serv);
 int			modeCmd(int fd, vecStr &cmd, Server &serv);
 int			whoCmd(int fd, vecStr &cmd, Server &serv);
 int			topicCmd(int fd, vecStr &cmd, Server &serv);
+int			whoCmd(int fd, vecStr &cmd, Server &serv);
 int			checkArgs(const std::string &port, const std::string &password);
 size_t		len(std::string s);
 vecStr		splitCmds(std::string &input, const std::string &delimiter);
