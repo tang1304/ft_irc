@@ -24,6 +24,7 @@
 # include <errno.h>
 # include <csignal>
 # include <cstring>
+# include <ctime>
 
 # define DEFAULT "\033[0m"
 # define RED "\033[31m"

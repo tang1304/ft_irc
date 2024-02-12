@@ -6,7 +6,7 @@
 /*   By: rrebois <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:15:06 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/09 11:46:50 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/12 11:12:42 by rrebois          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ class Channel{
 private:
 	std::string	_name;
 	std::string	_topic; // add timestamp of when it has been created and update it when changed
-	std::string	_topicChanger; 
+	std::string	_topicChanger;
 	std::string	_password;
 	std::string	_modes;
 	vecClient	_usersJoin;
@@ -34,6 +34,7 @@ private:
 	int			_limitUser;
 	int			_connected; //number of users/chanops connected
 	int			_id;
+	std::time_t	_timeTopicChange;
 
 public:
 	void				setId(int i);
@@ -67,6 +68,7 @@ public:
 	const bool			&getPrivated() const;
 	const bool			&getChangeTopic() const;
 	const int			&getId() const;
+	const std::time_t	&getTimeTopicChange();
 //	void				getModeFunc(std::string mode) const;
 	// void	giveChanopStatus();
 

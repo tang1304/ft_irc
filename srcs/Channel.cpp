@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: rrebois <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/29 15:40:11 by rrebois           #+#    #+#             */
-/*   Updated: 2024/02/12 10:26:09 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/12 11:15:07 by rrebois          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,10 @@ void	Channel::setTopic(std::string &topic){
 	if (topic == "")
 		_topic.clear();
 	else
+	{
 		_topic = topic;
+		_timeTopicChange = std::time(NULL);
+	}
 }
 
 void	Channel::setTopicChanger(const std::string &user){
@@ -288,4 +291,8 @@ const int	&Channel::getId() const
 	return (_id);
 }
 
+const std::time_t	&Channel::getTimeTopicChange()
+{
+	return (_timeTopicChange);
+}
 // void	Channel::giveChanopStatus()

@@ -57,7 +57,7 @@ void	Server::cmdInit(){
 	_commandsList["TOPIC"] = &topicCmd;
 	_commandsList["WHO"] = &whoCmd;
 	_commandsList["MODE"] = &modeCmd;
-	// _commandsList["LIST"] = &list;
+	_commandsList["LIST"] = &listCmd;
 }
 
 const std::string	&Server::getPassword() const
