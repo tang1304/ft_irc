@@ -6,7 +6,7 @@
 /*   By: rrebois <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 16:18:54 by rrebois           #+#    #+#             */
-/*   Updated: 2024/02/08 18:16:29 by rrebois          ###   ########.fr       */
+/*   Updated: 2024/02/12 09:26:30 by rrebois          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int	kickCmd(int fd, vecStr &cmd, Server &serv) // les coms sont avec :comment he
 	itVecClient itClient;
 	itVecClient	itChanop;
 	vecStr 		namesSplits;
-	vecPair 	kickUser;
+	std::string	comment;
 	size_t 		j = 3;
 	int 		i = 0;
 
@@ -34,54 +34,44 @@ int	kickCmd(int fd, vecStr &cmd, Server &serv) // les coms sont avec :comment he
 	itClient = findIt(user.getName(), itChan->getUsersJoin());
 	if (itClient != itChan->getUsersJoin().end())
 		return (sendToClient(user, ERR_CHANOPRIVSNEEDED(user.getName(), cmd[1])), 1);
-	namesSplits = split(cmd[2], ",");
-	for (itVecStr it = namesSplits.begin(); it != namesSplits.end(); it++)
-	{
-		if (j < cmd.size())
-		{
-			kickUser.push_back(std::make_pair(*it, cmd[j]));
-			j++;
-			i++;
-		}
-		else
-		{
-			kickUser.push_back(std::make_pair(*it, STDKICKMSG));
-			i++;
-		}
-		if (i == 3)
-			break ;
-	}
-	for (itVecPair it = kickUser.begin(); it != kickUser.end(); it++)
-	{
-		itClient = findIt(it->first, itChan->getUsersJoin());
-		itChanop = findIt(it->first, itChan->getChanop());
-		if (itClient == itChan->getUsersJoin().end() && itChanop == itChan->getChanop().end())
-		{
-			sendToClient(user, ERR_USERNOTINCHANNEL(user.getName(), it->first, itChan->getName()));
-			kickUser.erase(it);
-			it--;
-		}
-	}
 	itChanop = findIt(user.getName(), itChan->getChanop());
 	if (itChanop == itChan->getChanop().end())
 		return (sendToClient(user, ERR_NOTONCHANNEL(user.getName(), itChan->getName())), 1);
-	for (itVecPair it = kickUser.begin(); it != kickUser.end(); it++)
+	namesSplits = split(cmd[2], ",");
+	if (cmd.size() >= 4)
 	{
-		std::cout << it->first << ": " << it->second << std::endl;
-		itClient = findIt(it->first, itChan->getUsersJoin());
-		itChanop = findIt(it->first, itChan->getChanop());
-		if (itClient != itChan->getUsersJoin().end())
+		for (; j < cmd.size(); j++)
+			comment += cmd[j];
+		if (!comment.empty() && comment[0] == ':')
+			comment.erase(comment.begin());
+	}
+	else
+		comment = STDKICKMSG;
+	for (itVecStr it = namesSplits.begin(); it != namesSplits.end(); it++)
+	{
+		itClient = findIt(*it, itChan->getUsersJoin());
+		itChanop = findIt(*it, itChan->getChanop());
+		if (itClient == itChan->getUsersJoin().end() && itChanop == itChan->getChanop().end())
 		{
-			sendToClient(*itClient, RPL_COMMENTKICKED(itClient->getName(), itChan->getName(), it->second));
+			sendToClient(user, ERR_USERNOTINCHANNEL(user.getName(), *it, itChan->getName()));
+			namesSplits.erase(it);
+			it--;
+		}
+		else if (itClient != itChan->getUsersJoin().end())
+		{
+			sendToClient(*itClient, RPL_COMMENTKICKED(itClient->getName(), itChan->getName(), comment));
 			itChan->removeUser(*itClient);
+			sendToChanNotUser(user, *itChan, RPL_USERKICKED(user.getName(), *it, itChan->getName(), comment));
 		}
-		else
+		else if (itChanop != itChan->getChanop().end())
 		{
-			sendToClient(*itChanop, RPL_COMMENTKICKED(itChanop->getName(), itChan->getName(), it->second));
+			sendToClient(*itChanop, RPL_COMMENTKICKED(itChanop->getName(), itChan->getName(), comment));
 			itChan->removeChanop(*itChanop);
-//			sendToChan(*itChan, RPL_USERKICKED(user.getName(), itChanop->getName(), itChan->getName(), it->second));
+			sendToChanNotUser(user, *itChan, RPL_USERKICKED(user.getName(), *it, itChan->getName(), comment));
 		}
-		sendToChan(*itChan, RPL_USERKICKED(user.getName(), it->first, itChan->getName(), it->second));
+		i++;
+		if (i == MAXKICKUSERLIMIT)
+			break ;
 	}
 	return (0);
 }
