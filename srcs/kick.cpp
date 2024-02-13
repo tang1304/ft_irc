@@ -6,7 +6,7 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 16:18:54 by rrebois           #+#    #+#             */
-/*   Updated: 2024/02/12 10:41:46 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/13 09:13:52 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,8 @@ int	kickCmd(int fd, vecStr &cmd, Server &serv) // les coms sont avec :comment he
 		}
 		else if (itClient != itChan->getUsersJoin().end())
 		{
-			sendToClient(*itClient, RPL_COMMENTKICKED(itClient->getName(), itChan->getName(), comment));
+			sendToClient(*itClient, RPL_CMD(itClient->getName(), itClient->getUserName(), "KICK"\
+			,itChan->getName() + " " + itClient->getName() + " " + comment));
 			itChan->removeUser(*itClient);
 			sendToChanNotUser(user, *itChan, RPL_USERKICKED(user.getName(), *it, itChan->getName(), comment));
 		}

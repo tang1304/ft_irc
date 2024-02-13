@@ -6,7 +6,7 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/09 12:00:25 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/12 11:56:39 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/13 09:44:26 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,11 +53,11 @@ int	whoCmd(int fd, vecStr &cmd, Server &serv){
 	if (itChan != serv.getChanList().end()){
 		itVecClient	it;
 		for (it = itChan->getChanop().begin(); it != itChan->getChanop().end(); it++){
-			sendToClient(*it, RPL_WHOREPLY(user.getName(), itChan->getName()\
+			sendToClient(user, RPL_WHOREPLY(user.getName(), itChan->getName()\
 			, it->getUserName(), it->getName(), "H@", it->getRealName()));
 		}
 		for (it = itChan->getUsersJoin().begin(); it != itChan->getUsersJoin().end(); it++){
-			sendToClient(*it, RPL_WHOREPLY(user.getName(), itChan->getName()\
+			sendToClient(user, RPL_WHOREPLY(user.getName(), itChan->getName()\
 			, it->getUserName(), it->getName(), "H", it->getRealName()));
 		}
 		sendToClient(user, RPL_ENDOFWHO(user.getName(), mask));
@@ -65,6 +65,7 @@ int	whoCmd(int fd, vecStr &cmd, Server &serv){
 	else if (itClient != serv.getClientMap().end()){
 		sendToClient(user, RPL_WHOREPLY(user.getName(), mask, itClient->second.getUserName(), \
 		itClient->second.getName(), "H" , itClient->second.getRealName()));
+		sendToClient(user, RPL_ENDOFWHO(user.getName(), mask));
 	}
 	else
 		sendToClient(user, ERR_NOSUCHCHANNEL(user.getName(), mask));
