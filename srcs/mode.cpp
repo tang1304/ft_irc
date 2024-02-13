@@ -6,7 +6,7 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 13:14:23 by rrebois           #+#    #+#             */
-/*   Updated: 2024/02/12 15:44:35 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/13 14:47:45 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ static void	modeOperator(char c, std::string target, Client &user, Channel &chan
 		sendToClient(user, ERR_USERNOTINCHANNEL(user.getName(), target, chan.getName()));
 		return ;
 	}
-	if (user == *itChanop && c == '-' && itChanop != chan.getChanop().end())
+	if (itChanop != chan.getChanop().end() && user == *itChanop && c == '-')
 	{
 		sendToClient(user, ERR_CANNOTAUTODEMOTE(user.getName(), chan.getName()));
 		return ;
@@ -128,8 +128,8 @@ static void	modeBan(char c, std::string target, Client &user, Channel &chan)
 		sendToClient(user, ERR_USERNOTINCHANNEL(user.getName(), target, chan.getName()));
 		return ;
 	}
-	if (((user == *itChanop && itChanop != chan.getChanop().end()) ||
-		(user == *itClient && itClient != chan.getUsersJoin().end())) && c == '+')
+	if (((itChanop != chan.getChanop().end() && user == *itChanop) ||
+		(itClient != chan.getUsersJoin().end() && user == *itClient)) && c == '+')
 	{
 		sendToClient(user, ERR_CANNOTAUTOBAN(user.getName(), chan.getName()));
 		return ;
@@ -202,7 +202,7 @@ int	modeCmd(int fd, vecStr &cmd, Server &serv) // A verifier
 	}
 	for(itVecModesPair it = modesPair.begin(); it != modesPair.end(); it++)
 	{
-std::cout << it->first << " " << it->second << std::endl;
+// std::cout << it->first << " " << it->second << std::endl;
 		if (it->first == '+' || it->first == '-')
 			modestring = it->first;
 		else

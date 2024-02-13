@@ -6,14 +6,14 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 15:06:34 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/07 15:21:13 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/13 14:13:20 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../incs/irc.hpp"
 
 int	pingCmd(int fd, vecStr &cmd, Server &serv){
-	Client user = serv.getClientMap()[fd];
+	Client	user = serv.getClientMap()[fd];
 
 	if (cmd.size() < 2){
 		sendToClient(user, ERR_NEEDMOREPARAMS(user.getName(), cmd[0]));

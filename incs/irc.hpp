@@ -6,7 +6,7 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 10:20:16 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/12 10:24:40 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/13 14:39:25 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,18 +58,6 @@ bool	isItIn(T &content, U &container){
 	}
 	return (false);
 }
-
-
-//template <typename T, typename U>
-//typename U::iterator	findIt(T &content, U &container){
-//	typename U::iterator it = container.begin();
-//
-//	for (; it != container.end(); it++){
-//		if (content == *it)
-//			break ;
-//	}
-//	return (it);
-//}
 
 template <typename U>
 typename U::iterator	findIt(const std::string &name, U &container){
