@@ -6,7 +6,7 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 14:03:30 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/08 10:42:05 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/13 10:13:29 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,12 +29,12 @@ int	privmsgCmd(int fd, vecStr &cmd, Server &serv){
 	}
 
 	std::string	target = cmd[1];
-	std::string	msg = cmd[2].substr(1, std::string::npos);
+	std::string	msg = cmd[2];//.substr(1, std::string::npos);
 	if (target.find_first_of("#&") == 0){
 		for (itVecChan it = serv.getChanList().begin(); it != serv.getChanList().end(); it++){
 			if (it->getName() == target){
 				if (isItIn(user, it->getChanop()) || isItIn(user, it->getUsersJoin())){
-					sendToChanNotUser(user, *it, RPL_CMD(user.getName(), user.getUserName(), cmd[0], msg));
+					sendToChanNotUser(user, *it, RPL_CMD(user.getName(), user.getUserName(), "PRIVMSG " + target, msg));
 					return (0);
 				}
 				else{
@@ -49,7 +49,7 @@ int	privmsgCmd(int fd, vecStr &cmd, Server &serv){
 	else {
 		for (itClientMap it = serv.getClientMap().begin(); it != serv.getClientMap().end(); it++){
 			if (it->second.getName() == target){
-				sendToClient(it->second, RPL_CMD(user.getName(), user.getUserName(), cmd[0], msg));
+				sendToClient(it->second, RPL_CMD(user.getName(), user.getUserName(), "PRIVMSG " + target, msg));
 				return (0);
 			}
 		}
