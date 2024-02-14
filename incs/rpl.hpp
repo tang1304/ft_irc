@@ -6,7 +6,7 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 16:21:25 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/14 09:22:41 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/14 10:03:59 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -164,8 +164,6 @@
 //482
 # define ERR_CHANOPRIVSNEEDED(client, channel) (":" + SERVERNAME + " 482 " + client + " " + channel + " :You're not channel operator\r\n")
 
-# define ERROR(error) ("ERROR: " + error + "\r\n")
-
 //525
 # define ERR_INVALIDKEY(client, channel) (":" + SERVERNAME + " 525 " + client + " " + channel + " :Key is not well-formed (alphanumeric characters only)\r\n")
 
@@ -183,8 +181,6 @@
 # define ERR_USERALREADYOP(client, nick, channel) (":" + SERVERNAME + " " + client + " " + nick + " " + channel + " :User already chanop\r\n")
 # define ERR_USERALREADYBASICU(client, nick, channel) (":" + SERVERNAME + " " + client + " " + nick + " " + channel + " :User already basic user\r\n")
 # define ERR_CANNOTAUTODEMOTE(client, channel) (":" + SERVERNAME + " " + client + " " + channel + " :Cannot demote yourself\r\n")
-# define ERR_CANNOTAUTOBAN(client, channel) (":" + SERVERNAME + " " + client + " " + channel + " :Cannot ban yourself\r\n")
-# define ERR_CANNOTAUTOKICK(nick, username, cmd, args) (":" + nick + "!" + username + "@" + LOCALHOST + " " + cmd + " " + args + "\r\n")
 
 # define RPL_USERNOTBANNED(nick, channel) (":" + SERVERNAME + " " + nick + " " + channel + " :User not banned in this channel\r\n")
 # define RPL_USERBANNED(client, nick, channel) (":" + SERVERNAME + " " + client + " banned " + nick + " from channel " + channel + "\r\n")
