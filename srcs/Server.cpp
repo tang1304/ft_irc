@@ -6,7 +6,7 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:03:01 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/14 10:18:33 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/14 14:20:54 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,7 +147,8 @@ void	Server::clientConnexion(){
 	_pollFds.push_back(tmp);
 	_clients[clientSocket] = Client();
 	_clients[clientSocket].setClientFd(clientSocket);
-	std::cout << GREEN << "[Server] New client succesfully connected on socket #" << clientSocket << DEFAULT << std::endl;
+	std::cout << GREEN << "[Server] New client succesfully connected on socket #" << clientSocket \
+		<< DEFAULT << std::endl;
 }
 
 void	Server::clientDisconnection(const int &fd){
@@ -162,7 +163,8 @@ void	Server::clientDisconnection(const int &fd){
 			sendToChan(*itChan, RPL_CMD(itClient->getName(), itClient->getUserName(), "QUIT", ""));
 			itChan->removeUser(*itClient);
 		}
-		else if ((itClient = findIt(user, itChan->getChanop())) != itChan->getChanop().end()){
+		else if ((itClient = findIt(user, itChan->getChanop())) != itChan->getChanop().end() && \
+		itClient->getName() != user){
 			sendToChan(*itChan, RPL_CMD(itClient->getName(), itClient->getUserName(), "QUIT", ""));
 			itChan->removeChanop(*itClient);
 		}
@@ -172,7 +174,8 @@ void	Server::clientDisconnection(const int &fd){
 		}
 	}
 
-	std::cout << YELLOW << "[Server] Client #" << _clients[fd].getClientFd() << " disconnected from the server" << DEFAULT << std::endl;
+	std::cout << YELLOW << "[Server] Client #" << _clients[fd].getClientFd() << \
+		" disconnected from the server" << DEFAULT << std::endl;
 	close(fd);
 	_clients.erase(fd);
 	while (it->fd != fd)
