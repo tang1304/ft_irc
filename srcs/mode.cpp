@@ -3,19 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   mode.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: rrebois <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 13:14:23 by rrebois           #+#    #+#             */
-/*   Updated: 2024/02/14 09:13:40 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/14 17:08:50 by rrebois          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../incs/irc.hpp"
+#include "../incs/irc.hpp" //hexchat +t ok, +o, +i,
 
 static void modeLimitUser(char c, std::string target, Client &user, Channel &chan)
 {
 	unsigned int		i;
 	std::stringstream	ss;
+	std::string 		msg;
 
 	ss << target;
 	ss >> i;
@@ -26,18 +27,28 @@ static void modeLimitUser(char c, std::string target, Client &user, Channel &cha
 		return ;
 	}
 	chan.setLimitUserOnOff(c, i);
-	//sendToChan(); a mettre dans setPrivate
+	if (c == '+')
+		msg = chan.getName() + " user limit set to " + target + " (" + c + "l)";
+	else
+		msg = chan.getName() + " user limit removed (" + c + "l)";
+	sendToChan(chan, INFO(msg));
 }
 
 static void	modeInviteOnly(char c, std::string target, Client &user, Channel &chan)
 {
+	std::string 		msg;
+
 	if (!target.empty())
 	{
 		sendToClient(user, ERR_INVALIDMODEPARAM(user.getName(), chan.getName(), c+"i", target));
 		return ;
 	}
 	chan.setPrivated(c);
-//	sendToChan(); a mettre dans setPrivate
+	if (c == '+')
+		msg = "channel " + chan.getName() + " has become private";
+	else
+		msg = "channel " + chan.getName() + " is free to join";
+	sendToChan(chan, INFO(msg));
 }
 
 static int checkInvalidKey(std::string target)
@@ -52,6 +63,8 @@ static int checkInvalidKey(std::string target)
 
 static void	modeKey(char c, std::string target, Client &user, Channel &chan)
 {
+	std::string	msg;
+
 	if (c == '+' && (target.empty() || target.size() > PASSMAXLEN))
 	{
 		sendToClient(user, ERR_INVALIDMODEPARAM(user.getName(), chan.getName(), c+"k", target));
@@ -63,7 +76,11 @@ static void	modeKey(char c, std::string target, Client &user, Channel &chan)
 		return ;
 	}
 	chan.setPassword(c, target);
-//	sendToChan(); a mettre dans setPrivate
+	if (c == '+')
+		msg = chan.getName() + " password changed to " + target + "(+k)";
+	else
+		msg = chan.getName() + " password deleted (-k)";
+	sendToChan(chan, INFO(msg));
 }
 
 static void	modeOperator(char c, std::string target, Client &user, Channel &chan)
@@ -115,7 +132,9 @@ static void	modeBan(char c, std::string target, Client &user, Channel &chan)
 	itVecClient	itClient = findIt(target, chan.getUsersJoin());
 	itVecClient	itChanop = findIt(target, chan.getChanop());
 	itVecClient	itBan;
+	std::string msg;
 
+	msg = user.getName() + " banned " + target + " from " + chan.getName();
 	if (target.empty())
 	{
 		for (itBan = chan.getBanned().begin(); itBan != chan.getBanned().end(); itBan++)
@@ -137,12 +156,12 @@ static void	modeBan(char c, std::string target, Client &user, Channel &chan)
 	if (itClient != chan.getUsersJoin().end() && c == '+')
 	{
 		chan.addBanned(user, *itClient);
-		sendToChan(chan, RPL_USERBANNED(user.getName(), target, chan.getName()));
+		sendToChan(chan, INFO(msg));
 	}
 	else if (itClient == chan.getUsersJoin().end() && c == '+')
 	{
 		chan.addBanned(user, *itChanop);
-		sendToChan(chan, RPL_USERBANNED(user.getName(), target, chan.getName()));
+		sendToChan(chan, INFO(msg));
 	}
 	if (c == '-')
 	{
@@ -159,8 +178,14 @@ static void	modeBan(char c, std::string target, Client &user, Channel &chan)
 static void	modeTopic(char c, std::string target, Client &user, Channel &chan)
 {
 	(void)target;
+	std::string msg;
 
 	chan.setChangeTopic(c, user);
+	if (c == '+')
+		msg = chan.getName() + " topic can only be changed by chanops (+t)";
+	else
+		msg = chan.getName() + " topic can be changed by any user (-t)";
+	sendToChan(chan, INFO(msg));
 }
 
 int	modeCmd(int fd, vecStr &cmd, Server &serv) // A verifier

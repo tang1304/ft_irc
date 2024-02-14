@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   rpl.hpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: rrebois <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 16:21:25 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/14 09:22:41 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/14 15:09:44 by rrebois          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -164,8 +164,6 @@
 //482
 # define ERR_CHANOPRIVSNEEDED(client, channel) (":" + SERVERNAME + " 482 " + client + " " + channel + " :You're not channel operator\r\n")
 
-# define ERROR(error) ("ERROR: " + error + "\r\n")
-
 //525
 # define ERR_INVALIDKEY(client, channel) (":" + SERVERNAME + " 525 " + client + " " + channel + " :Key is not well-formed (alphanumeric characters only)\r\n")
 
@@ -174,6 +172,7 @@
 			channel + " " + mode + " " + param + " :Invalid parameter\r\n")
 
 # define ERROR(error) ("ERROR: " + error + "\r\n")
+# define INFO(msg) ("INFO: " + msg + "\r\n")
 # define ERR_NOEXISTINGUSER(client, nick) (":" + SERVERNAME +client + " " + nick + " :No existing user\r\n")
 # define ERR_PASSFIRST(client) (":" + SERVERNAME +client + " :Must confirm password first\r\n")
 # define ERR_NICKFIRST(client) (":" + SERVERNAME +client + " :Must set nickname first\r\n")
