@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: rrebois <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:03:01 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/14 09:14:05 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/14 13:27:50 by rrebois          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -179,27 +179,13 @@ void	Server::clientDisconnection(const int &fd){
 	while (it->fd != fd)
 		it++;
 	_pollFds.erase(it);
-
-	// TEST
-// for (itVecChan itc = getChanList().begin(); itc != getChanList().end(); itc++)
-// {
-// 	std::cout << "Chan " << itc->getName() << " created." << std::endl;
-// 	if (!itc->getPassword().empty())
-// 		std::cout << "Chan password " << itc->getPassword() << "." << std::endl;
-// 	else
-// 		std::cout << "No password set for this channel." << std::endl;
-// 	std::cout << "Number of users + chanops connected: " << itc->getConnected() << "." << std::endl;
-// 	for (itVecClient ut = itc->getUsersJoin().begin(); ut != itc->getUsersJoin().end(); ut++)
-// 		std::cout << "user " << ut->getName() << " connected." << std::endl;
-// 	for (itVecClient ut = itc->getChanop().begin(); ut != itc->getChanop().end(); ut++)
-// 		std::cout << "Chanop " << ut->getName() << " connected." << std::endl;
-// }
-	//END TEST
 }
 
 void	Server::clientHandle(const int &fd){
 	char	buffer[BUFFER_SIZE];
+	static	std::string	buf;
 	int		bytesRead = 0;
+	Client	user = getClient(fd);
 
 	memset(&buffer, 0, BUFFER_SIZE);
 	bytesRead = recv(fd, buffer, BUFFER_SIZE, 0);
@@ -210,17 +196,26 @@ void	Server::clientHandle(const int &fd){
 	else if (bytesRead == 0)
 		clientDisconnection(fd);
 	else{
-		std::cout << std::endl << PURPLE << "[Client] Received data from client #" << fd << ": " << buffer << DEFAULT;
+		std::cout << std::endl << PURPLE << "[Client] Received data from client before #" << fd << ": " << buffer << DEFAULT;
 // std::cout << GREEN << "buffer: " << buffer << ". Size: " << BUFFER_SIZE << DEFAULT << std::endl;
-		std::string	buf(buffer);
-		_clients[fd].setBufferRead(std::string(buf), 1);
-		if ((buf.empty() || buf == "\r\n") && _clients[fd].getBufferRead().empty())
+		buf += buffer;
+//		_clients[fd].setBufferRead(std::string(buf), 1);
+		if (buf.empty() || buf == "\r\n")
+		{
+			buf.clear();
 			return ;
-		size_t pos = _clients[fd].getBufferRead().find("\r\n");
-		if (pos != std::string::npos){  
+		}
+//		size_t pos = _clients[fd].getBufferRead().find("\r\n");
+		size_t pos = buf.find("\r\n");
+		if (pos == std::string::npos)
+			return ;
+		if (pos != std::string::npos){
+			_clients[fd].setBufferRead(std::string(buf), 1);
+			std::cout << std::endl << PURPLE << "[Client] Received data from client #" << fd << ": " << buf << DEFAULT;
 			buf = _clients[fd].getBufferRead();
 			parseInput((fd), buf);
 			_clients[fd].setBufferRead("", 0);
+			buf.clear();
 		}
 		send(_clients[fd].getClientFd(), _clients[fd].getBufferSend().c_str(), _clients[fd].getBufferSend().length(), 0);
 		_clients[fd].setBufferSend("");
