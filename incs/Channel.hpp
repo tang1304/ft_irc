@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rrebois <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:15:06 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/12 11:12:42 by rrebois          ###   ########.fr       */
+/*   Updated: 2024/02/14 08:56:22 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,6 @@ public:
 	void				removeChanop(Client &user);
 	void				removeBan(Client &user, Client &target);
 	void				promoteFirstUserToChanop(Client &user);
-	void				promoteDemoteUsers(char c, Client &target);
 
 	const int			&getConnected() const;
 	const std::string	&getPassword() const;

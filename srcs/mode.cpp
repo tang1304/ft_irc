@@ -6,7 +6,7 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 13:14:23 by rrebois           #+#    #+#             */
-/*   Updated: 2024/02/14 08:52:58 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/14 08:56:11 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,6 @@ static void	modeOperator(char c, std::string target, Client &user, Channel &chan
 	}
 	if (c == '+' && itClient != chan.getUsersJoin().end())
 	{
-		// chan.promoteDemoteUsers(c, *itClient);
 		chan.addChanop(*itClient);
 		sendToChan(chan, RPL_MODE(user.getName(), user.getUserName(), chan.getName(), "+", + "o", target));
 		return ;
@@ -100,7 +99,6 @@ static void	modeOperator(char c, std::string target, Client &user, Channel &chan
 	}
 	if (c == '-' && itChanop != chan.getChanop().end())
 	{
-		// chan.promoteDemoteUsers(c, *itChanop);
 		chan.removeChanop(*itChanop);
 		sendToChan(chan, RPL_MODE(user.getName(), user.getUserName(), chan.getName(), "-", + "o", target));
 		return ;
