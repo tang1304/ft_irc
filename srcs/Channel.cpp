@@ -6,7 +6,7 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/29 15:40:11 by rrebois           #+#    #+#             */
-/*   Updated: 2024/02/14 08:46:01 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/14 08:56:17 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -191,37 +191,6 @@ void	Channel::promoteFirstUserToChanop(Client &user)
 	_chanop.push_back(user);
 	sendToChan(*this, RPL_MODE(user.getName(), user.getUserName(), this->getName(), "+", + "o", user.getName()));
 	_usersJoin.erase(_usersJoin.begin());
-}
-
-void	Channel::promoteDemoteUsers(char c, Client &target)
-{
-	if (c == '+')
-	{
-		int index = 0;
-
-		_chanop.push_back(target);
-		for (itVecClient it = _usersJoin.begin(); it != _usersJoin.end(); it++)
-		{
-			if (target == *it)
-				break ;
-			index++;
-		}
-		_usersJoin.erase(_usersJoin.begin() + index);
-		return ;
-	}
-	if (c == '-')
-	{
-		_usersJoin.push_back(target);
-		int	index = 0;
-
-		for (itVecClient it = _chanop.begin(); it != _chanop.end(); it++)
-		{
-			if (target == *it)
-				break ;
-			index++;
-		}
-		_chanop.erase(_chanop.begin() + index);
-	}
 }
 
 const std::string	&Channel::getName() const
