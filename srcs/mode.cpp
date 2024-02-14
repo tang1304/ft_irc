@@ -6,7 +6,7 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 13:14:23 by rrebois           #+#    #+#             */
-/*   Updated: 2024/02/14 09:13:40 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/14 09:58:48 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,7 +131,7 @@ static void	modeBan(char c, std::string target, Client &user, Channel &chan)
 	if (((itChanop != chan.getChanop().end() && user == *itChanop) ||
 		(itClient != chan.getUsersJoin().end() && user == *itClient)) && c == '+')
 	{
-		sendToClient(user, ERR_CANNOTAUTOBAN(user.getName(), chan.getName()));
+		sendToClient(user, ERROR(std::string("Cannot ban yourself")));
 		return ;
 	}
 	if (itClient != chan.getUsersJoin().end() && c == '+')
