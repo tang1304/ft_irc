@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   topic.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rrebois <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 15:28:56 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/12 11:15:55 by rrebois          ###   ########.fr       */
+/*   Updated: 2024/02/14 10:45:47 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,8 @@ int	topicCmd(int fd, vecStr &cmd, Server &serv){
 	}
 	if (cmd.size() > 2){
 		std::string	topic = cmd[2];
+		if (topic.find_first_of(':') != 0)
+			topic.insert(0, ":");
 		if (it->getChangeTopic() == true && chanop == false){
 			sendToClient(user, ERR_CHANOPRIVSNEEDED(user.getName(), chan));
 			return (1);

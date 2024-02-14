@@ -6,7 +6,7 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/29 15:40:11 by rrebois           #+#    #+#             */
-/*   Updated: 2024/02/14 09:13:03 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/14 11:05:46 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,6 +101,7 @@ void	Channel::addChanop(Client &user)
 {
 	_chanop.push_back(user);
 	_connected++;
+	removeUser(user);
 }
 
 void	Channel::addBanned(Client &user, Client &target)
@@ -143,18 +144,16 @@ std::cout << "target " << target.getName() << std::endl;
 
 void	Channel::removeUser(Client &user)// checker si user pas end
 {
-	int	index = 0;
 	itVecClient	it;
 
 	for (it = _usersJoin.begin(); it != _usersJoin.end(); it++)
 	{
-		if (user.getName() == it->getName())
+		if (user.getName() == it->getName()){
+			_usersJoin.erase(it);
+			_connected--;
 			break ;
-		index++;
+		}
 	}
-	_usersJoin.erase(_usersJoin.begin() + index);
-	_connected--;
-	// add if !_connected -> delete channel de server + call destuctor?
 }
 
 void	Channel::removeChanop(Client &user) // checker si user pas end
