@@ -6,7 +6,7 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 16:18:54 by rrebois           #+#    #+#             */
-/*   Updated: 2024/02/13 16:25:26 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/14 08:36:08 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,17 +59,17 @@ int	kickCmd(int fd, vecStr &cmd, Server &serv) // les coms sont avec :comment he
 		}
 		else if (itClient != itChan->getUsersJoin().end())
 		{
-			sendToClient(*itClient, RPL_CMD(itClient->getName(), itClient->getUserName(), "KICK"\
-			,itChan->getName() + " " + user.getName() + " " + comment));
-			sendToChanNotUser(*itClient, *itChan, RPL_CMD(user.getName(), user.getUserName(), "KICK"\
+		// 	sendToClient(*itClient, RPL_CMD(itClient->getName(), itClient->getUserName(), "KICK"\
+		// 	,itChan->getName() + " " + user.getName() + " " + comment));
+			sendToChan(*itChan, RPL_CMD(user.getName(), user.getUserName(), "KICK"\
 			,itChan->getName() + " " + itClient->getName() + " " + comment));
 			itChan->removeUser(*itClient);
 		}
 		else if (itChanop != itChan->getChanop().end())
 		{
-			sendToClient(*itChanop, RPL_CMD(itChanop->getName(), itChanop->getUserName(), "KICK"\
-			,itChan->getName() + " " + user.getName() + " " + comment));
-			sendToChanNotUser(*itChanop, *itChan, RPL_CMD(user.getName(), user.getUserName(), "KICK"\
+			// sendToClient(*itChanop, RPL_CMD(itChanop->getName(), itChanop->getUserName(), "KICK"\
+			// ,itChan->getName() + " " + user.getName() + " " + comment));
+			sendToChan(*itChan, RPL_CMD(user.getName(), user.getUserName(), "KICK"\
 			,itChan->getName() + " " + itChanop->getName() + " " + comment));
 			itChan->removeChanop(*itChanop);
 		}
