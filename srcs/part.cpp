@@ -6,7 +6,7 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/06 15:09:03 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/14 13:49:24 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/14 15:44:39 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,10 +20,10 @@ int partCmd(int fd, vecStr &cmd, Server &serv){
 		sendToClient(user, ERR_NEEDMOREPARAMS(user.getName(), cmd[0]));
 		return (1);
 	}
+	std::string	reason = "";
 	if (cmd.size() > 2){
-		std::string	reason;
 		for (itVecStr it = cmd.begin() + 2; it != cmd.end(); it++){
-			reason += *it;
+			reason += *it + " ";
 		}
 	}
 	vecStr	channels = split(cmd[1], ",");
@@ -39,11 +39,12 @@ int partCmd(int fd, vecStr &cmd, Server &serv){
 			return (1);
 		}
 		if (chanop == true){
-			sendToChan(*it, RPL_CMD(user.getName(), user.getUserName(), cmd[0], *itChan));
+std::cout << "LA" <<std::endl;
+			sendToChan(*it, RPL_CMD(user.getName(), user.getUserName(), cmd[0], *itChan + " " + reason));
 			it->removeChanop(user);
 		}
 		else{
-			sendToChan(*it, RPL_CMD(user.getName(), user.getUserName(), cmd[0], *itChan));
+			sendToChan(*it, RPL_CMD(user.getName(), user.getUserName(), cmd[0], *itChan + " " + reason));
 			it->removeUser(user);
 		}
 		if (it->getConnected() == 0)
