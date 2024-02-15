@@ -6,7 +6,7 @@
 /*   By: rrebois <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/29 09:13:54 by rrebois           #+#    #+#             */
-/*   Updated: 2024/02/08 10:59:32 by rrebois          ###   ########.fr       */
+/*   Updated: 2024/02/15 09:42:07 by rrebois          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,10 +60,19 @@ static void	user_join_chan(itVecPair &it, Server &serv, Client &user)
 	itChanop = findIt(user.getName(), itc->getChanop());
 	if (itClient == itc->getUsersJoin().end() && itChanop == itc->getChanop().end())
   {
-		std::string	allUsers;
+		std::string			allUsers;
+	 	std::string			timestamp;
+	  	std::stringstream	ss;
+
+	 	ss << itc->getTimeTopicChange();
+	  	ss >> timestamp;
 		itc->addUser(user); // + replies
 		if (itc->getTopic().size() > 0)
+		{
 			sendToClient(user, RPL_TOPIC(user.getName(), itc->getName(), itc->getTopic()));
+			sendToClient(user, RPL_TOPICWHOTIME(user.getName(), itc->getName(), itc->getTopicChanger(),
+												timestamp, std::asctime(std::localtime(&itc->getTimeTopicChange()))));
+		}
 		for (itVecClient it = itc->getUsersJoin().begin(); it != itc->getUsersJoin().end(); it++)
 			allUsers += " " + it->getName();
 		for (itVecClient it = itc->getChanop().begin(); it != itc->getChanop().end(); it++)
