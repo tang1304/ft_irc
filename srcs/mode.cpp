@@ -151,7 +151,7 @@ static void	modeBan(char c, std::string target, Client &user, Channel &chan)
 	if (((itChanop != chan.getChanop().end() && user == *itChanop) ||
 		(itClient != chan.getUsersJoin().end() && user == *itClient)) && c == '+')
 	{
-		sendToClient(user, ERR_CANNOTAUTOBAN(user.getName(), chan.getName()));
+		sendToClient(user, ERROR(std::string("Cannot ban yourself")));
 		return ;
 	}
 	if (itClient != chan.getUsersJoin().end() && c == '+')

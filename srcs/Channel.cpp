@@ -103,6 +103,7 @@ void	Channel::addChanop(Client &user)
 	_chanop.push_back(user);
 	removeUser(user);
 	_connected++;
+	removeUser(user);
 }
 
 void	Channel::addBanned(Client &user, Client &target)
@@ -151,7 +152,6 @@ void	Channel::removeUser(Client &user)// checker si user pas end
 			break ;
 		}
 	}
-	// add if !_connected -> delete channel de server + call destuctor?
 }
 
 void	Channel::removeChanop(Client &user) // checker si user pas end
@@ -193,8 +193,8 @@ void	Channel::removeBan(Client &user, Client &target)
 
 void	Channel::promoteFirstUserToChanop(Client &user)
 {
-	_chanop.push_back(user);
 	sendToChan(*this, RPL_MODE(user.getName(), user.getUserName(), this->getName(), "+", + "o", user.getName()));
+	_chanop.push_back(user);
 	_usersJoin.erase(_usersJoin.begin());
 }
 
