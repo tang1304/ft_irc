@@ -28,7 +28,7 @@ OBJ = ${SRCS:%.cpp=${OBJ_DIR}%.o}
 NAME = ircserv
 RM = rm -f
 HEADERS_DIR = ./incs/
-HEADERS_FILES = Server.hpp Client.hpp Channel.hpp irc.hpp config.hpp
+HEADERS_FILES = Server.hpp Client.hpp Channel.hpp irc.hpp config.hpp rpl.hpp
 HEADERS = $(addprefix ${HEADERS_DIR}/, ${HEADERS_FILES})
 
 # --- COLORS --- #

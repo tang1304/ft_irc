@@ -6,7 +6,7 @@
 /*   By: rrebois <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 13:14:23 by rrebois           #+#    #+#             */
-/*   Updated: 2024/02/14 17:08:50 by rrebois          ###   ########.fr       */
+/*   Updated: 2024/02/15 08:22:53 by rrebois          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,8 @@ static void	modeOperator(char c, std::string target, Client &user, Channel &chan
 	}
 	if (itChanop != chan.getChanop().end() && user == *itChanop && c == '-')
 	{
-		sendToClient(user, ERR_CANNOTAUTODEMOTE(user.getName(), chan.getName()));
+		std::string msg = "cannot demote yourself";
+		sendToClient(user, ERROR(msg));
 		return ;
 	}
 	if (c == '+' && itClient != chan.getUsersJoin().end())
