@@ -32,10 +32,10 @@
 # define RPL_CREATED(client, date) (":" + SERVERNAME + " 003 " + client + " :This server was created " + date + "\r\n")
 
 //4
-# define RPL_MYINFO(client) (":" + SERVERNAME + " 004 " + client + " " + SERVERNAME + " 1.0, -+iotlk\r\n")
+# define RPL_MYINFO(client) (":" + SERVERNAME + " 004 " + client + " " + SERVERNAME + " 1.0, o, -+iotlk\r\n")
 
 //5
-# define RPL_ISUPPORT(client, tokens) (":" + SERVERNAME + " 005 " + client + " " + tokens + "\r\n")
+# define RPL_ISUPPORT(client, tokens) (":" + SERVERNAME + " 005 " + client + " " + TOKENS + " :are supported by this server" + "\r\n")
 
 //315
 # define RPL_ENDOFWHO(client, mask) (":" + SERVERNAME + " 315 " + client + " "+ mask + " :End of WHO list\r\n")
