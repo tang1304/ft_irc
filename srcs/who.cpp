@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "irc.hpp"
+#include "../incs/irc.hpp"
 
 static void	noMask(Client &user, Server &serv){
 	itClientMap	itClientServ;
