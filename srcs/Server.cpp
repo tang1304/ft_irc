@@ -6,7 +6,7 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:03:01 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/15 10:36:12 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/15 13:12:44 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -254,9 +254,12 @@ void	Server:: parseInput(const int &fd, std::string &input){
 }
 
 void	Server::registrationDone(int &fd){
+	time_t	timeStruct = std::time(NULL);
+	std::string	time = std::asctime(std::localtime(&timeStruct));
+
 	_clients[fd].setBufferSend(RPL_WELCOME(_clients[fd].getName(), _clients[fd].getUserName()));
 	_clients[fd].setBufferSend(RPL_YOURHOST(_clients[fd].getName()));
-	_clients[fd].setBufferSend(RPL_CREATED(_clients[fd].getName(), "2024"));
+	_clients[fd].setBufferSend(RPL_CREATED(_clients[fd].getName(), time.erase(time.size() - 1, 1)));
 	_clients[fd].setBufferSend(RPL_MYINFO(_clients[fd].getName()));
 	_clients[fd].setBufferSend(RPL_ISUPPORT(_clients[fd].getName(), "token"));
 	_clients[fd].setBufferSend(RPL_MOTDSTART(_clients[fd].getName()));

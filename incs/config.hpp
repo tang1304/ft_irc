@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   config.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rrebois <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/17 15:45:59 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/15 09:15:15 by rrebois          ###   ########.fr       */
+/*   Updated: 2024/02/15 13:45:13 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@
 
 # define SERVERNAME std::string("Ft_Irc")
 # define LOCALHOST std::string("127.0.0.1")
-# define MOTD std::string("HERE IS THE MOTD")
+# define MOTD std::string("Hello - Bonjour - Hola - Guten Tag - Salve - 您好")
 # define BUFFER_SIZE 1000
 # define NICKLEN 9
 # define PASSMAXLEN 15
@@ -44,6 +44,7 @@
 # define USERPERCHAN 10
 # define CHANUSERCANJOIN 5
 # define MAXKICKUSERLIMIT 3
+# define TOKENS std::string("CHANTYPES=#& CHANLIMIT=5 NICKLEN=9 USERLEN=12 KEYLEN=15 TARGMAX=3")
 
 # define STDKICKMSG "Bad behavior"
 # define USAGE "Error\nThere must be 2 arguments : ./ircserv <port> <password>"
