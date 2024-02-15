@@ -77,6 +77,8 @@ static void	user_join_chan(itVecPair &it, Server &serv, Client &user)
 
 static int check_chan_name(std::string name)
 {
+	if (name.size() == 1)
+		return (0);
 	for (size_t i = 0; i < name.size(); i++)
 	{
 		if (name.c_str()[0] != '#' && name.c_str()[0] != '&')
@@ -112,7 +114,6 @@ int	joinCmd(int fd, vecStr &cmd, Server &serv)
 	vecPair	chanPass;
 	bool	exists;
 
-// std::cout << "In join" << std::endl;
 	chanPass = create_pair_cmd(cmd);
 	user = serv.getClient(fd);
 	if (!check_chan_first_char(chanPass) && cmd.size() < 3)

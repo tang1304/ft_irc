@@ -6,7 +6,7 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/17 15:45:40 by tgellon           #+#    #+#             */
-/*   Updated: 2024/01/23 11:04:50 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/15 09:38:37 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,5 +28,3 @@ int	main(int argc, char **argv){
 		std::cerr << RED << e.what() << DEFAULT << std::endl;
 	}
 }
-
-// send ;essage when user becomes chanop
