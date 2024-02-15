@@ -6,7 +6,7 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 14:03:30 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/13 14:13:13 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/15 10:14:58 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ int	privmsgCmd(int fd, vecStr &cmd, Server &serv){
 	}
 
 	std::string	target = cmd[1];
-	std::string	msg = cmd[2];//.substr(1, std::string::npos);
+	std::string	msg = cmd[2];
 	if (target.find_first_of("#&") == 0){
 		for (itVecChan it = serv.getChanList().begin(); it != serv.getChanList().end(); it++){
 			if (it->getName() == target){

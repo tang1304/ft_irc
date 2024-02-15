@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rrebois <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/29 15:40:11 by rrebois           #+#    #+#             */
-/*   Updated: 2024/02/15 09:06:08 by rrebois          ###   ########.fr       */
+/*   Updated: 2024/02/15 10:05:24 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,7 +139,7 @@ void	Channel::addBanned(Client &user, Client &target)
 	}
 }
 
-void	Channel::removeUser(Client &user)// checker si user pas end
+void	Channel::removeUser(Client &user)
 {
 	itVecClient	it;
 
@@ -154,7 +154,7 @@ void	Channel::removeUser(Client &user)// checker si user pas end
 	}
 }
 
-void	Channel::removeChanop(Client &user) // checker si user pas end
+void	Channel::removeChanop(Client &user) 
 {
 	for (itVecClient it = _chanop.begin(); it != _chanop.end(); it++)
 	{
@@ -167,7 +167,6 @@ void	Channel::removeChanop(Client &user) // checker si user pas end
 	}
 	if (_chanop.empty() && _connected >= 1)
 		promoteFirstUserToChanop(*_usersJoin.begin());
-	// add if !_connected -> delete channel de server + call destuctor?
 }
 
 void	Channel::removeBan(Client &user, Client &target)
@@ -184,8 +183,6 @@ void	Channel::removeBan(Client &user, Client &target)
 			_banned.erase(itBan);
 			sendToClient(target, INFO(msgTargetUnbanned));
 			sendToChan(*this, INFO(msg));
-//			sendToClient(target, RPL_COMMENTUNBANNED(target.getName(), _name));
-//			sendToChan(*this, RPL_USERUNBANNED(user.getName(), target.getName(), getName()));
 			break ;
 		}
 	}
@@ -272,4 +269,3 @@ const std::time_t	&Channel::getTimeTopicChange()
 {
 	return (_timeTopicChange);
 }
-// void	Channel::giveChanopStatus()

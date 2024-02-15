@@ -40,7 +40,7 @@ static void	user_join_chan(itVecPair &it, Server &serv, Client &user)
 	}
 	for (itBan = itc->getBanned().begin(); itBan != itc->getBanned().end(); itBan++)
 	{
-		if (user == *itBan) // A CHANGERRRR!!!!!!!!
+		if (user == *itBan)
 		{
 			sendToClient(user, ERR_BANNEDFROMCHAN(user.getName(), it->first));
 			return ;
@@ -66,12 +66,12 @@ static void	user_join_chan(itVecPair &it, Server &serv, Client &user)
 
 	 	ss << itc->getTimeTopicChange();
 	  	ss >> timestamp;
-		itc->addUser(user); // + replies
+		itc->addUser(user);
 		if (itc->getTopic().size() > 0)
 		{
 			sendToClient(user, RPL_TOPIC(user.getName(), itc->getName(), itc->getTopic()));
 			sendToClient(user, RPL_TOPICWHOTIME(user.getName(), itc->getName(), itc->getTopicChanger(),
-												timestamp, std::asctime(std::localtime(&itc->getTimeTopicChange()))));
+							timestamp, std::asctime(std::localtime(&itc->getTimeTopicChange()))));
 		}
 		for (itVecClient it = itc->getUsersJoin().begin(); it != itc->getUsersJoin().end(); it++)
 			allUsers += " " + it->getName();
@@ -110,7 +110,7 @@ static void	user_create_chan(itVecPair &it, Server &serv, Client &user)
 		sendToClient(user, ERR_TOOMANYCHANNELS(user.getName(), it->first));
 		return ;
 	}
-	serv.addChan(it->first, it->second, user); //+ replies
+	serv.addChan(it->first, it->second, user);
 	Channel	chan = serv.getChanList().back();
 	std::string	userName = "@" + user.getName();
 	sendToClient(user, RPL_NAMREPLY(user.getName(), chan.getName(), userName));
@@ -143,20 +143,5 @@ int	joinCmd(int fd, vecStr &cmd, Server &serv)
 		else
 			user_create_chan(it, serv, user);
 	}
-	// TEST
-// for (itVecChan itc = serv.getChanList().begin(); itc != serv.getChanList().end(); itc++)
-// {
-// 	std::cout << "Chan " << itc->getName() << " created." << std::endl;
-// 	if (!itc->getPassword().empty())
-// 		std::cout << "Chan password " << itc->getPassword() << "." << std::endl;
-// 	else
-// 		std::cout << "No password set for this channel." << std::endl;
-// 	std::cout << "Users connected " << itc->getConnected() << "." << std::endl;
-// 	for (itVecClient ut = itc->getUsersJoin().begin(); ut != itc->getUsersJoin().end(); ut++)
-// 		std::cout << "user " << ut->getName() << " connected." << std::endl;
-// 	for (itVecClient ut = itc->getChanop().begin(); ut != itc->getChanop().end(); ut++)
-// 		std::cout << "Chanop " << ut->getName() << " connected." << std::endl;
-// }
-// END TEST
 	return (0);
 }

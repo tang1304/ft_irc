@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rrebois <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:15:06 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/15 09:06:15 by rrebois          ###   ########.fr       */
+/*   Updated: 2024/02/15 10:06:18 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ private:
 	std::string	_password;
 	std::string	_modes;
 	vecClient	_usersJoin;
-	vecClient	_chanop; // Channel moderators are identified by the channel member prefix ('@' for standard channel operators, '%' for halfops) next to their nickname whenever it is associated with a channel (e.g. replies to the NAMES, WHO, and WHOIS commands).
+	vecClient	_chanop; // Channel moderators are identified by the channel member prefix ('@' for standard channel operators) next to their nickname whenever it is associated with a channel.
 	vecClient	_banned; // peut etre a mettre dans client
 	bool		_privated; // invite only or not / false
 	bool		_changeTopic; // false = anyone true = chanops only / false
@@ -68,8 +68,6 @@ public:
 	const bool			&getChangeTopic() const;
 	const int			&getId() const;
 	const std::time_t	&getTimeTopicChange();
-//	void				getModeFunc(std::string mode) const;
-	// void	giveChanopStatus();
 
 	Channel(std::string name, std::string key);
 	~Channel();

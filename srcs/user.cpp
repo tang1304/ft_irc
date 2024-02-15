@@ -6,14 +6,14 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/25 13:22:51 by rrebois           #+#    #+#             */
-/*   Updated: 2024/02/08 10:43:14 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/15 10:16:49 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../incs/irc.hpp"
 
 int userCmd(int fd, vecStr &cmd, Server &serv)
-{// attention segfaut si USER t  * t
+{
 	std::string 		ERR;
 	std::stringstream	ss;
 
