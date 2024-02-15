@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   list.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rrebois <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/12 11:31:31 by rrebois           #+#    #+#             */
-/*   Updated: 2024/02/12 12:35:59 by rrebois          ###   ########.fr       */
+/*   Updated: 2024/02/15 10:13:09 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ int			listCmd(int fd, vecStr &cmd, Server &serv)
 			else
 				topic = itChan->getTopic();
 			sendToClient(user, RPL_LIST(user.getName(), itChan->getName(), \
-                                        count, topic));
+										count, topic));
 		}
 	}
 	sendToClient(user, RPL_LISTEND(user.getName()));

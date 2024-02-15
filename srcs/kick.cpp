@@ -6,13 +6,13 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 16:18:54 by rrebois           #+#    #+#             */
-/*   Updated: 2024/02/14 09:56:10 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/15 10:12:49 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../incs/irc.hpp"
 
-int	kickCmd(int fd, vecStr &cmd, Server &serv) // les coms sont avec :comment here so reason is co;;ent here for all or not??
+int	kickCmd(int fd, vecStr &cmd, Server &serv)
 {
 	Client		user = serv.getClient(fd);
 
