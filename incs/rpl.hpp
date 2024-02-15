@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   rpl.hpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: rrebois <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 16:21:25 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/14 10:26:58 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/15 09:37:27 by rrebois          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,13 +41,6 @@
 
 # define RPL_USERDEMOTED(client, nick) (":" + SERVERNAME + " " + client + " demoted chanop " + nick + "\r\n")
 
-//332
-# define RPL_TOPIC(client, channel, topic) (":" + SERVERNAME + " 332 " + client + " " + channel + " " + topic + "\r\n")
-
-//341
-# define RPL_INVITING(client, nick, channel) (":" + SERVERNAME + " 341 " + client + " invited " + nick + " to the channel " + channel + "\r\n")
-
-
 //315
 # define RPL_ENDOFWHO(client, mask) (":" + SERVERNAME + " 315 " + client + " "+ mask + " :End of WHO list\r\n")
 
@@ -63,8 +56,11 @@
 //331
 # define RPL_NOTOPIC(client, channel) (":" + SERVERNAME + " 331 " + client + " " + channel + " :No topic is set\r\n")
 
+//332
+# define RPL_TOPIC(client, channel, topic) (":" + SERVERNAME + " 332 " + client + " " + channel + " " + topic + "\r\n")
+
 //333
-# define RPL_TOPICWHOTIME(client, chan, nick, setat) (":" + SERVERNAME + " 333 " + client + " " + chan + " " + nick + " " + setat + "\r\n")
+# define RPL_TOPICWHOTIME(client, chan, nick, setat, date) (":" + SERVERNAME + " 333 " + client + ": " + chan + " " + nick + " " + setat +  " " + date + "\r\n")
 
 //341
 # define RPL_INVITING(client, nick, channel) (":" + SERVERNAME + " 341 " + client + " invited " + nick + " to the channel " + channel + "\r\n")
@@ -172,6 +168,7 @@
 			channel + " " + mode + " " + param + " :Invalid parameter\r\n")
 
 # define ERROR(error) ("ERROR: " + error + "\r\n")
+# define INFO(msg) ("INFO: " + msg + "\r\n")
 # define ERR_NOEXISTINGUSER(client, nick) (":" + SERVERNAME +client + " " + nick + " :No existing user\r\n")
 # define ERR_PASSFIRST(client) (":" + SERVERNAME +client + " :Must confirm password first\r\n")
 # define ERR_NICKFIRST(client) (":" + SERVERNAME +client + " :Must set nickname first\r\n")
