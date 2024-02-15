@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   user.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: rrebois <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/25 13:22:51 by rrebois           #+#    #+#             */
-/*   Updated: 2024/02/15 10:16:49 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/15 11:37:21 by rrebois          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 int userCmd(int fd, vecStr &cmd, Server &serv)
 {
+	std::string 		msg;
 	std::string 		ERR;
 	std::stringstream	ss;
 
@@ -27,9 +28,15 @@ int userCmd(int fd, vecStr &cmd, Server &serv)
 	if (serv.getClientMap()[fd].getRegistered())
 		return (serv.getClientMap()[fd].setBufferSend(ERR_ALREADYREGISTERED(ERR)), 1);
 	if (!serv.getClientMap()[fd].getPass())
-		return (serv.getClientMap()[fd].setBufferSend(ERR_PASSFIRST(ERR)), 1);
+	{
+		msg = "must confirm password first";
+		return (serv.getClientMap()[fd].setBufferSend(ERROR(msg)), 1);
+	}
 	if (serv.getClientMap()[fd].getName().empty())
-		return (serv.getClientMap()[fd].setBufferSend(ERR_NICKFIRST(ERR)), 1);
+	{
+		msg = "must set nickname first";
+		return (serv.getClientMap()[fd].setBufferSend(ERROR(msg)), 1);
+	}
 	if (cmd.size() < 5 || cmd[1].empty())
 		return (serv.getClientMap()[fd].setBufferSend(ERR_NEEDMOREPARAMS(ERR, cmd[0])), 1);
 	serv.getClientMap()[fd].setUsername(cmd[1]);

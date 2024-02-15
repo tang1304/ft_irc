@@ -227,6 +227,7 @@ void	Server::clientHandle(const int &fd){
 }
 
 void	Server:: parseInput(const int &fd, std::string &input){
+	std::string msg;
 	vecStr		command;
 	vecVecStr	vecCommand;
 	command = splitCmds(input, "\r\n");
@@ -244,7 +245,8 @@ void	Server:: parseInput(const int &fd, std::string &input){
 		itMapCmds	it = _commandsList.find(*itvv->begin());
 		if (it != _commandsList.end() && (*itvv->begin() != "PASS" && *itvv->begin() != "USER" && *itvv->begin() != "NICK")\
 		&& !_clients[fd].getRegistered()){
-			_clients[fd].setBufferSend(ERR_NOTREGISTERED(_clients[fd].getName()));
+		msg = "you may register first";
+			_clients[fd].setBufferSend(ERROR(msg));
 			return ;
 		}
 		if (it != _commandsList.end()){

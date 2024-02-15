@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   rpl.hpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: rrebois <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 16:21:25 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/15 10:11:04 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/15 13:40:43 by rrebois          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -165,14 +165,5 @@
 
 # define ERROR(error) ("ERROR: " + error + "\r\n")
 # define INFO(msg) ("INFO: " + msg + "\r\n")
-# define ERR_NOEXISTINGUSER(client, nick) (":" + SERVERNAME +client + " " + nick + " :No existing user\r\n")
-# define ERR_PASSFIRST(client) (":" + SERVERNAME +client + " :Must confirm password first\r\n")
-# define ERR_NICKFIRST(client) (":" + SERVERNAME +client + " :Must set nickname first\r\n")
-# define ERR_NOTREGISTERED(client) (":" + SERVERNAME + " " + client + " :You may register first\r\n")
-# define ERR_ALREADYINCHANNEL(client, channel) (":" + SERVERNAME + " " + client + " " + channel + " :User already in channel\r\n")
-# define ERR_CMODEUNKNOWNFLAG(channel) (":" + SERVERNAME + " " + channel + " :Unknown MODE flag\r\n")
-# define ERR_USERALREADYOP(client, nick, channel) (":" + SERVERNAME + " " + client + " " + nick + " " + channel + " :User already chanop\r\n")
-# define ERR_USERALREADYBASICU(client, nick, channel) (":" + SERVERNAME + " " + client + " " + nick + " " + channel + " :User already basic user\r\n")
-# define RPL_USERNOTBANNED(nick, channel) (":" + SERVERNAME + " " + nick + " " + channel + " :User not banned in this channel\r\n")
 
 #endif

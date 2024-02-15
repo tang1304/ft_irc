@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mode.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: rrebois <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 13:14:23 by rrebois           #+#    #+#             */
-/*   Updated: 2024/02/15 10:14:19 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/15 11:24:34 by rrebois          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,7 @@ static void	modeOperator(char c, std::string target, Client &user, Channel &chan
 {
 	itVecClient	itClient = findIt(target, chan.getUsersJoin());
 	itVecClient	itChanop = findIt(target, chan.getChanop());
+	std::string msg;
 
 	if (target.empty())
 	{
@@ -100,7 +101,7 @@ static void	modeOperator(char c, std::string target, Client &user, Channel &chan
 	}
 	if (itChanop != chan.getChanop().end() && user == *itChanop && c == '-')
 	{
-		std::string msg = "cannot demote yourself";
+		msg = "cannot demote yourself";
 		sendToClient(user, ERROR(msg));
 		return ;
 	}
@@ -112,7 +113,9 @@ static void	modeOperator(char c, std::string target, Client &user, Channel &chan
 	}
 	else if (c == '+' && itClient == chan.getUsersJoin().end())
 	{
-		sendToClient(user, ERR_USERALREADYOP(user.getName(), target, chan.getName()));
+		msg = "user " + target + " is already a chanop in the channel " + chan.getName()
+			  + ". Cannot be promoted further";
+		sendToClient(user, ERROR(msg));
 		return ;
 	}
 	if (c == '-' && itChanop != chan.getChanop().end())
@@ -123,7 +126,9 @@ static void	modeOperator(char c, std::string target, Client &user, Channel &chan
 	}
 	else if (c == '-' && itChanop == chan.getChanop().end())
 	{
-		sendToClient(user, ERR_USERALREADYBASICU(user.getName(), target, chan.getName()));
+		msg = "user " + target + " is already a basic user in the channel " + chan.getName()
+				+ ". Cannot be demoted further";
+		sendToClient(user, ERROR(msg));
 		return ;
 	}
 }
@@ -169,7 +174,9 @@ static void	modeBan(char c, std::string target, Client &user, Channel &chan)
 		itBan = findIt(target, chan.getBanned());
 		if (itBan == chan.getBanned().end())
 		{
-			sendToClient(user, RPL_USERNOTBANNED(target, chan.getName()));
+			msg = "user " + target + " not banned in the channel " + chan.getName();
+
+			sendToClient(user, ERROR(msg));
 			return ;
 		}
 		chan.removeBan(user, *itBan);
@@ -198,6 +205,7 @@ int	modeCmd(int fd, vecStr &cmd, Server &serv)
 	vecModesPair	modesPair;
 	size_t			j = 3;
 	char 			modestring;
+	std::string 	msg;
 
 	modeList['b'] = &modeBan;
 	modeList['i'] = &modeInviteOnly;
@@ -241,7 +249,13 @@ int	modeCmd(int fd, vecStr &cmd, Server &serv)
 			if (itCmd != modeList.end())
 					itCmd->second(modestring, it->second, user, *itChan);
 			else
-				sendToClient(user, ERR_CMODEUNKNOWNFLAG(cmd[1]));
+			{
+				msg = "unknown MODE flag (";
+				msg += modestring;
+				msg += it->first;
+				msg += ")";
+				sendToClient(user, ERROR(msg));
+			}
 		}
 	}
 	return (0);
