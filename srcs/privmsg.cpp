@@ -3,17 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   privmsg.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: rrebois <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 14:03:30 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/13 14:13:13 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/15 10:08:42 by rrebois          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../incs/irc.hpp"
 
 int	privmsgCmd(int fd, vecStr &cmd, Server &serv){
-	Client	user = serv.getClientMap()[fd];
+	Client	user = serv.getClient(fd);
 
 	if (cmd.size() == 1 || cmd.size() > 3 || cmd[1].find(':') == 0){
 		sendToClient(user, ERR_NORECIPIENT(user.getName(), cmd[0]));
@@ -47,9 +47,9 @@ int	privmsgCmd(int fd, vecStr &cmd, Server &serv){
 		return (1);
 	}
 	else {
-		for (itClientMap it = serv.getClientMap().begin(); it != serv.getClientMap().end(); it++){
-			if (it->second.getName() == target){
-				sendToClient(it->second, RPL_CMD(user.getName(), user.getUserName(), "PRIVMSG " + target, msg));
+		for (itVecClient it = serv.getAllClients().begin(); it != serv.getAllClients().end(); it++){
+			if (it->getName() == target){
+				sendToClient(*it, RPL_CMD(user.getName(), user.getUserName(), "PRIVMSG " + target, msg));
 				return (0);
 			}
 		}

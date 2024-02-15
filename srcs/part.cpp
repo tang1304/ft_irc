@@ -13,7 +13,7 @@
 # include "../incs/irc.hpp"
 
 int partCmd(int fd, vecStr &cmd, Server &serv){
-	Client		user = serv.getClientMap()[fd];
+	Client		user = serv.getClient(fd);
 //Modif to leave multiple channels !
 //Modif to add reason !
 	if (cmd.size() < 2){

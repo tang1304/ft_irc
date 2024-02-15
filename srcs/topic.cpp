@@ -13,7 +13,7 @@
 #include "../incs/irc.hpp"
 
 int	topicCmd(int fd, vecStr &cmd, Server &serv){
-	Client		user = serv.getClientMap()[fd];
+	Client		user = serv.getClient(fd);
 
 	if (cmd.size() < 2){
 		sendToClient(user, ERR_NEEDMOREPARAMS(user.getName(), cmd[0]));

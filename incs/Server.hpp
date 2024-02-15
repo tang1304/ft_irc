@@ -6,7 +6,7 @@
 /*   By: rrebois <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:03:20 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/14 10:42:51 by rrebois          ###   ########.fr       */
+/*   Updated: 2024/02/15 09:58:17 by rrebois          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,10 +25,10 @@ extern int	signalStatus;
 class Server{
 private:
 
-	clientMap			_clients;
 	int					_port;
-	std::string			_password;
 	int					_socketFd;
+	std::string			_password;
+	vecClient 			_clients;
 	std::vector<pollfd>	_pollFds; // To use poll(), keeps track of fds for multiple clients
 	mapCmds				_commandsList;
 	vecChan				_chanList;
@@ -41,8 +41,8 @@ public:
 	Server(const int &port, const std::string &password);
 
 	const std::string	&getPassword() const;
-	clientMap			&getClientMap();
 	Client				&getClient(int fd); // en template??
+	vecClient 			&getAllClients();
 	vecChan				&getChanList();
 	void				cmdInit();
 	static void			signalHandler(int signal); //static because of signal() that can' t accept member function
@@ -54,7 +54,6 @@ public:
 	void				addChan(std::string chan, std::string key, Client &user);
 	void				removeChan(int id);
 	void				registrationDone(int &fd);
-	itClientMap			findClient(std::string name);
 };
 
 #endif

@@ -62,8 +62,6 @@ typedef std::vector<std::string>									vecStr;
 typedef std::vector<std::string>::iterator							itVecStr;
 typedef std::vector<vecStr>											vecVecStr;
 typedef std::vector<vecStr>::iterator								itVecVecStr;
-typedef std::map<int, Client>										clientMap;
-typedef std::map<int, Client>::iterator								itClientMap;
 typedef std::vector<std::pair<std::string, std::string> >			vecPair;
 typedef std::vector<std::pair<std::string, std::string> >::iterator	itVecPair;
 typedef std::vector<std::pair<char, std::string> >					vecModesPair;

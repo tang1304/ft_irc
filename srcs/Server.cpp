@@ -6,7 +6,7 @@
 /*   By: rrebois <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:03:01 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/14 13:27:50 by rrebois          ###   ########.fr       */
+/*   Updated: 2024/02/15 10:02:12 by rrebois          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ const std::string	&Server::getPassword() const
 	return (_password);
 }
 
-clientMap &Server::getClientMap()
+vecClient &Server::getAllClients()
 {
 	return (_clients);
 }
@@ -174,11 +174,14 @@ void	Server::clientDisconnection(const int &fd){
 			itChan--;
 		}
 	}
-
 	std::cout << YELLOW << "[Server] Client #" << _clients[fd].getClientFd() << \
 		" disconnected from the server" << DEFAULT << std::endl;
 	close(fd);
-	_clients.erase(fd);
+	for (itClient = getAllClients().begin(); itClient != getAllClients().end(); itClient++)
+	{
+		if (itClient->getFd() == fd)
+			_clients.erase(itClient);
+	}
 	while (it->fd != fd)
 		it++;
 	_pollFds.erase(it);
@@ -266,14 +269,4 @@ void	Server::registrationDone(int &fd){
 	_clients[fd].setBufferSend(RPL_MOTDSTART(_clients[fd].getName()));
 	_clients[fd].setBufferSend(RPL_MOTD(_clients[fd].getName()));
 	_clients[fd].setBufferSend(RPL_ENDOFMOTD(_clients[fd].getName()));
-}
-
-itClientMap			Server::findClient(std::string name){
-	itClientMap	it;
-
-	for (it = _clients.begin(); it != _clients.end(); it++){
-		if (it->second.getName() == name)
-			break ;
-	}
-	return (it);
 }

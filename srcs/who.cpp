@@ -3,23 +3,24 @@
 /*                                                        :::      ::::::::   */
 /*   who.cpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: rrebois <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/09 12:00:25 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/13 09:44:26 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/15 10:13:20 by rrebois          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "irc.hpp"
+#include "../incs/irc.hpp"
 
 static void	noMask(Client &user, Server &serv){
-	itClientMap	itClientServ;
-	for (itClientServ = serv.getClientMap().begin(); itClientServ != serv.getClientMap().end(); itClientServ++){
-		if (itClientServ->second.getName() == user.getName())
+	itVecClient	itClientServ;
+
+	for (itClientServ = serv.getAllClients().begin(); itClientServ != serv.getAllClients().end(); itClientServ++){
+		if (itClientServ->getName() == user.getName())
 			continue ;
 		if (serv.getChanList().empty()){
-			sendToClient(user, RPL_WHOREPLY(user.getName(), itClientServ->second.getName()\
-				, itClientServ->second.getUserName(), itClientServ->second.getName(), "H", itClientServ->second.getRealName()));
+			sendToClient(user, RPL_WHOREPLY(user.getName(), itClientServ->getName()\
+				, itClientServ->getUserName(), itClientServ->getName(), "H", itClientServ->getRealName()));
 			continue ;
 		}
 		bool	sent = 0;
@@ -27,21 +28,21 @@ static void	noMask(Client &user, Server &serv){
 		for (itChan = serv.getChanList().begin(); itChan != serv.getChanList().end(); itChan++){
 			if (isItIn(user, itChan->getUsersJoin()) == false && isItIn(user, itChan->getChanop()) == false && sent == 0){
 				sendToClient(user, RPL_WHOREPLY(user.getName(), itChan->getName()\
-				, itClientServ->second.getUserName(), itClientServ->second.getName(), "H", itClientServ->second.getRealName()));
+				, itClientServ->getUserName(), itClientServ->getName(), "H", itClientServ->getRealName()));
 				sent = 1;
 			}
 			else
 				continue ;
 		}
 		if (sent == 0)
-			sendToClient(user, RPL_WHOREPLY(user.getName(), itClientServ->second.getName()\
-			, itClientServ->second.getUserName(), itClientServ->second.getName(), "H", itClientServ->second.getRealName()));
+			sendToClient(user, RPL_WHOREPLY(user.getName(), itClientServ->getName()\
+			, itClientServ->getUserName(), itClientServ->getName(), "H", itClientServ->getRealName()));
 	}
 	sendToClient(user, RPL_ENDOFWHO(user.getName(), ""));
 }
 
 int	whoCmd(int fd, vecStr &cmd, Server &serv){
-	Client		user = serv.getClientMap()[fd];
+	Client		user = serv.getAllClients()[fd];
 
 	if (cmd.size() == 1){
 		noMask(user, serv);
@@ -49,7 +50,7 @@ int	whoCmd(int fd, vecStr &cmd, Server &serv){
 	}
 	std::string	mask = cmd[1];
 	itVecChan	itChan = findIt(mask, serv.getChanList());
-	itClientMap itClient = serv.findClient(mask);
+	itVecClient itClient = findIt() serv.findClient(mask);
 	if (itChan != serv.getChanList().end()){
 		itVecClient	it;
 		for (it = itChan->getChanop().begin(); it != itChan->getChanop().end(); it++){
@@ -62,7 +63,7 @@ int	whoCmd(int fd, vecStr &cmd, Server &serv){
 		}
 		sendToClient(user, RPL_ENDOFWHO(user.getName(), mask));
 	}
-	else if (itClient != serv.getClientMap().end()){
+	else if (itClient != serv.getAllClients().end()){
 		sendToClient(user, RPL_WHOREPLY(user.getName(), mask, itClient->second.getUserName(), \
 		itClient->second.getName(), "H" , itClient->second.getRealName()));
 		sendToClient(user, RPL_ENDOFWHO(user.getName(), mask));

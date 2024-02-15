@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: rrebois <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 10:16:34 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/12 10:30:06 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/15 10:04:20 by rrebois          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -145,12 +145,12 @@ vecVecStr	splitCmd(vecStr &cmds, const std::string &delimiter){
 }
 
 void	sendToAll(Server &serv, const std::string &msg){
-	itClientMap	it = serv.getClientMap().begin();
-	for (; it != serv.getClientMap().end(); it++){
-		if (it->second.getDisconnect() == 0){
-			it->second.setBufferSend(msg);
-			send(it->second.getClientFd(), it->second.getBufferSend().c_str(), it->second.getBufferSend().length(), 0);
-			it->second.setBufferSend("");
+	itVecClient	it = serv.getAllClients().begin();
+	for (; it != serv.getAllClients().end(); it++){
+		if (it->getDisconnect() == 0){
+			it->setBufferSend(msg);
+			send(it->getClientFd(), it->getBufferSend().c_str(), it->getBufferSend().length(), 0);
+			it->setBufferSend("");
 		}
 	}
 }
