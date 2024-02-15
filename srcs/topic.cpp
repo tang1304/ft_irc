@@ -6,7 +6,7 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 15:28:56 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/15 09:37:45 by rrebois          ###   ########.fr       */
+/*   Updated: 2024/02/15 11:26:35 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,8 +40,6 @@ int	topicCmd(int fd, vecStr &cmd, Server &serv){
 		}
 		it->setTopic(topic);
 		it->setTopicChanger(user.getName());
-		//Needs to change the time of last change
-//		sendToChan(*it, RPL_TOPIC(user.getName(), it->getName(), topic)); //a enlever??
 	}
 	else{
 		std::string			timestamp;
