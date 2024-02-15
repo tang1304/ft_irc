@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: rrebois <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/29 15:40:11 by rrebois           #+#    #+#             */
-/*   Updated: 2024/02/14 15:56:40 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/15 09:06:08 by rrebois          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,15 +42,16 @@ void	Channel::setPrivated(char c)
 
 void	Channel::setChangeTopic(char c, Client &user)
 {
+	(void)user;
 	if (c == '+')
 	{
+		std::string error = this->getName() + " topic can be modified only by chanop users";
 		_changeTopic = true;
-		sendToChan(*this, RPL_SETTOPICCHANOP(user.getName(), getName()));
 	}
 	else
 	{
+		std::string error2 = this->getName() + " topic can be modified by any user";
 		_changeTopic = false;
-		sendToChan(*this, RPL_UNSETTOPICCHANOP(user.getName(), getName()));
 	}
 }
 
@@ -100,45 +101,41 @@ void	Channel::addUser(Client &user)
 void	Channel::addChanop(Client &user)
 {
 	_chanop.push_back(user);
+	removeUser(user);
 	_connected++;
 	removeUser(user);
 }
 
 void	Channel::addBanned(Client &user, Client &target)
 {
-	int index = 0;
 	itVecClient itClient;
 	itVecClient itChanop;
+	std::string msg;
+	std::string comment;
 
 	_banned.push_back(target);
+	msg = "you have been banned from " + getName();
+	comment = "Banned";
+	sendToClient(target, INFO(msg));
 	for (itClient = getUsersJoin().begin(); itClient != getUsersJoin().end(); ++itClient)
 	{
 		if (*itClient == target)
-			break ;
-		index++;
-	}
-	if (itClient != getUsersJoin().end())
-	{
-		sendToClient(target, RPL_COMMENTBANNED(target.getName(), _name));
-		_usersJoin.erase(_usersJoin.begin() + index);
-		_connected--;
-//		sendToChan(*this, RPL_USERBANNED(user.getName(), target.getName(), getName()));
-	}
-	else
-	{
-		index = 0;
-		for (itChanop = getChanop().begin(); itChanop != getChanop().end(); ++itChanop)
 		{
-			if (*itChanop == target)
-				break ;
-			index++;
+			sendToChan(*this, RPL_CMD(user.getName(), user.getUserName(), "KICK"\
+			,getName() + " " + itClient->getName() + " " + comment));
+			removeUser(*itClient);
+			return ;
 		}
-std::cout << "user " << user.getName() << std::endl;
-std::cout << "target " << target.getName() << std::endl;
-		sendToClient(target, RPL_COMMENTBANNED(target.getName(), _name));
-		_chanop.erase(_chanop.begin() + index);
-		_connected--;
-//		sendToChan(*this, RPL_USERBANNED(user.getName(), target.getName(), getName()));
+	}
+	for (itChanop = getChanop().begin(); itChanop != getChanop().end(); ++itChanop)
+	{
+		if (*itChanop == target)
+		{
+			sendToChan(*this, RPL_CMD(user.getName(), user.getUserName(), "KICK"\
+			,getName() + " " + itChanop->getName() + " " + comment));
+			removeChanop(*itChanop);
+			return ;
+		}
 	}
 }
 
@@ -148,7 +145,8 @@ void	Channel::removeUser(Client &user)// checker si user pas end
 
 	for (it = _usersJoin.begin(); it != _usersJoin.end(); it++)
 	{
-		if (user.getName() == it->getName()){
+		if (user.getName() == it->getName())
+		{
 			_usersJoin.erase(it);
 			_connected--;
 			break ;
@@ -158,16 +156,15 @@ void	Channel::removeUser(Client &user)// checker si user pas end
 
 void	Channel::removeChanop(Client &user) // checker si user pas end
 {
-	int	index = 0;
-
 	for (itVecClient it = _chanop.begin(); it != _chanop.end(); it++)
 	{
 		if (user.getName() == it->getName())
+		{
+			_chanop.erase(it);
+			_connected--;
 			break ;
-		index++;
+		}
 	}
-	_chanop.erase(_chanop.begin() + index);
-	_connected--;
 	if (_chanop.empty() && _connected >= 1)
 		promoteFirstUserToChanop(*_usersJoin.begin());
 	// add if !_connected -> delete channel de server + call destuctor?
@@ -175,17 +172,23 @@ void	Channel::removeChanop(Client &user) // checker si user pas end
 
 void	Channel::removeBan(Client &user, Client &target)
 {
-	int index = 0;
+	std::string msgTargetUnbanned;
+	std::string msg;
 
+	msgTargetUnbanned = "you have been unbanned from channel " + getName();
+	msg = user.getName() + " unbanned " + target.getName() + " from channel " + getName();
 	for (itVecClient itBan = getBanned().begin(); itBan != getBanned().end(); ++itBan)
 	{
 		if (*itBan == target)
+		{
+			_banned.erase(itBan);
+			sendToClient(target, INFO(msgTargetUnbanned));
+			sendToChan(*this, INFO(msg));
+//			sendToClient(target, RPL_COMMENTUNBANNED(target.getName(), _name));
+//			sendToChan(*this, RPL_USERUNBANNED(user.getName(), target.getName(), getName()));
 			break ;
-		index++;
+		}
 	}
-	_banned.erase(_banned.begin() + index);
-	sendToClient(target, RPL_COMMENTUNBANNED(target.getName(), _name));
-	sendToChan(*this, RPL_USERUNBANNED(user.getName(), target.getName(), getName()));
 }
 
 void	Channel::promoteFirstUserToChanop(Client &user)

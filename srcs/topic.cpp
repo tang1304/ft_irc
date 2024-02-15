@@ -6,7 +6,7 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 15:28:56 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/14 10:45:47 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/15 09:37:45 by rrebois          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,13 +41,18 @@ int	topicCmd(int fd, vecStr &cmd, Server &serv){
 		it->setTopic(topic);
 		it->setTopicChanger(user.getName());
 		//Needs to change the time of last change
-		sendToChan(*it, RPL_TOPIC(user.getName(), it->getName(), topic));
+//		sendToChan(*it, RPL_TOPIC(user.getName(), it->getName(), topic)); //a enlever??
 	}
 	else{
+		std::string			timestamp;
+		std::stringstream	ss;
+
+		ss << it->getTimeTopicChange();
+		ss >> timestamp;
 		if (it->getTopic().size() > 0){
 			sendToClient(user, RPL_TOPIC(user.getName(), it->getName(), it->getTopic()));
 			sendToClient(user, RPL_TOPICWHOTIME(user.getName(), it->getName(), it->getTopicChanger(),
-												std::asctime(std::localtime(&it->getTimeTopicChange()))));
+									timestamp, std::asctime(std::localtime(&it->getTimeTopicChange()))));
 		}
 		else
 			sendToClient(user, RPL_NOTOPIC(user.getName(), it->getName()));
