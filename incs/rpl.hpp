@@ -41,8 +41,6 @@
 
 # define RPL_USERDEMOTED(client, nick) (":" + SERVERNAME + " " + client + " demoted chanop " + nick + "\r\n")
 
-
-
 //315
 # define RPL_ENDOFWHO(client, mask) (":" + SERVERNAME + " 315 " + client + " "+ mask + " :End of WHO list\r\n")
 
@@ -180,8 +178,6 @@
 # define ERR_USERALREADYOP(client, nick, channel) (":" + SERVERNAME + " " + client + " " + nick + " " + channel + " :User already chanop\r\n")
 # define ERR_USERALREADYBASICU(client, nick, channel) (":" + SERVERNAME + " " + client + " " + nick + " " + channel + " :User already basic user\r\n")
 # define ERR_CANNOTAUTODEMOTE(client, channel) (":" + SERVERNAME + " " + client + " " + channel + " :Cannot demote yourself\r\n")
-# define ERR_CANNOTAUTOBAN(client, channel) (":" + SERVERNAME + " " + client + " " + channel + " :Cannot ban yourself\r\n")
-# define ERR_CANNOTAUTOKICK(nick, username, cmd, args) (":" + nick + "!" + username + "@" + LOCALHOST + " " + cmd + " " + args + "\r\n")
 
 # define RPL_USERNOTBANNED(nick, channel) (":" + SERVERNAME + " " + nick + " " + channel + " :User not banned in this channel\r\n")
 # define RPL_USERBANNED(client, nick, channel) (":" + SERVERNAME + " " + client + " banned " + nick + " from channel " + channel + "\r\n")
@@ -190,9 +186,5 @@
 # define RPL_COMMENTUNBANNED(nick, channel) (":" + SERVERNAME + " " + nick + " unbanned from " + channel + "\r\n")
 # define RPL_SETTOPICCHANOP(client, channel) (":" + SERVERNAME + " " + client + " " + channel + " :Topic can be modified only by chanop users\r\n")
 # define RPL_UNSETTOPICCHANOP(client, channel) (":" + SERVERNAME + " " + client + " " + channel + " :Topic can be modified by any user\r\n")
-# define RPL_USERJOIN(client, channel) (":" + client + " is joining the channel " + channel + "\r\n")
-# define RPL_USERLEFT(client, channel) (":" + client + " has left the channel " + channel + "\r\n")
-# define RPL_USERKICKED(client, nick, channel, comment) (":" + SERVERNAME + " " + client + " kicked " + nick + " from " + channel + " :" + comment + "\r\n")
-# define RPL_COMMENTKICKED(nick, channel, comment) (":" + SERVERNAME + " " + nick + " kicked from " + channel + " :" + comment + "\r\n")
 
 #endif

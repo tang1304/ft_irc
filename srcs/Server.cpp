@@ -87,7 +87,6 @@ void	Server::addChan(std::string chan, std::string key, Client &user)
 
 	newChan.setId(j);
 	newChan.addChanop(user);
-	// sendToChan(newChan, RPL_USERJOIN(user.getName(), chan));
 	sendToChan(newChan, RPL_CMD(user.getName(), user.getUserName(), "JOIN" ,chan));
 	user.setChanCount(1);
 	_chanList.push_back(newChan);
@@ -132,6 +131,7 @@ void	Server::runningLoop(){
 			}
 		}
 	}
+	close(_socketFd);
 }
 
 void	Server::clientConnexion(){
@@ -148,7 +148,8 @@ void	Server::clientConnexion(){
 	_pollFds.push_back(tmp);
 	_clients[clientSocket] = Client();
 	_clients[clientSocket].setClientFd(clientSocket);
-	std::cout << GREEN << "[Server] New client succesfully connected on socket #" << clientSocket << DEFAULT << std::endl;
+	std::cout << GREEN << "[Server] New client succesfully connected on socket #" << clientSocket \
+		<< DEFAULT << std::endl;
 }
 
 void	Server::clientDisconnection(const int &fd){
@@ -163,7 +164,8 @@ void	Server::clientDisconnection(const int &fd){
 			sendToChan(*itChan, RPL_CMD(itClient->getName(), itClient->getUserName(), "QUIT", ""));
 			itChan->removeUser(*itClient);
 		}
-		else if ((itClient = findIt(user, itChan->getChanop())) != itChan->getChanop().end()){
+		else if ((itClient = findIt(user, itChan->getChanop())) != itChan->getChanop().end() && \
+		itClient->getName() != user){
 			sendToChan(*itChan, RPL_CMD(itClient->getName(), itClient->getUserName(), "QUIT", ""));
 			itChan->removeChanop(*itClient);
 		}
@@ -173,7 +175,8 @@ void	Server::clientDisconnection(const int &fd){
 		}
 	}
 
-	std::cout << YELLOW << "[Server] Client #" << _clients[fd].getClientFd() << " disconnected from the server" << DEFAULT << std::endl;
+	std::cout << YELLOW << "[Server] Client #" << _clients[fd].getClientFd() << \
+		" disconnected from the server" << DEFAULT << std::endl;
 	close(fd);
 	_clients.erase(fd);
 	while (it->fd != fd)
@@ -227,21 +230,9 @@ void	Server::clientHandle(const int &fd){
 void	Server:: parseInput(const int &fd, std::string &input){
 	vecStr		command;
 	vecVecStr	vecCommand;
-std::cout << input << std::endl;
 	command = splitCmds(input, "\r\n");
-for (itVecStr it = command.begin(); it != command.end(); it++)
-{
-	std::cout << *it << std::endl;
-
-}
 
 	vecCommand = splitCmd(command, " ");
-for (itVecVecStr itv = vecCommand.begin(); itv != vecCommand.end(); itv++)
-{
-	for (itVecStr it = itv->begin(); it != itv->end(); it++)
-		std::cout << *it << std::endl;
-
-}
 	if (vecCommand.empty() || vecCommand.begin()->empty())
 		return ;
 	itVecVecStr	itvv = vecCommand.begin();
