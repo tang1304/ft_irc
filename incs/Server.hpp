@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rrebois <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:03:20 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/14 10:42:51 by rrebois          ###   ########.fr       */
+/*   Updated: 2024/02/15 10:11:29 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ public:
 
 	const std::string	&getPassword() const;
 	clientMap			&getClientMap();
-	Client				&getClient(int fd); // en template??
+	Client				&getClient(int fd);
 	vecChan				&getChanList();
 	void				cmdInit();
 	static void			signalHandler(int signal); //static because of signal() that can' t accept member function

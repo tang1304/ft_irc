@@ -6,7 +6,7 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/06 15:09:03 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/14 15:44:39 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/15 10:14:47 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,6 @@
 
 int partCmd(int fd, vecStr &cmd, Server &serv){
 	Client		user = serv.getClientMap()[fd];
-//Modif to leave multiple channels !
-//Modif to add reason !
 	if (cmd.size() < 2){
 		sendToClient(user, ERR_NEEDMOREPARAMS(user.getName(), cmd[0]));
 		return (1);

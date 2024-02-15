@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mode.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rrebois <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 13:14:23 by rrebois           #+#    #+#             */
-/*   Updated: 2024/02/15 08:22:53 by rrebois          ###   ########.fr       */
+/*   Updated: 2024/02/15 10:14:19 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -189,7 +189,7 @@ static void	modeTopic(char c, std::string target, Client &user, Channel &chan)
 	sendToChan(chan, INFO(msg));
 }
 
-int	modeCmd(int fd, vecStr &cmd, Server &serv) // A verifier
+int	modeCmd(int fd, vecStr &cmd, Server &serv)
 {
 	Client			user = serv.getClient(fd);
 	itVecChan		itChan;
@@ -233,7 +233,6 @@ int	modeCmd(int fd, vecStr &cmd, Server &serv) // A verifier
 	}
 	for(itVecModesPair it = modesPair.begin(); it != modesPair.end(); it++)
 	{
-// std::cout << it->first << " " << it->second << std::endl;
 		if (it->first == '+' || it->first == '-')
 			modestring = it->first;
 		else
@@ -245,24 +244,5 @@ int	modeCmd(int fd, vecStr &cmd, Server &serv) // A verifier
 				sendToClient(user, ERR_CMODEUNKNOWNFLAG(cmd[1]));
 		}
 	}
-
-
-
-
-	// TEST
-	// for (itVecChan itc = serv.getChanList().begin(); itc != serv.getChanList().end(); itc++)
-	// {
-	// 	std::cout << "Chan " << itc->getName() << " created." << std::endl;
-	// 	if (!itc->getPassword().empty())
-	// 		std::cout << "Chan password " << itc->getPassword() << "." << std::endl;
-	// 	else
-	// 		std::cout << "No password set for this channel." << std::endl;
-	// 	std::cout << "Users connected " << itc->getConnected() << "." << std::endl;
-	// 	for (itVecClient ut = itc->getUsersJoin().begin(); ut != itc->getUsersJoin().end(); ut++)
-	// 		std::cout << "user " << ut->getName() << " connected." << std::endl;
-	// 	for (itVecClient ut = itc->getChanop().begin(); ut != itc->getChanop().end(); ut++)
-	// 		std::cout << "Chanop " << ut->getName() << " connected." << std::endl;
-	// }
-// END TEST
 	return (0);
 }
