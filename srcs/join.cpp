@@ -6,7 +6,7 @@
 /*   By: rrebois <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/29 09:13:54 by rrebois           #+#    #+#             */
-/*   Updated: 2024/02/15 09:42:07 by rrebois          ###   ########.fr       */
+/*   Updated: 2024/02/15 13:39:17 by rrebois          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,10 +27,11 @@ static int	check_chan_first_char(vecPair pair)
 
 static void	user_join_chan(itVecPair &it, Server &serv, Client &user)
 {
-	itVecChan				itc;
-	itVecClient				itBan;
-	itVecClient				itClient;
-	itVecClient				itChanop;
+	itVecChan	itc;
+	itVecClient	itBan;
+	itVecClient	itClient;
+	itVecClient	itChanop;
+	std::string msg;
 
 	itc = findIt(it->first, serv.getChanList());
 	if (it->second != itc->getPassword())
@@ -81,7 +82,10 @@ static void	user_join_chan(itVecPair &it, Server &serv, Client &user)
 		sendToClient(user, RPL_ENDOFNAMES(user.getName(), itc->getName()));
 	}
 	else
-		sendToClient(user, ERR_ALREADYINCHANNEL(user.getName(), it->first));
+	{
+		msg = "you are already in the channel " + itc->getName();
+		sendToClient(user, ERROR(msg));
+	}
 }
 
 static int check_chan_name(std::string name)

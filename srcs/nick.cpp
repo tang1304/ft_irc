@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   nick.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: rrebois <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 15:06:38 by rrebois           #+#    #+#             */
-/*   Updated: 2024/02/08 10:41:39 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/15 11:41:31 by rrebois          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ static int check_password_used(std::string nick, Server &serv)
 
 int	nickCmd(int fd, vecStr& cmd, Server &serv)
 {
+	std::string			msg;
 	std::string 		ERR;
 	std::stringstream	ss;
 
@@ -52,7 +53,10 @@ int	nickCmd(int fd, vecStr& cmd, Server &serv)
 	else
 		ERR = serv.getClientMap()[fd].getName();
 	if (!serv.getClientMap()[fd].getPass())
-		return (serv.getClientMap()[fd].setBufferSend(ERR_PASSFIRST(ERR)), 1);
+	{
+		msg = "must confirm password first";
+		return (serv.getClientMap()[fd].setBufferSend(ERROR(msg)), 1);
+	}
 	if (cmd.size() < 2)
 		return (serv.getClientMap()[fd].setBufferSend(ERR_NONICKNAMEGIVEN(ERR)), 1);
 	if (!check_valid_nick(cmd[1]))

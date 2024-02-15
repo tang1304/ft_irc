@@ -40,8 +40,6 @@ int	topicCmd(int fd, vecStr &cmd, Server &serv){
 		}
 		it->setTopic(topic);
 		it->setTopicChanger(user.getName());
-		//Needs to change the time of last change
-//		sendToChan(*it, RPL_TOPIC(user.getName(), it->getName(), topic)); //a enlever??
 	}
 	else{
 		std::string			timestamp;
