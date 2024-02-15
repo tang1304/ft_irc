@@ -6,7 +6,7 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:03:01 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/15 10:01:52 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/15 10:36:12 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -199,16 +199,12 @@ void	Server::clientHandle(const int &fd){
 	else if (bytesRead == 0)
 		clientDisconnection(fd);
 	else{
-		std::cout << std::endl << PURPLE << "[Client] Received data from client before #" << fd << ": " << buffer << DEFAULT;
-// std::cout << GREEN << "buffer: " << buffer << ". Size: " << BUFFER_SIZE << DEFAULT << std::endl;
 		buf += buffer;
-//		_clients[fd].setBufferRead(std::string(buf), 1);
 		if (buf.empty() || buf == "\r\n")
 		{
 			buf.clear();
 			return ;
 		}
-//		size_t pos = _clients[fd].getBufferRead().find("\r\n");
 		size_t pos = buf.find("\r\n");
 		if (pos == std::string::npos)
 			return ;

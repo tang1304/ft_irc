@@ -6,7 +6,7 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/29 15:40:11 by rrebois           #+#    #+#             */
-/*   Updated: 2024/02/15 10:05:24 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/15 10:48:16 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 Channel::Channel(std::string name, std::string key) :
 		_name(name), _topic(""), _topicChanger(""), _password(key), _modes(""), \
 		_privated(false), _changeTopic(false), _limitUserOnOff(true), _limitUser(USERPERCHAN), \
-		_connected(0) { }
+		_connected(0), _id(0), _timeTopicChange(std::time(NULL)) { }
 
 Channel::~Channel() {}
 
