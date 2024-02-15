@@ -12,7 +12,7 @@
 
 #include "../incs/irc.hpp"
 
-int	kickCmd(int fd, vecStr &cmd, Server &serv) // les coms sont avec :comment here so reason is co;;ent here for all or not??
+int	kickCmd(int fd, vecStr &cmd, Server &serv)
 {
 	Client		user = serv.getClient(fd);
 

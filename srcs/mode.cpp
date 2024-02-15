@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../incs/irc.hpp" //hexchat +t ok, +o, +i,
+#include "../incs/irc.hpp"
 
 static void modeLimitUser(char c, std::string target, Client &user, Channel &chan)
 {

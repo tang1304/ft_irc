@@ -39,7 +39,6 @@ int partCmd(int fd, vecStr &cmd, Server &serv){
 			return (1);
 		}
 		if (chanop == true){
-std::cout << "LA" <<std::endl;
 			sendToChan(*it, RPL_CMD(user.getName(), user.getUserName(), cmd[0], *itChan + " " + reason));
 			it->removeChanop(user);
 		}
