@@ -6,7 +6,7 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:03:01 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/15 13:12:44 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/16 11:45:33 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,6 +130,8 @@ void	Server::runningLoop(){
 			}
 		}
 	}
+	for (itClientMap it = _clients.begin(); it != _clients.end(); it++)
+		close(it->second.getFd());
 	close(_socketFd);
 }
 
@@ -185,7 +187,7 @@ void	Server::clientDisconnection(const int &fd){
 
 void	Server::clientHandle(const int &fd){
 	char	buffer[BUFFER_SIZE];
-	static	std::string	buf;
+	static  std::string	buf;
 	int		bytesRead = 0;
 	Client	user = getClient(fd);
 

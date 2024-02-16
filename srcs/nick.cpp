@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   nick.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rrebois <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 15:06:38 by rrebois           #+#    #+#             */
-/*   Updated: 2024/02/15 11:41:31 by rrebois          ###   ########.fr       */
+/*   Updated: 2024/02/16 14:11:01 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,15 @@ int	nickCmd(int fd, vecStr& cmd, Server &serv)
 		return (serv.getClientMap()[fd].setBufferSend(ERR_ERRONEUSNICKNAME(ERR, cmd[1])), 1);
 	if (!check_password_used(cmd[1], serv))
 		return (serv.getClientMap()[fd].setBufferSend(ERR_NICKNAMEINUSE(ERR, cmd[1])), 1);
+	for (itVecChan it = serv.getChanList().begin(); it != serv.getChanList().end(); it++){
+		itVecClient itClient;
+		std::string	oldName = serv.getClientMap()[fd].getName();
+		if ((itClient = findIt(oldName, it->getChanop())) != it->getChanop().end() \
+		|| (itClient = findIt(oldName, it->getUsersJoin())) != it->getUsersJoin().end()){
+			itClient->setName(cmd[1]);
+			sendToChan(*it, RPL_CMD(oldName, serv.getClientMap()[fd].getUserName(), "NICK", cmd[1]));
+		}
+	}
 	serv.getClientMap()[fd].setName(cmd[1]);
 return (0);
 }

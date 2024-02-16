@@ -3,12 +3,13 @@
 /*                                                        :::      ::::::::   */
 /*   bot.cpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rrebois <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 13:31:57 by rrebois           #+#    #+#             */
-/*   Updated: 2024/02/14 13:31:57 by rrebois          ###   ########.fr       */
+/*   Updated: 2024/02/15 15:52:16 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../incs/irc.hpp"
 
+//http://api.openweathermap.org/data/2.5/forecast?id=524901&appid={API key}
