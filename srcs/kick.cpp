@@ -59,9 +59,9 @@ int	kickCmd(int fd, vecStr &cmd, Server &serv)
 		}
 		else if (itClient != itChan->getUsersJoin().end())
 		{
+			itChan->removeUser(*itClient);
 			sendToChan(*itChan, RPL_CMD(user.getName(), user.getUserName(), "KICK"\
 			,itChan->getName() + " " + itClient->getName() + " " + comment));
-			itChan->removeUser(*itClient);
 		}
 		else if (itChanop != itChan->getChanop().end())
 		{
