@@ -61,6 +61,8 @@ static void	user_join_chan(itVecPair &it, Server &serv, Client &user)
 	 	ss << itc->getTimeTopicChange();
 	  	ss >> timestamp;
 		itc->addUser(user);
+		sendToChan(*itc, RPL_CMD(user.getName(), user.getUserName(), "JOIN", itc->getName()));
+
 		if (itc->getTopic().size() > 0)
 		{
 			sendToClient(user, RPL_TOPIC(user.getName(), itc->getName(), itc->getTopic()));

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rrebois <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:03:01 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/19 10:05:18 by rrebois          ###   ########.fr       */
+/*   Updated: 2024/02/19 10:36:14 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,15 +23,21 @@ Server::Server(const int &port, const std::string &password): _port(port), _pass
 		throw (std::runtime_error("Error: Socket creation failed"));
 	int	opt = 0;
 	opt = setsockopt(_socketFd, SOL_SOCKET, SO_REUSEADDR, (char *)&opt, sizeof(opt));
-	if (opt < 0)
+	if (opt < 0){
+		close(_socketFd);
 		throw (std::runtime_error("Error: setsokopt() failed"));
+	}
 	servAddr.sin_family = AF_INET;
 	servAddr.sin_addr.s_addr = INADDR_ANY;
 	servAddr.sin_port = htons(_port);
-	if (bind(_socketFd, (struct sockaddr*)&servAddr, sizeof(servAddr)) < 0)
+	if (bind(_socketFd, (struct sockaddr*)&servAddr, sizeof(servAddr)) < 0){
+		close(_socketFd);
 		throw (std::runtime_error("Error: bind() failed"));
-	if (listen(_socketFd, SOMAXCONN) < 0)
+	}
+	if (listen(_socketFd, SOMAXCONN) < 0){
+		close(_socketFd);
 		throw (std::runtime_error("Error: listen() failed"));
+	}
 	struct pollfd tmp;
 	tmp.fd = _socketFd;
 	tmp.events = POLLIN;
