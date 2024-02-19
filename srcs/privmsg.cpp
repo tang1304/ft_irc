@@ -6,7 +6,7 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 14:03:30 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/19 11:57:14 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/19 16:02:50 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ int	privmsgCmd(int fd, vecStr &cmd, Server &serv){
 		for (itVecChan it = serv.getChanList().begin(); it != serv.getChanList().end(); it++){
 			if (it->getName() == target){
 				if (isItIn(user, it->getChanop()) || isItIn(user, it->getUsersJoin())){
-					sendToChan(*it, RPL_CMD(user.getName(), user.getUserName(), "PRIVMSG " + target, msg));
+					sendToChanNotUser(user, *it, RPL_CMD(user.getName(), user.getUserName(), "PRIVMSG " + target, msg));
 					return (0);
 				}
 				else{

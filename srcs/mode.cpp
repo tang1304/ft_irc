@@ -6,7 +6,7 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 13:14:23 by rrebois           #+#    #+#             */
-/*   Updated: 2024/02/19 14:01:00 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/19 15:58:42 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,10 +28,9 @@ static void modeLimitUser(char c, std::string target, Client &user, Channel &cha
 	}
 	chan.setLimitUserOnOff(c, i);
 	if (c == '+')
-		msg = chan.getName() + " user limit set to " + target + " (" + c + "l)";
+		sendToChan(chan, RPL_CMD(user.getName(), user.getUserName(), "MODE", chan.getName() + " +l " + target));
 	else
-		msg = chan.getName() + " user limit removed (" + c + "l)";
-	sendToChan(chan, INFO(msg));
+		sendToChan(chan, RPL_CMD(user.getName(), user.getUserName(), "MODE", chan.getName() + " -l"));
 }
 
 static void	modeInviteOnly(char c, std::string target, Client &user, Channel &chan)
