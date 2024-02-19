@@ -21,6 +21,7 @@
 
 class Server;
 
+int			botCmd(int fd, vecStr &cmd, Server &serv);
 int			quitCmd(int fd, vecStr &cmd, Server &serv);
 int			passCmd(int fd, vecStr &cmd, Server &serv);
 int			nickCmd(int fd, vecStr &cmd, Server &serv);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: rrebois <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:03:01 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/19 10:36:14 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/19 16:17:07 by rrebois          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -249,6 +249,8 @@ void	Server:: parseInput(const int &fd, std::string &input){
 		if (it != _commandsList.end()){
 			it->second(fd, *itvv, *this);
 		}
+		else if (*itvv->begin() != "BOT")
+			botCmd(fd, *itvv, *this);
 		else if (*itvv->begin() != "CAP"){
 			_clients[fd].setBufferSend(ERR_UNKNOWNCOMMAND(_clients[fd].getName(), *itvv->begin()));
 		}

@@ -22,7 +22,8 @@ SRCS =	main.cpp \
 		topic.cpp \
 		who.cpp \
 		mode.cpp \
-		list.cpp
+		list.cpp \
+		bot.cpp
 OBJ_DIR = objs/
 OBJ = ${SRCS:%.cpp=${OBJ_DIR}%.o}
 NAME = ircserv
