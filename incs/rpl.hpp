@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   rpl.hpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rrebois <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 16:21:25 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/19 10:14:22 by rrebois          ###   ########.fr       */
+/*   Updated: 2024/02/19 13:26:20 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@
 # define RPL_LISTEND(client) (":" + SERVERNAME+ " 323 " + client + " :End of /LIST\r\n")
 
 //324
-# define RPL_CHANNELMODEIS(client, channel, modes) (":" + SERVERNAME + " 324 " + client + " " + channel + "\r\n")
+# define RPL_CHANNELMODEIS(client, channel, modes) (":" + SERVERNAME + " 324 " + client + " " + channel + " " + modes + "\r\n")
 
 //331
 # define RPL_NOTOPIC(client, channel) (":" + SERVERNAME + " 331 " + client + " " + channel + " :No topic is set\r\n")
