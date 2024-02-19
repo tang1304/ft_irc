@@ -6,7 +6,7 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 13:14:23 by rrebois           #+#    #+#             */
-/*   Updated: 2024/02/19 11:41:03 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/19 13:25:06 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,10 +45,9 @@ static void	modeInviteOnly(char c, std::string target, Client &user, Channel &ch
 	}
 	chan.setPrivated(c);
 	if (c == '+')
-		msg = "channel " + chan.getName() + " has become private";
+		sendToChan(chan, RPL_CMD(user.getName(), user.getUserName(), "MODE", chan.getName() + " +i " + target));
 	else
-		msg = "channel " + chan.getName() + " is free to join";
-	sendToChan(chan, INFO(msg));
+		sendToChan(chan, RPL_CMD(user.getName(), user.getUserName(), "MODE", chan.getName() + " -i " + target));
 }
 
 static int checkInvalidKey(std::string target)
@@ -189,10 +188,9 @@ static void	modeTopic(char c, std::string target, Client &user, Channel &chan)
 
 	chan.setChangeTopic(c, user);
 	if (c == '+')
-		msg = chan.getName() + " topic can only be changed by chanops (+t)";
+		sendToChan(chan, RPL_CMD(user.getName(), user.getUserName(), "MODE", chan.getName() + " +t "));
 	else
-		msg = chan.getName() + " topic can be changed by any user (-t)";
-	sendToChan(chan, INFO(msg));
+		sendToChan(chan, RPL_CMD(user.getName(), user.getUserName(), "MODE", chan.getName() + " -t "));
 }
 
 int	modeCmd(int fd, vecStr &cmd, Server &serv)
