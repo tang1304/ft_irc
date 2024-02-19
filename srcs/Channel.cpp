@@ -106,39 +106,6 @@ void	Channel::addChanop(Client &user)
 	removeUser(user);
 }
 
-void	Channel::addBanned(Client &user, Client &target)
-{
-	itVecClient itClient;
-	itVecClient itChanop;
-	std::string msg;
-	std::string comment;
-
-	_banned.push_back(target);
-	msg = "you have been banned from " + getName();
-	comment = "Banned";
-	sendToClient(target, INFO(msg));
-	for (itClient = getUsersJoin().begin(); itClient != getUsersJoin().end(); ++itClient)
-	{
-		if (*itClient == target)
-		{
-			sendToChan(*this, RPL_CMD(user.getName(), user.getUserName(), "KICK"\
-			,getName() + " " + itClient->getName() + " " + comment));
-			removeUser(*itClient);
-			return ;
-		}
-	}
-	for (itChanop = getChanop().begin(); itChanop != getChanop().end(); ++itChanop)
-	{
-		if (*itChanop == target)
-		{
-			sendToChan(*this, RPL_CMD(user.getName(), user.getUserName(), "KICK"\
-			,getName() + " " + itChanop->getName() + " " + comment));
-			removeChanop(*itChanop);
-			return ;
-		}
-	}
-}
-
 void	Channel::removeUser(Client &user)
 {
 	itVecClient	it;
@@ -167,25 +134,6 @@ void	Channel::removeChanop(Client &user)
 	}
 	if (_chanop.empty() && _connected >= 1)
 		promoteFirstUserToChanop(*_usersJoin.begin());
-}
-
-void	Channel::removeBan(Client &user, Client &target)
-{
-	std::string msgTargetUnbanned;
-	std::string msg;
-
-	msgTargetUnbanned = "you have been unbanned from channel " + getName();
-	msg = user.getName() + " unbanned " + target.getName() + " from channel " + getName();
-	for (itVecClient itBan = getBanned().begin(); itBan != getBanned().end(); ++itBan)
-	{
-		if (*itBan == target)
-		{
-			_banned.erase(itBan);
-			sendToClient(target, INFO(msgTargetUnbanned));
-			sendToChan(*this, INFO(msg));
-			break ;
-		}
-	}
 }
 
 void	Channel::promoteFirstUserToChanop(Client &user)
@@ -233,11 +181,6 @@ const std::string	&Channel::getTopicChanger() const
 const std::string	&Channel::getModes() const
 {
 	return (_modes);
-}
-
-vecClient	&Channel::getBanned()
-{
-	return (_banned);
 }
 
 const int	&Channel::getLimitUser() const

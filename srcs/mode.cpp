@@ -6,7 +6,7 @@
 /*   By: rrebois <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 13:14:23 by rrebois           #+#    #+#             */
-/*   Updated: 2024/02/15 11:24:34 by rrebois          ###   ########.fr       */
+/*   Updated: 2024/02/19 10:13:26 by rrebois          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,56 +133,6 @@ static void	modeOperator(char c, std::string target, Client &user, Channel &chan
 	}
 }
 
-static void	modeBan(char c, std::string target, Client &user, Channel &chan)
-{
-	itVecClient	itClient = findIt(target, chan.getUsersJoin());
-	itVecClient	itChanop = findIt(target, chan.getChanop());
-	itVecClient	itBan;
-	std::string msg;
-
-	msg = user.getName() + " banned " + target + " from " + chan.getName();
-	if (target.empty())
-	{
-		for (itBan = chan.getBanned().begin(); itBan != chan.getBanned().end(); itBan++)
-			sendToClient(user, RPL_BANLIST(user.getName(), chan.getName(), itBan->getName()));
-		sendToClient(user, RPL_ENDOFBANLIST(user.getName(), chan.getName()));
-		return ;
-	}
-	if (itClient == chan.getUsersJoin().end() && itChanop == chan.getChanop().end() && c == '+')
-	{
-		sendToClient(user, ERR_USERNOTINCHANNEL(user.getName(), target, chan.getName()));
-		return ;
-	}
-	if (((itChanop != chan.getChanop().end() && user == *itChanop) ||
-		(itClient != chan.getUsersJoin().end() && user == *itClient)) && c == '+')
-	{
-		sendToClient(user, ERROR(std::string("Cannot ban yourself")));
-		return ;
-	}
-	if (itClient != chan.getUsersJoin().end() && c == '+')
-	{
-		chan.addBanned(user, *itClient);
-		sendToChan(chan, INFO(msg));
-	}
-	else if (itClient == chan.getUsersJoin().end() && c == '+')
-	{
-		chan.addBanned(user, *itChanop);
-		sendToChan(chan, INFO(msg));
-	}
-	if (c == '-')
-	{
-		itBan = findIt(target, chan.getBanned());
-		if (itBan == chan.getBanned().end())
-		{
-			msg = "user " + target + " not banned in the channel " + chan.getName();
-
-			sendToClient(user, ERROR(msg));
-			return ;
-		}
-		chan.removeBan(user, *itBan);
-	}
-}
-
 static void	modeTopic(char c, std::string target, Client &user, Channel &chan)
 {
 	(void)target;
@@ -207,7 +157,6 @@ int	modeCmd(int fd, vecStr &cmd, Server &serv)
 	char 			modestring;
 	std::string 	msg;
 
-	modeList['b'] = &modeBan;
 	modeList['i'] = &modeInviteOnly;
 	modeList['k'] = &modeKey;
 	modeList['l'] = &modeLimitUser;

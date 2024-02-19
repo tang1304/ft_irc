@@ -6,7 +6,7 @@
 /*   By: rrebois <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 16:21:25 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/15 13:40:43 by rrebois          ###   ########.fr       */
+/*   Updated: 2024/02/19 10:14:22 by rrebois          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,12 +71,6 @@
 
 //366
 # define RPL_ENDOFNAMES(client, chan) (":" + SERVERNAME + " 366 " + client + " :End of /NAMES list\r\n")
-
-//367
-# define RPL_BANLIST(client, channel, id) (":" + SERVERNAME + " 367 " + client + " " + channel + " [!" + id + "@" + LOCALHOST + "]\r\n")
-
-//368
-# define RPL_ENDOFBANLIST(client, channel) (":" + SERVERNAME + " 368 " + client + " " + channel + " :End of channel ban list\r\n")
 
 //372
 # define RPL_MOTD(client) (":" + SERVERNAME + " 372 " + client + " : " + MOTD + "\r\n")
@@ -143,9 +137,6 @@
 
 //473
 # define ERR_INVITEONLYCHAN(client, channel) (":" + SERVERNAME + " 473 " + client + " " + channel + " :Cannot join channel (+i)\r\n")
-
-//474
-# define ERR_BANNEDFROMCHAN(client, channel) (":" + SERVERNAME + " 474 " + client + " " + channel + " :Cannot join channel (+b)\r\n")
 
 //475
 # define ERR_BADCHANNELKEY(client, channel) (":" + SERVERNAME + " 475 " + client + " " + channel + " :Cannot join channel (+k)\r\n")
