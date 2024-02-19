@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: rrebois <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/29 15:40:11 by rrebois           #+#    #+#             */
-/*   Updated: 2024/02/19 14:18:19 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/19 11:40:10 by rrebois          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,17 @@ Channel::~Channel() {}
 void	Channel::setId(int i)
 {
 	_id = i;
+}
+
+int	Channel::setInvited(Client &user)
+{
+	itVecClient	target = findIt(user, _invited);
+	if (target == _invited.end())
+	{
+		_invited.push_back(user);
+		return (0);
+	}
+	return (1);
 }
 
 void	Channel::setPassword(char c, std::string &key)
@@ -133,6 +144,12 @@ void	Channel::removeChanop(Client &user)
 		promoteFirstUserToChanop(*_usersJoin.begin());
 }
 
+void	Channel::removeInvited(Client &user)
+{
+	itVecClient target = findIt(user, _invited);
+	_invited.erase(target);
+}
+
 void	Channel::promoteFirstUserToChanop(Client &user)
 {
 	sendToChan(*this, RPL_MODE(user.getName(), user.getUserName(), this->getName(), "+", + "o", user.getName()));
@@ -158,6 +175,11 @@ vecClient	&Channel::getUsersJoin()
 vecClient	&Channel::getChanop()
 {
 	return (_chanop);
+}
+
+vecClient	&Channel::getInvited()
+{
+	return (_invited);
 }
 
 const std::string	&Channel::getPassword() const

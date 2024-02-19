@@ -6,7 +6,7 @@
 /*   By: rrebois <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 12:22:53 by rrebois           #+#    #+#             */
-/*   Updated: 2024/02/15 11:48:46 by rrebois          ###   ########.fr       */
+/*   Updated: 2024/02/19 15:23:28 by rrebois          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,18 @@ int	inviteCmd(int fd, vecStr &cmd, Server &serv)
 		msg = "user " + cmd[1] + " does not exist on this server";
 		return (serv.getClientMap()[fd].setBufferSend(ERROR(msg)), 1);
 	}
-	sendToChan(*itChan, RPL_INVITING(user.getName(), cmd[1], itChan->getName()));
-	itChan->addUser(itClientList->second);
+	if (!itChan->setInvited(itClientList->second))
+	{
+		sendToChan(*itChan, RPL_INVITING(user.getName(), itChan->getName(), cmd[1]));
+		msg = itClientList->second.getName() + " " + itChan->getName();
+		sendToClient(itClientList->second, RPL_CMD(user.getName(), user.getUserName(),
+												   cmd[0], msg));
+	}
+	else
+	{
+		msg = itClientList->second.getName() + " " + itChan->getName();
+		sendToClient(user, RPL_CMD(user.getName(), user.getUserName(),
+								   cmd[0], msg));
+	}
 	return (0);
 }

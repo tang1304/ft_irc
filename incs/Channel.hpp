@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: rrebois <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:15:06 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/15 10:06:18 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/19 11:34:24 by rrebois          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ private:
 	std::string	_topicChanger;
 	std::string	_password;
 	std::string	_modes;
+	vecClient 	_invited;
 	vecClient	_usersJoin;
 	vecClient	_chanop; // Channel moderators are identified by the channel member prefix ('@' for standard channel operators) next to their nickname whenever it is associated with a channel.
 	bool		_privated; // invite only or not / false
@@ -36,6 +37,7 @@ private:
 	std::time_t	_timeTopicChange;
 
 public:
+	int 				setInvited(Client &user);
 	void				setId(int i);
 	void				setPassword(char c, std::string &key);
 	void				setPrivated(char c);
@@ -48,6 +50,7 @@ public:
 	void				addChanop(Client &user);
 	void				removeUser(Client &user);
 	void				removeChanop(Client &user);
+	void				removeInvited(Client &user);
 	void				promoteFirstUserToChanop(Client &user);
 
 	const int			&getConnected() const;
@@ -58,6 +61,7 @@ public:
 	const std::string	&getModes() const;
 	vecClient			&getUsersJoin();
 	vecClient			&getChanop();
+	vecClient 			&getInvited();
 	const int			&getLimitUser() const;
 	const bool			&getLimitUserOnOff() const;
 	const bool			&getPrivated() const;

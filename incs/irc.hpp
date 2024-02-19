@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   irc.hpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: rrebois <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 10:20:16 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/16 09:27:49 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/19 11:26:26 by rrebois          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,17 @@ typename U::iterator	findIt(const std::string &name, U &container){
 
 	for (; it != container.end(); it++){
 		if (name == it->getName())
+			break ;
+	}
+	return (it);
+}
+
+template <typename U>
+typename U::iterator	findIt(Client &target, U &container){
+	typename U::iterator it = container.begin();
+
+	for (; it != container.end(); it++){
+		if (target == *it)
 			break ;
 	}
 	return (it);
