@@ -39,14 +39,6 @@ static void	user_join_chan(itVecPair &it, Server &serv, Client &user)
 		sendToClient(user, ERR_BADCHANNELKEY(user.getName(), it->first));
 		return ;
 	}
-	for (itBan = itc->getBanned().begin(); itBan != itc->getBanned().end(); itBan++)
-	{
-		if (user == *itBan)
-		{
-			sendToClient(user, ERR_BANNEDFROMCHAN(user.getName(), it->first));
-			return ;
-		}
-	}
 	if (itc->getConnected() == itc->getLimitUser() && itc->getLimitUserOnOff())
 	{
 		sendToClient(user, ERR_CHANNELISFULL(user.getName(), it->first));
