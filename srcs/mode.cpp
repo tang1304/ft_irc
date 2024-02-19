@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mode.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rrebois <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 13:14:23 by rrebois           #+#    #+#             */
-/*   Updated: 2024/02/19 10:13:26 by rrebois          ###   ########.fr       */
+/*   Updated: 2024/02/19 14:01:00 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,10 +45,9 @@ static void	modeInviteOnly(char c, std::string target, Client &user, Channel &ch
 	}
 	chan.setPrivated(c);
 	if (c == '+')
-		msg = "channel " + chan.getName() + " has become private";
+		sendToChan(chan, RPL_CMD(user.getName(), user.getUserName(), "MODE", chan.getName() + " +i " + target));
 	else
-		msg = "channel " + chan.getName() + " is free to join";
-	sendToChan(chan, INFO(msg));
+		sendToChan(chan, RPL_CMD(user.getName(), user.getUserName(), "MODE", chan.getName() + " -i " + target));
 }
 
 static int checkInvalidKey(std::string target)
@@ -77,10 +76,9 @@ static void	modeKey(char c, std::string target, Client &user, Channel &chan)
 	}
 	chan.setPassword(c, target);
 	if (c == '+')
-		msg = chan.getName() + " password changed to " + target + "(+k)";
+		sendToChan(chan, RPL_CMD(user.getName(), user.getUserName(), "MODE", chan.getName() + " +k " + target));
 	else
-		msg = chan.getName() + " password deleted (-k)";
-	sendToChan(chan, INFO(msg));
+		sendToChan(chan, RPL_CMD(user.getName(), user.getUserName(), "MODE", chan.getName() + " -k "));
 }
 
 static void	modeOperator(char c, std::string target, Client &user, Channel &chan)
@@ -108,7 +106,7 @@ static void	modeOperator(char c, std::string target, Client &user, Channel &chan
 	if (c == '+' && itClient != chan.getUsersJoin().end())
 	{
 		chan.addChanop(*itClient);
-		sendToChan(chan, RPL_MODE(user.getName(), user.getUserName(), chan.getName(), "+", + "o", target));
+		sendToChan(chan, RPL_CMD(user.getName(), user.getUserName(), "MODE", chan.getName() + " +o " + target));
 		return ;
 	}
 	else if (c == '+' && itClient == chan.getUsersJoin().end())
@@ -120,8 +118,9 @@ static void	modeOperator(char c, std::string target, Client &user, Channel &chan
 	}
 	if (c == '-' && itChanop != chan.getChanop().end())
 	{
+		chan.addUser(*itChanop);
 		chan.removeChanop(*itChanop);
-		sendToChan(chan, RPL_MODE(user.getName(), user.getUserName(), chan.getName(), "-", + "o", target));
+		sendToChan(chan, RPL_CMD(user.getName(), user.getUserName(), "MODE", chan.getName() + " -o " + target));
 		return ;
 	}
 	else if (c == '-' && itChanop == chan.getChanop().end())
@@ -140,10 +139,9 @@ static void	modeTopic(char c, std::string target, Client &user, Channel &chan)
 
 	chan.setChangeTopic(c, user);
 	if (c == '+')
-		msg = chan.getName() + " topic can only be changed by chanops (+t)";
+		sendToChan(chan, RPL_CMD(user.getName(), user.getUserName(), "MODE", chan.getName() + " +t "));
 	else
-		msg = chan.getName() + " topic can be changed by any user (-t)";
-	sendToChan(chan, INFO(msg));
+		sendToChan(chan, RPL_CMD(user.getName(), user.getUserName(), "MODE", chan.getName() + " -t "));
 }
 
 int	modeCmd(int fd, vecStr &cmd, Server &serv)

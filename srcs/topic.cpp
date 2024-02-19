@@ -6,7 +6,7 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 15:28:56 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/15 11:26:35 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/19 10:37:36 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ int	topicCmd(int fd, vecStr &cmd, Server &serv){
 		}
 		it->setTopic(topic);
 		it->setTopicChanger(user.getName());
+		sendToChan(*it, RPL_CMD(user.getName(), user.getUserName(), "TOPIC", it->getName() + " " + topic));
 	}
 	else{
 		std::string			timestamp;

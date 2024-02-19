@@ -103,16 +103,13 @@ void	Channel::setModes(const std::string &mode){
 void	Channel::addUser(Client &user)
 {
 	_usersJoin.push_back(user);
-	sendToChan(*this, RPL_CMD(user.getName(), user.getUserName(), "JOIN", this->_name));
+	// sendToChan(*this, RPL_CMD(user.getName(), user.getUserName(), "JOIN", this->_name));
 	_connected++;
-	send(user.getClientFd(), user.getBufferSend().c_str(), user.getBufferSend().length(), 0);
-	user.setBufferSend("");
 }
 
 void	Channel::addChanop(Client &user)
 {
 	_chanop.push_back(user);
-	removeUser(user);
 	_connected++;
 	removeUser(user);
 }
