@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: rrebois <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:03:01 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/16 11:45:33 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/19 10:05:18 by rrebois          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -187,9 +187,7 @@ void	Server::clientDisconnection(const int &fd){
 
 void	Server::clientHandle(const int &fd){
 	char	buffer[BUFFER_SIZE];
-	static  std::string	buf;
 	int		bytesRead = 0;
-	Client	user = getClient(fd);
 
 	memset(&buffer, 0, BUFFER_SIZE);
 	bytesRead = recv(fd, buffer, BUFFER_SIZE, 0);
@@ -200,22 +198,17 @@ void	Server::clientHandle(const int &fd){
 	else if (bytesRead == 0)
 		clientDisconnection(fd);
 	else{
-		buf += buffer;
-		if (buf.empty() || buf == "\r\n")
-		{
-			buf.clear();
+		std::cout << PURPLE << "[Client] Received data from client #" << fd << ": " << buffer << DEFAULT << std::endl;
+// std::cout << GREEN << "buffer: " << buffer << ". Size: " << BUFFER_SIZE << DEFAULT << std::endl;
+		std::string	buf(buffer);
+		_clients[fd].setBufferRead(std::string(buf), 1);
+		if ((buf.empty() || buf == "\r\n") && _clients[fd].getBufferRead().empty())
 			return ;
-		}
-		size_t pos = buf.find("\r\n");
-		if (pos == std::string::npos)
-			return ;
+		size_t pos = _clients[fd].getBufferRead().find("\r\n");
 		if (pos != std::string::npos){
-			_clients[fd].setBufferRead(std::string(buf), 1);
-			std::cout << std::endl << PURPLE << "[Client] Received data from client #" << fd << ": " << buf << DEFAULT;
 			buf = _clients[fd].getBufferRead();
 			parseInput((fd), buf);
 			_clients[fd].setBufferRead("", 0);
-			buf.clear();
 		}
 		send(_clients[fd].getClientFd(), _clients[fd].getBufferSend().c_str(), _clients[fd].getBufferSend().length(), 0);
 		_clients[fd].setBufferSend("");
