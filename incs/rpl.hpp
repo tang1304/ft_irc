@@ -6,7 +6,7 @@
 /*   By: rrebois <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 16:21:25 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/19 10:14:22 by rrebois          ###   ########.fr       */
+/*   Updated: 2024/02/19 15:02:26 by rrebois          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@
 # define RPL_TOPICWHOTIME(client, chan, nick, setat, date) (":" + SERVERNAME + " 333 " + client + ": " + chan + " " + nick + " " + setat +  " " + date + "\r\n")
 
 //341
-# define RPL_INVITING(client, nick, channel) (":" + SERVERNAME + " 341 " + client + " invited " + nick + " to the channel " + channel + "\r\n")
+# define RPL_INVITING(client, channel, nick) (":" + SERVERNAME + " 341 " + client + " " + nick + " " + channel + "\r\n")
 
 //352
 # define RPL_WHOREPLY(client, channel, userName, nick, flags, realName) (":" + SERVERNAME + " 352 " + client + " " + channel + \
