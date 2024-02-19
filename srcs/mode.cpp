@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mode.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rrebois <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 13:14:23 by rrebois           #+#    #+#             */
-/*   Updated: 2024/02/15 11:24:34 by rrebois          ###   ########.fr       */
+/*   Updated: 2024/02/19 11:41:03 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,10 +77,9 @@ static void	modeKey(char c, std::string target, Client &user, Channel &chan)
 	}
 	chan.setPassword(c, target);
 	if (c == '+')
-		msg = chan.getName() + " password changed to " + target + "(+k)";
+		sendToChan(chan, RPL_CMD(user.getName(), user.getUserName(), "MODE", chan.getName() + " +k " + target));
 	else
-		msg = chan.getName() + " password deleted (-k)";
-	sendToChan(chan, INFO(msg));
+		sendToChan(chan, RPL_CMD(user.getName(), user.getUserName(), "MODE", chan.getName() + " -k "));
 }
 
 static void	modeOperator(char c, std::string target, Client &user, Channel &chan)
