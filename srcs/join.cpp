@@ -6,7 +6,7 @@
 /*   By: rrebois <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/29 09:13:54 by rrebois           #+#    #+#             */
-/*   Updated: 2024/02/15 13:39:17 by rrebois          ###   ########.fr       */
+/*   Updated: 2024/02/19 11:36:51 by rrebois          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,13 +28,14 @@ static int	check_chan_first_char(vecPair pair)
 static void	user_join_chan(itVecPair &it, Server &serv, Client &user)
 {
 	itVecChan	itc;
-	itVecClient	itBan;
+	itVecClient	itInvited;
 	itVecClient	itClient;
 	itVecClient	itChanop;
 	std::string msg;
 
 	itc = findIt(it->first, serv.getChanList());
-	if (it->second != itc->getPassword())
+	itInvited = findIt(user, itc->getInvited());
+	if (it->second != itc->getPassword() && itInvited == itc->getInvited().end())
 	{
 		sendToClient(user, ERR_BADCHANNELKEY(user.getName(), it->first));
 		return ;
@@ -44,7 +45,7 @@ static void	user_join_chan(itVecPair &it, Server &serv, Client &user)
 		sendToClient(user, ERR_CHANNELISFULL(user.getName(), it->first));
 		return ;
 	}
-	if (itc->getPrivated())
+	if (itc->getPrivated() && itInvited == itc->getInvited().end())
 	{
 		sendToClient(user, ERR_INVITEONLYCHAN(user.getName(), it->first));
 		return ;
@@ -52,7 +53,7 @@ static void	user_join_chan(itVecPair &it, Server &serv, Client &user)
 	itClient = findIt(user.getName(), itc->getUsersJoin());
 	itChanop = findIt(user.getName(), itc->getChanop());
 	if (itClient == itc->getUsersJoin().end() && itChanop == itc->getChanop().end())
-  {
+  	{
 		std::string			allUsers;
 	 	std::string			timestamp;
 	  	std::stringstream	ss;
@@ -72,6 +73,8 @@ static void	user_join_chan(itVecPair &it, Server &serv, Client &user)
 			allUsers += " @" + it->getName();
 		sendToClient(user, RPL_NAMREPLY(user.getName(), itc->getName(), allUsers));
 		sendToClient(user, RPL_ENDOFNAMES(user.getName(), itc->getName()));
+		if (itInvited != itc->getInvited().end())
+			itc->removeInvited(*itInvited);
 	}
 	else
 	{
