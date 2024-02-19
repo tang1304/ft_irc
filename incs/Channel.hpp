@@ -27,7 +27,6 @@ private:
 	std::string	_modes;
 	vecClient	_usersJoin;
 	vecClient	_chanop; // Channel moderators are identified by the channel member prefix ('@' for standard channel operators) next to their nickname whenever it is associated with a channel.
-	vecClient	_banned; // peut etre a mettre dans client
 	bool		_privated; // invite only or not / false
 	bool		_changeTopic; // false = anyone true = chanops only / false
 	bool		_limitUserOnOff;
@@ -47,10 +46,8 @@ public:
 	void				setModes(const std::string &mode);
 	void				addUser(Client &user);
 	void				addChanop(Client &user);
-	void				addBanned(Client &user, Client &target);
 	void				removeUser(Client &user);
 	void				removeChanop(Client &user);
-	void				removeBan(Client &user, Client &target);
 	void				promoteFirstUserToChanop(Client &user);
 
 	const int			&getConnected() const;
@@ -61,7 +58,6 @@ public:
 	const std::string	&getModes() const;
 	vecClient			&getUsersJoin();
 	vecClient			&getChanop();
-	vecClient			&getBanned();
 	const int			&getLimitUser() const;
 	const bool			&getLimitUserOnOff() const;
 	const bool			&getPrivated() const;
