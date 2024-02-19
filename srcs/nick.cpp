@@ -6,7 +6,7 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 15:06:38 by rrebois           #+#    #+#             */
-/*   Updated: 2024/02/16 14:11:01 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/19 11:22:10 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,5 +73,9 @@ int	nickCmd(int fd, vecStr& cmd, Server &serv)
 		}
 	}
 	serv.getClientMap()[fd].setName(cmd[1]);
-return (0);
+	if (serv.getClientMap()[fd].getUserName() != "" && serv.getClientMap()[fd].getRegistered() == false){
+		serv.getClientMap()[fd].setRegistered();
+		serv.registrationDone(fd);
+	}
+	return (0);
 }
