@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rrebois <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/29 15:40:11 by rrebois           #+#    #+#             */
-/*   Updated: 2024/02/19 11:40:10 by rrebois          ###   ########.fr       */
+/*   Updated: 2024/02/20 09:31:00 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,10 +92,10 @@ void	Channel::setTopicChanger(const std::string &user){
 }
 
 void	Channel::setModes(const std::string &mode){
-	if (mode.find('+')){
+	if (mode.find('+') != std::string::npos){
 		_modes += mode[1];
 	}
-	else if (mode.find('-')){
+	else if (mode.find('-') != std::string::npos){
 		_modes.erase(_modes.find(mode[1]), 1);
 	}
 }

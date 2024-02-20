@@ -6,7 +6,7 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 13:14:23 by rrebois           #+#    #+#             */
-/*   Updated: 2024/02/19 15:58:42 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/20 09:27:14 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,10 +27,14 @@ static void modeLimitUser(char c, std::string target, Client &user, Channel &cha
 		return ;
 	}
 	chan.setLimitUserOnOff(c, i);
-	if (c == '+')
+	if (c == '+'){
 		sendToChan(chan, RPL_CMD(user.getName(), user.getUserName(), "MODE", chan.getName() + " +l " + target));
-	else
+		chan.setModes("+l");
+	}
+	else{
 		sendToChan(chan, RPL_CMD(user.getName(), user.getUserName(), "MODE", chan.getName() + " -l"));
+		chan.setModes("-l");
+	}
 }
 
 static void	modeInviteOnly(char c, std::string target, Client &user, Channel &chan)
@@ -43,10 +47,14 @@ static void	modeInviteOnly(char c, std::string target, Client &user, Channel &ch
 		return ;
 	}
 	chan.setPrivated(c);
-	if (c == '+')
+	if (c == '+'){
 		sendToChan(chan, RPL_CMD(user.getName(), user.getUserName(), "MODE", chan.getName() + " +i " + target));
-	else
+		chan.setModes("+i");
+	}
+	else{
 		sendToChan(chan, RPL_CMD(user.getName(), user.getUserName(), "MODE", chan.getName() + " -i " + target));
+		chan.setModes("-i");
+	}
 }
 
 static int checkInvalidKey(std::string target)
@@ -74,10 +82,14 @@ static void	modeKey(char c, std::string target, Client &user, Channel &chan)
 		return ;
 	}
 	chan.setPassword(c, target);
-	if (c == '+')
+	if (c == '+'){
 		sendToChan(chan, RPL_CMD(user.getName(), user.getUserName(), "MODE", chan.getName() + " +k " + target));
-	else
+		chan.setModes("+k");
+	}
+	else{
 		sendToChan(chan, RPL_CMD(user.getName(), user.getUserName(), "MODE", chan.getName() + " -k "));
+		chan.setModes("-k");
+}
 }
 
 static void	modeOperator(char c, std::string target, Client &user, Channel &chan)
@@ -137,10 +149,14 @@ static void	modeTopic(char c, std::string target, Client &user, Channel &chan)
 	std::string msg;
 
 	chan.setChangeTopic(c, user);
-	if (c == '+')
+	if (c == '+'){
 		sendToChan(chan, RPL_CMD(user.getName(), user.getUserName(), "MODE", chan.getName() + " +t "));
-	else
+		chan.setModes("+t");
+	}
+	else{
 		sendToChan(chan, RPL_CMD(user.getName(), user.getUserName(), "MODE", chan.getName() + " -t "));
+		chan.setModes("-t");
+	}
 }
 
 int	modeCmd(int fd, vecStr &cmd, Server &serv)
