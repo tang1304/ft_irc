@@ -6,7 +6,7 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/17 15:45:59 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/15 13:45:13 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/20 14:10:17 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@
 # include <csignal>
 # include <cstring>
 # include <ctime>
+# include <stdio.h>
 
 # define DEFAULT "\033[0m"
 # define RED "\033[31m"
