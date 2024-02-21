@@ -6,7 +6,7 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 11:11:10 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/21 14:50:25 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/21 17:24:57 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ Bot::Bot(const int &port, const std::string &password): _port(port), _password(p
 	struct sockaddr_in	servAddr;
 
 	_socket = socket(AF_INET, SOCK_STREAM, 0);
+std::cout << "Socket: " << _socket << std::endl;
 	if (_socket < 0)
 		throw (std::runtime_error("Error: Bot socket creation failed"));
 	int	opt = 0;
@@ -27,10 +28,16 @@ Bot::Bot(const int &port, const std::string &password): _port(port), _password(p
 	servAddr.sin_family = AF_INET;
 	servAddr.sin_port = htons(_port);
 	servAddr.sin_addr.s_addr = inet_addr("127.0.0.1");
+
 	if (connect(_socket, (struct sockaddr *)&servAddr, sizeof(servAddr)) == -1) {
 		close(_socket);
 		throw (std::runtime_error("Error: Bot connection failed"));
 	}
+	struct pollfd tmp;
+	tmp.fd = _socket;
+	tmp.events = POLLIN;
+	tmp.revents = 0;
+	_pollFds.push_back(tmp);
 	std::cout << BLUE << "Connected to server" << DEFAULT << std::endl;
 }
 
@@ -49,25 +56,31 @@ const std::string	&Bot::getBufferRead() const{
 
 void	Bot::runningLoop(){
 	signal(SIGINT, Bot::signalHandler);
-	while (signalStatus == 0)
-	{
-		char	buffer[BUFFER_SIZE];
-		int		bytesRead = 0;
+	while (signalStatus == 0){
+		if (poll(this->_pollFds.data(), this->_pollFds.size(), -1) == -1 && !signalStatus)
+			throw (std::runtime_error("[Server] Error: poll() failed"));
+		for (size_t i = 0; i < _pollFds.size(); ++i){
+			if (_pollFds[i].revents & POLLIN){
+				char	buffer[BUFFER_SIZE];
+				int		bytesRead = 0;
 
-		memset(&buffer, 0, BUFFER_SIZE);
-		bytesRead = recv(_socket, buffer, BUFFER_SIZE, 0);
-		if (bytesRead < 1)
-			throw (std::runtime_error("Error: Bot recv() failed"));
-		else{
-			std::string	buf(buffer);
-			setBufferRead(buf, 1);
-			if ((buf.empty() || buf == "\r\n") && getBufferRead().empty())
-				return ;
-			size_t pos = getBufferRead().find("\r\n");
-			if (pos != std::string::npos){
-				buf = getBufferRead();
-				parseInput(buf);
-				setBufferRead("", 0);
+				memset(&buffer, 0, BUFFER_SIZE);
+				bytesRead = recv(_socket, buffer, BUFFER_SIZE, 0);
+				if (bytesRead < 1)
+					throw (std::runtime_error("Error: Bot recv() failed"));
+				else{
+					std::string	buf(buffer);
+std::cout << buf << std::endl;
+					setBufferRead(buf, 1);
+					if ((buf.empty() || buf == "\r\n") && getBufferRead().empty())
+						return ;
+					size_t pos = getBufferRead().find("\r\n");
+					if (pos != std::string::npos){
+						buf = getBufferRead();
+						parseInput(buf);
+						setBufferRead("", 0);
+					}
+				}
 			}
 		}
 	}
@@ -87,10 +100,10 @@ void	Bot:: parseInput(std::string &input){
 	{
 		if (*itvv->begin() != "PRIVMSG"){
 			std::string	err = "Sorry, I don't understand your request\r\n";
-			send(3, err.c_str(), sizeof(err), 0);
+			send(_socket, err.c_str(), err.size(), MSG_DONTWAIT + MSG_NOSIGNAL);
 		}
 		else {
-			send(3, "cool\r\n", 7, 0);
+			send(_socket, "cool\r\n", 7, 0);
 		}
 		// itMapCmds	it = _commandsList.find(*itvv->begin());
 		// if (it != _commandsList.end() && (*itvv->begin() != "PASS" && *itvv->begin() != "USER" && *itvv->begin() != "NICK")\
@@ -172,5 +185,6 @@ void	Bot::signalHandler(int signal)
 		std::cout << "[BOT] Bye !" << DEFAULT << std::endl;
 		signalStatus = SIGINT;
 	}
+	exit(EXIT_FAILURE);
 	return ;
 }

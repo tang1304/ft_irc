@@ -6,7 +6,7 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:03:01 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/21 11:42:43 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/21 16:54:36 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ Server::Server(const int &port, const std::string &password): _port(port), _pass
 	struct sockaddr_in	servAddr;
 
 	_socketFd = socket(AF_INET, SOCK_STREAM, 0);
+std::cout << "Socket: " << _socketFd << std::endl;
 	if (_socketFd < 0)
 		throw (std::runtime_error("Error: Socket creation failed"));
 	int	opt = 0;

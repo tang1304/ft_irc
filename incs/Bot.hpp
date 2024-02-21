@@ -6,7 +6,7 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 11:05:27 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/21 14:49:35 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/21 16:10:36 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,11 @@
 # include <netinet/in.h>
 # include <arpa/inet.h>
 # include <unistd.h>
+# include <stdlib.h>
 # include <csignal>
 # include <string.h>
 # include <vector>
+# include <poll.h>
 
 # define DEFAULT "\033[0m"
 # define RED "\033[31m"
@@ -48,6 +50,7 @@ private:
 	std::string	_password;
 	std::string	_bufferRead;
 	std::string	_bufferSend;
+	std::vector<pollfd>	_pollFds;
 
 public:
 	Bot(const int &port, const std::string &password);
