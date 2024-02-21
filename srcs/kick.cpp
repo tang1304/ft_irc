@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   kick.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rrebois <rrebois@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: rrebois <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 16:18:54 by rrebois           #+#    #+#             */
-/*   Updated: 2024/02/21 14:25:36 by rrebois          ###   ########lyon.fr   */
+/*   Updated: 2024/02/21 17:37:41 by rrebois          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,28 +49,30 @@ int	kickCmd(int fd, vecStr &cmd, Server &serv)
 		comment = STDKICKMSG;
 	for (itVecStr it = namesSplits.begin(); it != namesSplits.end(); it++)
 	{
+std::cout << "target to kick: " << *it << std::endl;
+std::cout << "nameSplit size: " << namesSplits.size() << std::endl;
 		itClient = findIt(*it, itChan->getUsersJoin());
 		itChanop = findIt(*it, itChan->getChanop());
 		if (itClient == itChan->getUsersJoin().end() && itChanop == itChan->getChanop().end())
 		{
 			sendToClient(user, ERR_USERNOTINCHANNEL(user.getName(), *it, itChan->getName()));
-			namesSplits.erase(it);
-			it--;
+//			namesSplits.erase(it);
+//			it--;
 		}
 		else if (itClient != itChan->getUsersJoin().end())
 		{
-			itChan->removeUser(*itClient);
-			if (itChan->getConnected() == 0)
-			{
-				serv.removeChan(itChan->getId());
-				return (0);
-			}
+//			if (itChan->getConnected() == 0) car pas autokick
+//			{
+//				serv.removeChan(itChan->getId());
+//				return (0);
+//			}
 			sendToChan(*itChan, RPL_CMD(user.getName(), user.getUserName(), cmd[0]\
-			,itChan->getName() + " " + itClient->getName() + " " + comment));
+			,itChan->getName() + " " + *it + " " + comment));
+			itChan->removeUser(*itClient);
 		}
 		else if (itChanop != itChan->getChanop().end())
 		{
-			if (itChanop->getName() == user.getName()){
+			if (*it == user.getName()){
 				sendToClient(user, ERROR(std::string("Cannot kick yourself")));
 			}
 			else
@@ -78,11 +80,11 @@ int	kickCmd(int fd, vecStr &cmd, Server &serv)
 				sendToChan(*itChan, RPL_CMD(user.getName(), user.getUserName(), cmd[0]\
 				, itChan->getName() + " " + itChanop->getName() + " " + comment));
 				itChan->removeChanop(*itChanop);
-				if (itChan->getConnected() == 0)
-				{
-					serv.removeChan(itChan->getId());
-					return (0);
-				}
+//				if (itChan->getConnected() == 0)
+//				{
+//					serv.removeChan(itChan->getId());
+//					return (0);
+//				}
 			}
 		}
 		i++;

@@ -6,7 +6,7 @@
 /*   By: rrebois <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/29 15:40:11 by rrebois           #+#    #+#             */
-/*   Updated: 2024/02/21 15:13:31 by rrebois          ###   ########.fr       */
+/*   Updated: 2024/02/21 15:57:40 by rrebois          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,6 +143,7 @@ void	Channel::removeChanop(Client &user)
 	if (_chanop.empty() && _connected > 0)
 	{
 		sendToChan(*this, RPL_CMD(user.getName(), user.getUserName(), "MODE", this->getName() + " +o " + _usersJoin.begin()->getName()));
+//		sendToChan(*this, RPL_CMD(user.getName(), user.getUserName(), "QUIT", ""));
 		addChanop(*_usersJoin.begin());
 	}
 }
