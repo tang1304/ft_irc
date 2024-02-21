@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: rrebois <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:03:01 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/20 14:08:26 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/21 10:58:01 by rrebois          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ void	Server::cmdInit(){
 	_commandsList["WHO"] = &whoCmd;
 	_commandsList["MODE"] = &modeCmd;
 	_commandsList["LIST"] = &listCmd;
-	_commandsList["ASTRO"] = &botCmd;
+//	_commandsList["FACT"] = &botCmd;
 }
 
 const std::string	&Server::getPassword() const

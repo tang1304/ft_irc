@@ -49,6 +49,7 @@
 
 # define STDKICKMSG "Bad behavior"
 # define USAGE "Error\nThere must be 2 arguments : ./ircserv <port> <password>"
+# define USAGEBOT "ERROR\nThere must be 2 arguments : ./bot <port> <password>"
 
 class Server;
 
