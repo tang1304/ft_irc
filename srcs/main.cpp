@@ -13,7 +13,6 @@
 
 // join #abc by an abc client no message
 //list of members not displayed when joining a new chan
-// message when las chanop leaves, the new chanops is not correctly displayed.
 
 #include "../incs/irc.hpp"
 
