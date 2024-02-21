@@ -6,11 +6,13 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 11:02:21 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/21 12:21:58 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/21 14:51:31 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 # include "Bot.hpp"
+
+int	signalStatus = 0;
 
 static int	checkArgs(const std::string &port, const std::string &password){
 	int	portValue = 0;
@@ -36,8 +38,7 @@ int	main(int argc, char **argv){
 		Bot	bot(port, argv[2]);
 		std::string buff = "PASS abc\r\nNICK Bot\r\nUSER bot 0 * bot\r\n";
 		send(3, buff.c_str(), sizeof(buff), 0);
-		while (1)
-			;
+		bot.runningLoop();
 	}
 	catch(std::exception &e){
 		std::cerr << RED << e.what() << DEFAULT << std::endl;

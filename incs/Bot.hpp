@@ -6,7 +6,7 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 11:05:27 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/21 11:29:13 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/21 14:49:35 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,9 @@
 # include <netinet/in.h>
 # include <arpa/inet.h>
 # include <unistd.h>
+# include <csignal>
+# include <string.h>
+# include <vector>
 
 # define DEFAULT "\033[0m"
 # define RED "\033[31m"
@@ -29,9 +32,18 @@
 # define CYAN "\033[36m"
 
 # define USAGE "Error\nThere must be 2 arguments : ./bot <port> <password>"
+# define BUFFER_SIZE 1000
+
+typedef std::vector<std::string>			vecStr;
+typedef std::vector<std::string>::iterator	itVecStr;
+typedef std::vector<vecStr>					vecVecStr;
+typedef std::vector<vecStr>::iterator		itVecVecStr;
+
+extern int	signalStatus;
 
 class Bot{
 private:
+	int			_socket;
 	int			_port;
 	std::string	_password;
 	std::string	_bufferRead;
@@ -40,6 +52,14 @@ private:
 public:
 	Bot(const int &port, const std::string &password);
 	~Bot();
+
+	void				setBufferRead(const std::string &read, int i);
+	const std::string	&getBufferRead() const;
+	void				runningLoop();
+	void				parseInput(std::string &input);
+	vecStr				splitCmds(std::string &input, const std::string &delimiter);
+	vecVecStr			splitCmd(vecStr &cmds, const std::string &delimiter);
+	static void			signalHandler(int signal);
 };
 
 #endif
