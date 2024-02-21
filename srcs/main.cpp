@@ -3,12 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: rrebois <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/17 15:45:40 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/15 09:38:37 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/21 12:42:40 by rrebois          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+
+// join #abc by an abc client no message
+//list of members not displayed when joining a new chan
+// message when las chanop leaves, the new chanops is not correctly displayed.
 
 #include "../incs/irc.hpp"
 

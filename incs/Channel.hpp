@@ -51,7 +51,7 @@ public:
 	void				removeUser(Client &user);
 	void				removeChanop(Client &user);
 	void				removeInvited(Client &user);
-	void				promoteFirstUserToChanop(Client &user);
+//	void				promoteFirstUserToChanop(Client &user);
 
 	const int			&getConnected() const;
 	const std::string	&getPassword() const;

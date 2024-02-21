@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   kick.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: rrebois <rrebois@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 16:18:54 by rrebois           #+#    #+#             */
-/*   Updated: 2024/02/15 10:12:49 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/21 14:25:36 by rrebois          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,18 +60,30 @@ int	kickCmd(int fd, vecStr &cmd, Server &serv)
 		else if (itClient != itChan->getUsersJoin().end())
 		{
 			itChan->removeUser(*itClient);
-			sendToChan(*itChan, RPL_CMD(user.getName(), user.getUserName(), "KICK"\
+			if (itChan->getConnected() == 0)
+			{
+				serv.removeChan(itChan->getId());
+				return (0);
+			}
+			sendToChan(*itChan, RPL_CMD(user.getName(), user.getUserName(), cmd[0]\
 			,itChan->getName() + " " + itClient->getName() + " " + comment));
 		}
 		else if (itChanop != itChan->getChanop().end())
 		{
 			if (itChanop->getName() == user.getName()){
 				sendToClient(user, ERROR(std::string("Cannot kick yourself")));
-				continue ;
 			}
-			sendToChan(*itChan, RPL_CMD(user.getName(), user.getUserName(), "KICK"\
-			,itChan->getName() + " " + itChanop->getName() + " " + comment));
-			itChan->removeChanop(*itChanop);
+			else
+			{
+				sendToChan(*itChan, RPL_CMD(user.getName(), user.getUserName(), cmd[0]\
+				, itChan->getName() + " " + itChanop->getName() + " " + comment));
+				itChan->removeChanop(*itChanop);
+				if (itChan->getConnected() == 0)
+				{
+					serv.removeChan(itChan->getId());
+					return (0);
+				}
+			}
 		}
 		i++;
 		if (i == MAXKICKUSERLIMIT)
