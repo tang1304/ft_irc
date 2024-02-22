@@ -46,8 +46,9 @@ SRCS_B	=	bot.cpp \
 		mode.cpp \
 		list.cpp
 OBJ_DIR = objs/
+OBJB_DIR = objs_b/
 OBJ = ${SRCS:%.cpp=${OBJ_DIR}%.o}
-OBJB = ${SRCS_B:%.cpp=${OBJ_DIR}%.o}
+OBJB = ${SRCS_B:%.cpp=${OBJB_DIR}%.o}
 NAME = ircserv
 NAMEB	=	bonus
 RM = rm -f
@@ -75,14 +76,15 @@ ${OBJ}: ${OBJ_DIR}%.o :	${SRCS_DIR}%.cpp ${HEADERS}
 		@mkdir -p objs
 		${CC} ${CFLAGS} -I/usr/include -I ${HEADERS_DIR} -c $< -o $@
 
-${OBJB}: ${OBJ_DIR}%.o :	${SRCS_DIR}%.cpp ${HEADERS}
-		@mkdir -p objs
+${OBJB}: ${OBJB_DIR}%.o :	${SRCS_DIR}%.cpp ${HEADERS}
+		@mkdir -p objs_b
 		${CC} ${CFLAGS} -I/usr/include -I ${HEADERS_DIR} -c $< -o $@
 
-all :	${NAME}
+all :	${NAME} ${NAMEB}
 
 clean :
 		${RM} -rf objs/
+		${RM} -rf objs_b/
 		@echo "${_RED}### Removed ${NAME} object files ###${_NOC}"
 
 fclean :	clean
