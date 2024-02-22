@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Server.cpp                                         :+:      :+:    :+:   */
+/*   Server_bonus.cpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:03:01 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/22 14:16:46 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/22 14:23:14 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,7 @@ void	Server::cmdInit(){
 	_commandsList["WHO"] = &whoCmd;
 	_commandsList["MODE"] = &modeCmd;
 	_commandsList["LIST"] = &listCmd;
+	_commandsList["FACT"] = &botCmd;
 }
 
 const std::string	&Server::getPassword() const
@@ -236,7 +237,7 @@ void	Server:: parseInput(const int &fd, std::string &input){
 		itMapCmds	it = _commandsList.find(*itvv->begin());
 		if (it != _commandsList.end() && (*itvv->begin() != "PASS" && *itvv->begin() != "USER" && *itvv->begin() != "NICK")\
 		&& !_clients[fd].getRegistered()){
-		msg = "you may register first";
+			msg = "you may register first";
 			_clients[fd].setBufferSend(ERROR(msg));
 			return ;
 		}

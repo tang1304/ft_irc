@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   kick.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rrebois <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 16:18:54 by rrebois           #+#    #+#             */
-/*   Updated: 2024/02/21 17:37:41 by rrebois          ###   ########.fr       */
+/*   Updated: 2024/02/22 14:21:51 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,16 +56,9 @@ std::cout << "nameSplit size: " << namesSplits.size() << std::endl;
 		if (itClient == itChan->getUsersJoin().end() && itChanop == itChan->getChanop().end())
 		{
 			sendToClient(user, ERR_USERNOTINCHANNEL(user.getName(), *it, itChan->getName()));
-//			namesSplits.erase(it);
-//			it--;
 		}
 		else if (itClient != itChan->getUsersJoin().end())
 		{
-//			if (itChan->getConnected() == 0) car pas autokick
-//			{
-//				serv.removeChan(itChan->getId());
-//				return (0);
-//			}
 			sendToChan(*itChan, RPL_CMD(user.getName(), user.getUserName(), cmd[0]\
 			,itChan->getName() + " " + *it + " " + comment));
 			itChan->removeUser(*itClient);
@@ -80,11 +73,6 @@ std::cout << "nameSplit size: " << namesSplits.size() << std::endl;
 				sendToChan(*itChan, RPL_CMD(user.getName(), user.getUserName(), cmd[0]\
 				, itChan->getName() + " " + itChanop->getName() + " " + comment));
 				itChan->removeChanop(*itChanop);
-//				if (itChan->getConnected() == 0)
-//				{
-//					serv.removeChan(itChan->getId());
-//					return (0);
-//				}
 			}
 		}
 		i++;

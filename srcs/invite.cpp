@@ -28,7 +28,7 @@ int	inviteCmd(int fd, vecStr &cmd, Server &serv)
 		return (serv.getClientMap()[fd].setBufferSend(ERR_NOSUCHCHANNEL(user.getName(), cmd[2])), 1);
 	if (!isItIn(user, itChan->getUsersJoin()) && !isItIn(user, itChan->getChanop()) && !itChan->getPrivated())
 		return (serv.getClientMap()[fd].setBufferSend(ERR_NOTONCHANNEL(user.getName(), cmd[2])), 1);
-	if (isItIn(user, itChan->getUsersJoin()) && itChan->getPrivated()) // a tester
+	if (isItIn(user, itChan->getUsersJoin()) && itChan->getPrivated())
 	 	return (serv.getClientMap()[fd].setBufferSend(ERR_CHANOPRIVSNEEDED(user.getName(), cmd[2])), 1);
 	if (itChan->getConnected() == itChan->getLimitUser() && itChan->getLimitUserOnOff())
 		return (serv.getClientMap()[fd].setBufferSend(ERR_CHANNELISFULL(user.getName(), cmd[2])), 1);

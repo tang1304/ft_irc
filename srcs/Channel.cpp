@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rrebois <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/29 15:40:11 by rrebois           #+#    #+#             */
-/*   Updated: 2024/02/22 10:33:52 by rrebois          ###   ########.fr       */
+/*   Updated: 2024/02/22 14:22:09 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,6 @@ void	Channel::setModes(const std::string &mode){
 void	Channel::addUser(Client &user)
 {
 	_usersJoin.push_back(user);
-	// sendToChan(*this, RPL_CMD(user.getName(), user.getUserName(), "JOIN", this->_name));
 	_connected++;
 }
 
@@ -143,7 +142,6 @@ void	Channel::removeChanop(Client &user)
 	if (_chanop.empty() && _connected > 0)
 	{
 		sendToChan(*this, RPL_CMD(user.getName(), user.getUserName(), "MODE", this->getName() + " +o " + _usersJoin.begin()->getName()));
-//		sendToChan(*this, RPL_CMD(user.getName(), user.getUserName(), "QUIT", ""));
 		addChanop(*_usersJoin.begin());
 	}
 }
@@ -154,12 +152,6 @@ void	Channel::removeInvited(Client &user)
 	_invited.erase(target);
 }
 
-//void	Channel::promoteFirstUserToChanop(Client &user)
-//{
-//	sendToChan(*this, RPL_MODE(user.getName(), user.getUserName(), this->getName(), "+", + "o", user.getName()));
-//	_chanop.push_back(user);
-//	_usersJoin.erase(_usersJoin.begin());
-//}
 
 const std::string	&Channel::getName() const
 {
