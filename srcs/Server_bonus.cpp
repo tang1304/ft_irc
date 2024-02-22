@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Server.cpp                                         :+:      :+:    :+:   */
+/*   Server_bonus.cpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rrebois <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:03:01 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/22 13:42:58 by rrebois          ###   ########.fr       */
+/*   Updated: 2024/02/22 14:08:20 by rrebois          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,7 @@ void	Server::cmdInit(){
 	_commandsList["WHO"] = &whoCmd;
 	_commandsList["MODE"] = &modeCmd;
 	_commandsList["LIST"] = &listCmd;
+	_commandsList["FACT"] = &botCmd;
 }
 
 const std::string	&Server::getPassword() const
@@ -241,13 +242,15 @@ void	Server:: parseInput(const int &fd, std::string &input){
 		itMapCmds	it = _commandsList.find(*itvv->begin());
 		if (it != _commandsList.end() && (*itvv->begin() != "PASS" && *itvv->begin() != "USER" && *itvv->begin() != "NICK")\
 		&& !_clients[fd].getRegistered()){
-		msg = "you may register first";
+			msg = "you may register first";
 			_clients[fd].setBufferSend(ERROR(msg));
 			return ;
 		}
 		if (it != _commandsList.end()){
 			it->second(fd, *itvv, *this);
 		}
+//		else if (*itvv->begin() == "FACT")
+//			botCmd(fd, *itvv, *this);
 		else if (*itvv->begin() != "CAP"){
 			_clients[fd].setBufferSend(ERR_UNKNOWNCOMMAND(_clients[fd].getName(), *itvv->begin()));
 		}

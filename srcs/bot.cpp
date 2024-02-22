@@ -6,15 +6,11 @@
 /*   By: rrebois <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 13:31:57 by rrebois           #+#    #+#             */
-/*   Updated: 2024/02/22 13:38:25 by rrebois          ###   ########.fr       */
+/*   Updated: 2024/02/22 13:39:45 by rrebois          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../incs/bot.hpp"
-
-bot::bot() { }
-
-bot::~bot() { }
+#include "../incs/irc.hpp"
 
 int	botCmd(int fd, vecStr &cmd, Server &serv)
 {
