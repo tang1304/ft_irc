@@ -74,7 +74,7 @@ static void	user_join_chan(itVecPair &it, Server &serv, Client &user)
 			allUsers += " " + it->getName();
 		for (itVecClient it = itc->getChanop().begin(); it != itc->getChanop().end(); it++)
 			allUsers += " @" + it->getName();
-		sendToClient(user, RPL_NAMREPLY(user.getName(), itc->getName() + ":", allUsers));
+		sendToClient(user, RPL_NAMREPLY(user.getName(), itc->getName(), allUsers));
 		sendToClient(user, RPL_ENDOFNAMES(user.getName(), itc->getName()));
 		if (itInvited != itc->getInvited().end())
 			itc->removeInvited(*itInvited);
@@ -115,7 +115,7 @@ static void	user_create_chan(itVecPair &it, Server &serv, Client &user)
 	serv.addChan(it->first, it->second, user);
 	Channel	chan = serv.getChanList().back();
 	std::string	userName = "@" + user.getName();
-	sendToClient(user, RPL_NAMREPLY(user.getName(), chan.getName() + ": ", userName));
+	sendToClient(user, RPL_NAMREPLY(user.getName(), chan.getName(), userName));
 	sendToClient(user, RPL_ENDOFNAMES(user.getName(), chan.getName()));
 }
 
