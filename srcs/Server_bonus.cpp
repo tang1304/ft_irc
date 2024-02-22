@@ -253,6 +253,9 @@ void	Server:: parseInput(const int &fd, std::string &input){
 void	Server::registrationDone(int &fd){
 	time_t	timeStruct = std::time(NULL);
 	std::string	time = std::asctime(std::localtime(&timeStruct));
+	std::string fact;
+	std::stringstream ss;
+	vecStr vec;
 
 	_clients[fd].setBufferSend(RPL_WELCOME(_clients[fd].getName(), _clients[fd].getUserName()));
 	_clients[fd].setBufferSend(RPL_YOURHOST(_clients[fd].getName()));
@@ -262,6 +265,11 @@ void	Server::registrationDone(int &fd){
 	_clients[fd].setBufferSend(RPL_MOTDSTART(_clients[fd].getName()));
 	_clients[fd].setBufferSend(RPL_MOTD(_clients[fd].getName()));
 	_clients[fd].setBufferSend(RPL_ENDOFMOTD(_clients[fd].getName()));
+	ss << _clients.size();
+	ss >> fact;
+	vec.push_back("FACT");
+	vec.push_back(fact);
+	botCmd(fd, vec, *this);
 }
 
 itClientMap			Server::findClient(std::string name){

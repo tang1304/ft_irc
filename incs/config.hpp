@@ -33,7 +33,7 @@
 # define YELLOW "\033[33m"
 # define BLUE "\033[34m"
 # define PURPLE "\033[35m"
-# define CYAN "\033[36m"
+//# define CYAN "\033[36m"
 
 # define SERVERNAME std::string("Ft_Irc")
 # define LOCALHOST std::string("127.0.0.1")
