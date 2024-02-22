@@ -6,7 +6,7 @@
 /*   By: rrebois <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/29 09:13:54 by rrebois           #+#    #+#             */
-/*   Updated: 2024/02/19 11:36:51 by rrebois          ###   ########.fr       */
+/*   Updated: 2024/02/22 12:16:00 by rrebois          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,8 @@ static void	user_join_chan(itVecPair &it, Server &serv, Client &user)
 
 	itc = findIt(it->first, serv.getChanList());
 	itInvited = findIt(user, itc->getInvited());
-	if (it->second != itc->getPassword() && itInvited == itc->getInvited().end())
+	if (it->second != itc->getPassword() && itInvited == itc->getInvited().end() &&
+		itc->getModes().find("k") != std::string::npos)
 	{
 		sendToClient(user, ERR_BADCHANNELKEY(user.getName(), it->first));
 		return ;
@@ -73,7 +74,7 @@ static void	user_join_chan(itVecPair &it, Server &serv, Client &user)
 			allUsers += " " + it->getName();
 		for (itVecClient it = itc->getChanop().begin(); it != itc->getChanop().end(); it++)
 			allUsers += " @" + it->getName();
-		sendToClient(user, RPL_NAMREPLY(user.getName(), itc->getName(), allUsers));
+		sendToClient(user, RPL_NAMREPLY(user.getName(), itc->getName() + ":", allUsers));
 		sendToClient(user, RPL_ENDOFNAMES(user.getName(), itc->getName()));
 		if (itInvited != itc->getInvited().end())
 			itc->removeInvited(*itInvited);
@@ -114,7 +115,7 @@ static void	user_create_chan(itVecPair &it, Server &serv, Client &user)
 	serv.addChan(it->first, it->second, user);
 	Channel	chan = serv.getChanList().back();
 	std::string	userName = "@" + user.getName();
-	sendToClient(user, RPL_NAMREPLY(user.getName(), chan.getName(), userName));
+	sendToClient(user, RPL_NAMREPLY(user.getName(), chan.getName() + ": ", userName));
 	sendToClient(user, RPL_ENDOFNAMES(user.getName(), chan.getName()));
 }
 

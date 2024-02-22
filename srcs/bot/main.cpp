@@ -14,9 +14,9 @@
 #include "../../incs/bot.hpp"
 
 int main(int ac, char **av)
-{(void)av;
+{
 	if (ac != 3)
 		return (std::cerr << RED << USAGEBOT << DEFAULT << std::endl, 1);
 	return (0);
-
+	if (av[0] == "FACT" && )
 }

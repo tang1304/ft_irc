@@ -12,7 +12,6 @@
 
 
 // join #abc by an abc client no message
-//list of members not displayed when joining a new chan
 
 #include "../incs/irc.hpp"
 

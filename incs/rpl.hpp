@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   rpl.hpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: rrebois <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 16:21:25 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/19 15:02:26 by rrebois          ###   ########.fr       */
+/*   Updated: 2024/02/22 12:12:05 by rrebois          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@
 # define RPL_ISUPPORT(client, tokens) (":" + SERVERNAME + " 005 " + client + " " + TOKENS + " :are supported by this server" + "\r\n")
 
 //315
-# define RPL_ENDOFWHO(client, mask) (":" + SERVERNAME + " 315 " + client + " "+ mask + " :End of WHO list\r\n")
+# define RPL_ENDOFWHO(client, mask) (":" + SERVERNAME + " 315 " + client + " " + mask + " :End of WHO list\r\n")
 
 //322
 # define RPL_LIST(client, channel, count, topic) (":" + SERVERNAME + " 322 " + client + " "+ channel + " " + count + " :" + topic + "\r\n")
@@ -66,11 +66,10 @@
 	" " + userName + " " + LOCALHOST + " " + SERVERNAME + " " + nick + " " + flags + " " + realName + "\r\n")
 
 //353
-# define RPL_NAMREPLY(client, chan, list) (":" + SERVERNAME + " 353 " + client + " = " + chan + " " + list + "\r\n")
-
+# define RPL_NAMREPLY(client, chan, list) (":" + SERVERNAME + " 353 " + client + " = " + chan + list + "\r\n")
 
 //366
-# define RPL_ENDOFNAMES(client, chan) (":" + SERVERNAME + " 366 " + client + " :End of /NAMES list\r\n")
+# define RPL_ENDOFNAMES(client, chan) (":" + SERVERNAME + " 366 " + chan + " :End of /NAMES list\r\n")
 
 //372
 # define RPL_MOTD(client) (":" + SERVERNAME + " 372 " + client + " : " + MOTD + "\r\n")
