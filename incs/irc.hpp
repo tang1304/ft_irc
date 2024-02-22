@@ -6,7 +6,7 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 10:20:16 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/20 14:09:15 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/22 13:52:09 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ int			whoCmd(int fd, vecStr &cmd, Server &serv);
 int			topicCmd(int fd, vecStr &cmd, Server &serv);
 int			whoCmd(int fd, vecStr &cmd, Server &serv);
 int			listCmd(int fd, vecStr &cmd, Server &serv);
-//int			botCmd(int fd, vecStr &cmd, Server &serv);
+int			botCmd(int fd, vecStr &cmd, Server &serv);
 int			checkArgs(const std::string &port, const std::string &password);
 size_t		len(std::string s);
 vecStr		split(std::string &input, const std::string &delimiter);

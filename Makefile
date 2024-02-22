@@ -22,6 +22,7 @@ SRCS =	main.cpp \
 		topic.cpp \
 		who.cpp \
 		mode.cpp \
+		bot.cpp \
 		list.cpp
 BOT	=	bot/bot.cpp \
 		bot/main.cpp

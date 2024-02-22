@@ -3,18 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   bot.cpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rrebois <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 13:31:57 by rrebois           #+#    #+#             */
-/*   Updated: 2024/02/22 13:38:25 by rrebois          ###   ########.fr       */
+/*   Updated: 2024/02/22 14:04:55 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../incs/bot.hpp"
-
-bot::bot() { }
-
-bot::~bot() { }
+#include "irc.hpp"
 
 int	botCmd(int fd, vecStr &cmd, Server &serv)
 {
@@ -32,10 +28,10 @@ int	botCmd(int fd, vecStr &cmd, Server &serv)
 	std::string url = "curl --request GET --url 'https://numbersapi.p.rapidapi.com/" + nbr + "/trivia?notfound=floor' --header 'X-RapidAPI-Host: numbersapi.p.rapidapi.com' --header 'X-RapidAPI-Key: 8811cec522mshe204decfbb38e0ep14fcdbjsne677ef174dcb'";
 	FILE*	pipe = popen(url.c_str(), "r");
 	if (pipe == NULL){
-		sendToClient(user, ERROR(nbr + " not a valid argument"));
+		std::cerr << RED << "Error on popen()" << DEFAULT << std::endl;
 		return (1);
 	}
-	std::string result = "";
+	std::string result = "[BOT] ";
 	char buffer[1000];
 	while (fgets(buffer, 1000, pipe) != NULL) {
 		if (ferror(pipe)) {
