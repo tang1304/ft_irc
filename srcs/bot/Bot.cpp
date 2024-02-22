@@ -6,7 +6,7 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 11:11:10 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/21 17:24:57 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/22 13:35:37 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,24 +20,24 @@ std::cout << "Socket: " << _socket << std::endl;
 	if (_socket < 0)
 		throw (std::runtime_error("Error: Bot socket creation failed"));
 	int	opt = 0;
-	opt = setsockopt(_socket, SOL_SOCKET, SO_REUSEADDR, (char *)&opt, sizeof(opt));
+	opt = setsockopt(_socket, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt));
 	if (opt < 0){
 		close(_socket);
 		throw (std::runtime_error("Error: setsokopt() failed"));
 	}
 	servAddr.sin_family = AF_INET;
 	servAddr.sin_port = htons(_port);
-	servAddr.sin_addr.s_addr = inet_addr("127.0.0.1");
-
+	servAddr.sin_addr.s_addr = INADDR_ANY;
+	// if (bind(_socket, (struct sockaddr*)&servAddr, sizeof(servAddr)) < 0){
+	// 	std::cout << RED << strerror(errno) << DEFAULT << std::endl;
+	// 	close(_socket);
+	// 	throw (std::runtime_error("Error: bind() failed"));
+	// }
+	inet_aton("127.0.0.1", &servAddr.sin_addr);
 	if (connect(_socket, (struct sockaddr *)&servAddr, sizeof(servAddr)) == -1) {
 		close(_socket);
 		throw (std::runtime_error("Error: Bot connection failed"));
 	}
-	struct pollfd tmp;
-	tmp.fd = _socket;
-	tmp.events = POLLIN;
-	tmp.revents = 0;
-	_pollFds.push_back(tmp);
 	std::cout << BLUE << "Connected to server" << DEFAULT << std::endl;
 }
 
@@ -57,33 +57,34 @@ const std::string	&Bot::getBufferRead() const{
 void	Bot::runningLoop(){
 	signal(SIGINT, Bot::signalHandler);
 	while (signalStatus == 0){
-		if (poll(this->_pollFds.data(), this->_pollFds.size(), -1) == -1 && !signalStatus)
-			throw (std::runtime_error("[Server] Error: poll() failed"));
-		for (size_t i = 0; i < _pollFds.size(); ++i){
-			if (_pollFds[i].revents & POLLIN){
+		// if (poll(this->_pollFds.data(), this->_pollFds.size(), -1) == -1 && !signalStatus)
+		// 	throw (std::runtime_error("[Server] Error: poll() failed"));
+		// for (size_t i = 0; i < _pollFds.size(); ++i){
+		// 	if (_pollFds[i].revents & POLLIN){
 				char	buffer[BUFFER_SIZE];
 				int		bytesRead = 0;
 
 				memset(&buffer, 0, BUFFER_SIZE);
-				bytesRead = recv(_socket, buffer, BUFFER_SIZE, 0);
+				bytesRead = recv(_socket, buffer, sizeof(buffer), 0);
 				if (bytesRead < 1)
 					throw (std::runtime_error("Error: Bot recv() failed"));
 				else{
 					std::string	buf(buffer);
-std::cout << buf << std::endl;
+std::cout << "Buffer: " << buf << std::endl;
 					setBufferRead(buf, 1);
 					if ((buf.empty() || buf == "\r\n") && getBufferRead().empty())
 						return ;
 					size_t pos = getBufferRead().find("\r\n");
 					if (pos != std::string::npos){
 						buf = getBufferRead();
-						parseInput(buf);
+						// parseInput(buf);
+						send(_socket, "cool\r\n", 7, 0);
 						setBufferRead("", 0);
 					}
 				}
 			}
-		}
-	}
+		// }
+	// }
 }
 
 void	Bot:: parseInput(std::string &input){

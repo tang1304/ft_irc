@@ -6,7 +6,7 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 11:05:27 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/21 16:10:36 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/22 13:07:30 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@
 # include <string.h>
 # include <vector>
 # include <poll.h>
+# include <errno.h>
 
 # define DEFAULT "\033[0m"
 # define RED "\033[31m"

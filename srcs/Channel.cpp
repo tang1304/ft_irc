@@ -6,7 +6,7 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/29 15:40:11 by rrebois           #+#    #+#             */
-/*   Updated: 2024/02/20 09:31:00 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/22 10:28:46 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,7 @@ void	Channel::setModes(const std::string &mode){
 	if (mode.find('+') != std::string::npos){
 		_modes += mode[1];
 	}
-	else if (mode.find('-') != std::string::npos){
+	else if (mode.find('-') != std::string::npos && _modes.find(mode[1]) != std::string::npos){
 		_modes.erase(_modes.find(mode[1]), 1);
 	}
 }
