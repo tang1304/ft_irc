@@ -6,7 +6,7 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/17 15:45:59 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/20 14:10:17 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/23 10:43:27 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,8 @@
 # define STDKICKMSG "Bad behavior"
 # define USAGE "Error\nThere must be 2 arguments : ./ircserv <port> <password>"
 # define USAGEBOT "ERROR\nThere must be 2 arguments : ./bot <port> <password>"
+# define BOTWELCOME(nbr) ("[BOT] Welcome to this server.\n[BOT] To interact with me, type FACT plus a number to learn something.\n" \
+"[BOT] You are now " + nbr + " on the server, here is a fact with this number\r\n")
 
 class Server;
 

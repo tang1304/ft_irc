@@ -6,7 +6,7 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:03:01 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/22 14:23:14 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/23 10:04:04 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -223,7 +223,7 @@ void	Server::clientHandle(const int &fd){
 }
 
 void	Server:: parseInput(const int &fd, std::string &input){
-	std::string msg;
+	std::string	msg;
 	vecStr		command;
 	vecVecStr	vecCommand;
 	command = splitCmds(input, "\r\n");
@@ -251,22 +251,23 @@ void	Server:: parseInput(const int &fd, std::string &input){
 }
 
 void	Server::registrationDone(int &fd){
-	time_t	timeStruct = std::time(NULL);
-	std::string	time = std::asctime(std::localtime(&timeStruct));
-	std::string fact;
-	std::stringstream ss;
-	vecStr vec;
+	time_t				timeStruct = std::time(NULL);
+	std::string			time = std::asctime(std::localtime(&timeStruct));
+	std::string			fact;
+	std::stringstream	ss;
+	vecStr				vec;
 
-	_clients[fd].setBufferSend(RPL_WELCOME(_clients[fd].getName(), _clients[fd].getUserName()));
-	_clients[fd].setBufferSend(RPL_YOURHOST(_clients[fd].getName()));
-	_clients[fd].setBufferSend(RPL_CREATED(_clients[fd].getName(), time.erase(time.size() - 1, 1)));
-	_clients[fd].setBufferSend(RPL_MYINFO(_clients[fd].getName()));
-	_clients[fd].setBufferSend(RPL_ISUPPORT(_clients[fd].getName(), "token"));
-	_clients[fd].setBufferSend(RPL_MOTDSTART(_clients[fd].getName()));
-	_clients[fd].setBufferSend(RPL_MOTD(_clients[fd].getName()));
-	_clients[fd].setBufferSend(RPL_ENDOFMOTD(_clients[fd].getName()));
+	sendToClient(_clients[fd], RPL_WELCOME(_clients[fd].getName(), _clients[fd].getUserName()));
+	sendToClient(_clients[fd], RPL_YOURHOST(_clients[fd].getName()));
+	sendToClient(_clients[fd], RPL_CREATED(_clients[fd].getName(), time.erase(time.size() - 1, 1)));
+	sendToClient(_clients[fd], RPL_MYINFO(_clients[fd].getName()));
+	sendToClient(_clients[fd], RPL_ISUPPORT(_clients[fd].getName(), "token"));
+	sendToClient(_clients[fd], RPL_MOTDSTART(_clients[fd].getName()));
+	sendToClient(_clients[fd], RPL_MOTD(_clients[fd].getName()));
+	sendToClient(_clients[fd], RPL_ENDOFMOTD(_clients[fd].getName()));
 	ss << _clients.size();
 	ss >> fact;
+	sendToClient(_clients[fd], BOTWELCOME(fact));
 	vec.push_back("FACT");
 	vec.push_back(fact);
 	botCmd(fd, vec, *this);

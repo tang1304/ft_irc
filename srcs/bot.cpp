@@ -6,7 +6,7 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 13:31:57 by rrebois           #+#    #+#             */
-/*   Updated: 2024/02/22 14:15:05 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/23 09:11:53 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,9 @@ int	botCmd(int fd, vecStr &cmd, Server &serv)
 		sendToClient(user, ERROR(nbr + " not a valid argument"));
 		return (1);
 	}
-	std::string url = "curl --request GET --url 'https://numbersapi.p.rapidapi.com/" + nbr + "/trivia?notfound=floor' --header 'X-RapidAPI-Host: numbersapi.p.rapidapi.com' --header 'X-RapidAPI-Key: 8811cec522mshe204decfbb38e0ep14fcdbjsne677ef174dcb'";
+	std::string url = "curl --request GET --url 'https://numbersapi.p.rapidapi.com/" + nbr + \
+		"/trivia?notfound=floor' --header 'X-RapidAPI-Host: numbersapi.p.rapidapi.com' --header \
+		'X-RapidAPI-Key: 8811cec522mshe204decfbb38e0ep14fcdbjsne677ef174dcb'";
 	FILE*	pipe = popen(url.c_str(), "r");
 	if (pipe == NULL){
 		std::cerr << RED << "Error on popen()" << DEFAULT << std::endl;
