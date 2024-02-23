@@ -6,7 +6,7 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 11:11:10 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/22 13:35:37 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/22 16:27:49 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,21 +19,21 @@ Bot::Bot(const int &port, const std::string &password): _port(port), _password(p
 std::cout << "Socket: " << _socket << std::endl;
 	if (_socket < 0)
 		throw (std::runtime_error("Error: Bot socket creation failed"));
-	int	opt = 0;
-	opt = setsockopt(_socket, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt));
-	if (opt < 0){
-		close(_socket);
-		throw (std::runtime_error("Error: setsokopt() failed"));
-	}
+	// int	opt = 0;
+	// opt = setsockopt(_socket, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt));
+	// if (opt < 0){
+	// 	close(_socket);
+	// 	throw (std::runtime_error("Error: setsokopt() failed"));
+	// }
 	servAddr.sin_family = AF_INET;
 	servAddr.sin_port = htons(_port);
 	servAddr.sin_addr.s_addr = INADDR_ANY;
+	inet_aton("127.0.0.1", &servAddr.sin_addr);
 	// if (bind(_socket, (struct sockaddr*)&servAddr, sizeof(servAddr)) < 0){
 	// 	std::cout << RED << strerror(errno) << DEFAULT << std::endl;
 	// 	close(_socket);
 	// 	throw (std::runtime_error("Error: bind() failed"));
 	// }
-	inet_aton("127.0.0.1", &servAddr.sin_addr);
 	if (connect(_socket, (struct sockaddr *)&servAddr, sizeof(servAddr)) == -1) {
 		close(_socket);
 		throw (std::runtime_error("Error: Bot connection failed"));
@@ -56,7 +56,7 @@ const std::string	&Bot::getBufferRead() const{
 
 void	Bot::runningLoop(){
 	signal(SIGINT, Bot::signalHandler);
-	while (signalStatus == 0){
+	// while (signalStatus == 0){
 		// if (poll(this->_pollFds.data(), this->_pollFds.size(), -1) == -1 && !signalStatus)
 		// 	throw (std::runtime_error("[Server] Error: poll() failed"));
 		// for (size_t i = 0; i < _pollFds.size(); ++i){
@@ -82,7 +82,7 @@ std::cout << "Buffer: " << buf << std::endl;
 						setBufferRead("", 0);
 					}
 				}
-			}
+			// }
 		// }
 	// }
 }
