@@ -6,7 +6,7 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 10:16:34 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/23 14:08:06 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/23 15:09:25 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,12 +38,13 @@ int	checkArgs(const std::string &port, const std::string &password){
 vecStr	split(std::string &input, const std::string &delimiter){
 	vecStr		result;
 	size_t		colonPos = 0;
+	size_t		space = 0;
 	size_t		pos = 0;
 	size_t		prevPos = 0;
 	std::string	tmp;
 	std::string	colonStr;
 
-	if ((colonPos = input.find(':')) != std::string::npos && (input.c_str()[colonPos - 1] == ' ')){
+	if ((colonPos = input.find(':')) != std::string::npos && colonPos != 0 && ((space = input[colonPos - 1]) == ' ')){
 		colonStr = input.substr(colonPos + 1, input.find("\r\n") - colonPos);
 		input.erase(colonPos - 1);
 	}
