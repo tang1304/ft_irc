@@ -6,7 +6,7 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/17 15:45:59 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/23 10:43:27 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/23 11:40:08 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@
 # define SERVERNAME std::string("Ft_Irc")
 # define LOCALHOST std::string("127.0.0.1")
 # define MOTD std::string("Hello - Bonjour - Hola - Guten Tag - Salve - 您好")
-# define BUFFER_SIZE 1000
+# define BUFFER_SIZE 1024
 # define NICKLEN 9
 # define PASSMAXLEN 15
 # define USERLEN 12

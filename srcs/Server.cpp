@@ -6,7 +6,7 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:03:01 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/22 14:16:46 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/23 11:41:18 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -191,11 +191,12 @@ void	Server::clientDisconnection(const int &fd){
 }
 
 void	Server::clientHandle(const int &fd){
-	char	buffer[BUFFER_SIZE];
+	char	buffer[BUFFER_SIZE + 1];
 	int		bytesRead = 0;
 
-	memset(&buffer, 0, BUFFER_SIZE);
+	std::memset(&buffer, 0, BUFFER_SIZE);
 	bytesRead = recv(fd, buffer, BUFFER_SIZE, 0);
+	buffer[BUFFER_SIZE] = 0;
 	if (bytesRead == -1){
 		std::cerr << RED << "[Server] Error: recv() failed: " << strerror(errno) << DEFAULT << std::endl;
 		clientDisconnection(fd);
