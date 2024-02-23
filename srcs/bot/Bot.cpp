@@ -6,38 +6,47 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 11:11:10 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/22 16:27:49 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/23 13:59:08 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 # include "Bot.hpp"
 
 Bot::Bot(const int &port, const std::string &password): _port(port), _password(password){
-	struct sockaddr_in	servAddr;
-
 	_socket = socket(AF_INET, SOCK_STREAM, 0);
 std::cout << "Socket: " << _socket << std::endl;
 	if (_socket < 0)
 		throw (std::runtime_error("Error: Bot socket creation failed"));
-	// int	opt = 0;
-	// opt = setsockopt(_socket, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt));
-	// if (opt < 0){
-	// 	close(_socket);
-	// 	throw (std::runtime_error("Error: setsokopt() failed"));
-	// }
-	servAddr.sin_family = AF_INET;
-	servAddr.sin_port = htons(_port);
-	servAddr.sin_addr.s_addr = INADDR_ANY;
-	inet_aton("127.0.0.1", &servAddr.sin_addr);
-	// if (bind(_socket, (struct sockaddr*)&servAddr, sizeof(servAddr)) < 0){
+	int	opt = 0;
+	opt = setsockopt(_socket, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt));
+	if (opt < 0){
+		close(_socket);
+		throw (std::runtime_error("Error: setsokopt() failed"));
+	}
+	_servAddr.sin_family = AF_INET;
+	_servAddr.sin_port = htons(_port);
+	inet_aton("127.0.0.1", &_servAddr.sin_addr);
+
+	struct addrinfo	*servInfo;
+	struct addrinfo	add;
+	int				test;
+	std::memset(&add, 0, sizeof(add));
+	add.ai_socktype = SOCK_STREAM;
+	add.ai_family = AF_UNSPEC;
+	test = getaddrinfo("127.0.0.1", 0, &add, &servInfo);
+	_servAddr.sin_addr = ((struct sockaddr_in*)servInfo->ai_addr)->sin_addr;
+	// if (bind(_socket, (struct sockaddr*)&_servAddr, sizeof(_servAddr)) < 0){
 	// 	std::cout << RED << strerror(errno) << DEFAULT << std::endl;
 	// 	close(_socket);
 	// 	throw (std::runtime_error("Error: bind() failed"));
 	// }
-	if (connect(_socket, (struct sockaddr *)&servAddr, sizeof(servAddr)) == -1) {
+	if (connect(_socket, (struct sockaddr *)&_servAddr, sizeof(_servAddr)) == -1) {
 		close(_socket);
 		throw (std::runtime_error("Error: Bot connection failed"));
 	}
+	_pollFds.fd = _socket;
+	_pollFds.events = POLLIN;
+	_pollFds.revents = 0;
 	std::cout << BLUE << "Connected to server" << DEFAULT << std::endl;
 }
 
@@ -56,35 +65,33 @@ const std::string	&Bot::getBufferRead() const{
 
 void	Bot::runningLoop(){
 	signal(SIGINT, Bot::signalHandler);
-	// while (signalStatus == 0){
-		// if (poll(this->_pollFds.data(), this->_pollFds.size(), -1) == -1 && !signalStatus)
-		// 	throw (std::runtime_error("[Server] Error: poll() failed"));
-		// for (size_t i = 0; i < _pollFds.size(); ++i){
-		// 	if (_pollFds[i].revents & POLLIN){
-				char	buffer[BUFFER_SIZE];
-				int		bytesRead = 0;
+	while (signalStatus == 0){
+		if (poll(&_pollFds, 1, -1) == -1 && !signalStatus)
+			throw (std::runtime_error("[BOT] Error: poll() failed"));
+		if (_pollFds.revents & POLLIN){
+			char	buffer[BUFFER_SIZE + 1];
+			int		bytesRead = 0;
 
-				memset(&buffer, 0, BUFFER_SIZE);
-				bytesRead = recv(_socket, buffer, sizeof(buffer), 0);
-				if (bytesRead < 1)
-					throw (std::runtime_error("Error: Bot recv() failed"));
-				else{
-					std::string	buf(buffer);
+			memset(&buffer, 0, BUFFER_SIZE);
+			bytesRead = recv(_socket, buffer, sizeof(buffer), 0);
+			if (bytesRead < 1)
+				throw (std::runtime_error("Error: Bot recv() failed"));
+			else{
+				std::string	buf(buffer);
 std::cout << "Buffer: " << buf << std::endl;
-					setBufferRead(buf, 1);
-					if ((buf.empty() || buf == "\r\n") && getBufferRead().empty())
-						return ;
-					size_t pos = getBufferRead().find("\r\n");
-					if (pos != std::string::npos){
-						buf = getBufferRead();
-						// parseInput(buf);
-						send(_socket, "cool\r\n", 7, 0);
-						setBufferRead("", 0);
-					}
+				setBufferRead(buf, 1);
+				if ((buf.empty() || buf == "\r\n") && getBufferRead().empty())
+					return ;
+				size_t pos = getBufferRead().find("\r\n");
+				if (pos != std::string::npos){
+					buf = getBufferRead();
+					// parseInput(buf);
+					send(_socket, "cool\r\n", 7, 0);
+					setBufferRead("", 0);
 				}
-			// }
-		// }
-	// }
+			}
+		}
+	}
 }
 
 void	Bot:: parseInput(std::string &input){

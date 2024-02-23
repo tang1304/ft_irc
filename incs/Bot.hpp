@@ -6,7 +6,7 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 11:05:27 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/22 13:07:30 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/23 13:57:08 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,12 @@
 # include <sstream>
 # include <sys/socket.h>
 # include <netinet/in.h>
+# include <netdb.h>
 # include <arpa/inet.h>
 # include <unistd.h>
 # include <stdlib.h>
 # include <csignal>
+# include <cstring>
 # include <string.h>
 # include <vector>
 # include <poll.h>
@@ -46,12 +48,13 @@ extern int	signalStatus;
 
 class Bot{
 private:
-	int			_socket;
-	int			_port;
-	std::string	_password;
-	std::string	_bufferRead;
-	std::string	_bufferSend;
-	std::vector<pollfd>	_pollFds;
+	int					_socket;
+	int					_port;
+	std::string			_password;
+	std::string			_bufferRead;
+	std::string			_bufferSend;
+	struct sockaddr_in	_servAddr;
+	struct pollfd		_pollFds;
 
 public:
 	Bot(const int &port, const std::string &password);
