@@ -6,7 +6,7 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:03:01 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/23 11:41:18 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/23 14:08:16 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -215,7 +215,7 @@ void	Server::clientHandle(const int &fd){
 			parseInput((fd), buf);
 			_clients[fd].setBufferRead("", 0);
 		}
-		send(_clients[fd].getClientFd(), _clients[fd].getBufferSend().c_str(), _clients[fd].getBufferSend().length(), 0);
+		send(_clients[fd].getClientFd(), _clients[fd].getBufferSend().c_str(), _clients[fd].getBufferSend().length(), MSG_NOSIGNAL);
 		_clients[fd].setBufferSend("");
 		if (_clients[fd].getDisconnect())
 			clientDisconnection(fd);

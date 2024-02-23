@@ -6,7 +6,7 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 10:16:34 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/23 13:06:22 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/23 14:08:06 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -150,7 +150,7 @@ void	sendToAll(Server &serv, const std::string &msg){
 	for (; it != serv.getClientMap().end(); it++){
 		if (it->second.getDisconnect() == 0){
 			it->second.setBufferSend(msg);
-			send(it->second.getClientFd(), it->second.getBufferSend().c_str(), it->second.getBufferSend().length(), 0);
+			send(it->second.getClientFd(), it->second.getBufferSend().c_str(), it->second.getBufferSend().length(), MSG_NOSIGNAL);
 			it->second.setBufferSend("");
 		}
 	}
@@ -159,7 +159,7 @@ void	sendToAll(Server &serv, const std::string &msg){
 void	sendToClient(Client &user, const std::string &msg){
 	if (user.getDisconnect() == 0){
 		user.setBufferSend(msg);
-		send(user.getClientFd(), user.getBufferSend().c_str(), user.getBufferSend().length(), 0);
+		send(user.getClientFd(), user.getBufferSend().c_str(), user.getBufferSend().length(), MSG_NOSIGNAL);
 		std::cout << BLUE << "-> " << user.getFd() << ": " << msg << DEFAULT;
 		user.setBufferSend("");
 	}
