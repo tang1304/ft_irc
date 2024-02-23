@@ -6,7 +6,7 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 11:11:10 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/23 15:06:44 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/23 15:56:55 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 Bot::Bot(const int &port, const std::string &password): _port(port), _password(password){
 	_socket = socket(AF_INET, SOCK_STREAM, 0);
-std::cout << "Socket: " << _socket << std::endl;
+
 	if (_socket < 0)
 		throw (std::runtime_error("Error: Bot socket creation failed"));
 	int	opt = 0;
@@ -42,8 +42,34 @@ void	Bot::setBufferRead(const std::string &read, int i){
 		_bufferRead.clear();
 }
 
+void	Bot::setBufferSend(const std::string& msg)
+{
+	if (msg.empty())
+		_bufferSend.clear();
+	else
+		_bufferSend += msg;
+}
+
 const std::string	&Bot::getBufferRead() const{
 	return (_bufferRead);
+}
+
+const std::string	&Bot::getBufferSend() const{
+	return (_bufferSend);
+}
+
+void	Bot::signalHandler(int signal)
+{
+	std::cout << std::endl << YELLOW << "[BOT] Signal received: " << signal << std::endl;
+	if (signal == SIGINT){
+		std::cout << "[BOT] Bye !" << DEFAULT << std::endl;
+		signalStatus = SIGINT;
+	}
+	return ;
+}
+
+void	Bot::connection(){
+	sendToClient("PASS abc\r\nNICK Bot\r\nUSER bot 0 * bot\r\n");
 }
 
 void	Bot::runningLoop(){
@@ -58,20 +84,15 @@ void	Bot::runningLoop(){
 			throw (std::runtime_error("Error: Bot recv() failed"));
 		else{
 			std::string	buf(buffer);
-std::cout << "Buffer: " << buf << std::endl;
 			setBufferRead(buf, 1);
 			if (buf.find("PRIVMSG") != std::string::npos)
 				parseInput(buf);
-			// if ((buf.empty() || buf == "\r\n") && getBufferRead().empty())
-			// 	return ;
-			// size_t pos = getBufferRead().find("\r\n");
-			// if (pos != std::string::npos){
-			// 	buf = getBufferRead();
-			// 	parseInput(buf);
-			// 	setBufferRead("", 0);
-			// }
 		}
+		setBufferRead("", 0);
+		setBufferSend("");
 	}
+	close(_socket);
+	return ;
 }
 
 void	Bot:: parseInput(std::string &input){
@@ -82,73 +103,44 @@ void	Bot:: parseInput(std::string &input){
 
 	pos = input.find("PRIVMSG");
 	colon = input.find_first_of(':', pos);
-	sub = input.substr(colon);
-std::cout << sub << std::endl;
+	sub = input.substr(colon + 1);
 	args = split(sub, " ");
-}
-
-// void	Bot:: parseInput(std::string &input){
-// 	std::string msg;
-// 	vecStr		command;
-// 	vecVecStr	vecCommand;
-
-// 	command = splitCmds(input, "\r\n");
-// 	vecCommand = splitCmd(command, " ");
-// 	if (vecCommand.empty() || vecCommand.begin()->empty())
-// 		return ;
-// 	itVecVecStr	itvv = vecCommand.begin();
-// 	for (; itvv != vecCommand.end(); itvv++)
-// 	{
-// 		if (*itvv->begin() != "PRIVMSG"){
-// 			continue ;
-// 		}
-// 		else {
-// 			send(_socket, "cool\r\n", 7, 0);
-// 		}
-// 		// itMapCmds	it = _commandsList.find(*itvv->begin());
-// 		// if (it != _commandsList.end() && (*itvv->begin() != "PASS" && *itvv->begin() != "USER" && *itvv->begin() != "NICK")\
-// 		// && !_clients[fd].getRegistered()){
-// 		// msg = "you may register first";
-// 		// 	_clients[fd].setBufferSend(ERROR(msg));
-// 		// 	return ;
-// 		// }
-// 		// if (it != _commandsList.end()){
-// 		// 	it->second(fd, *itvv, *this);
-// 		// }
-// 		// else if (*itvv->begin() != "CAP"){
-// 		// 	_clients[fd].setBufferSend(ERR_UNKNOWNCOMMAND(_clients[fd].getName(), *itvv->begin()));
-// 		// }
-// 	}
-// }
-
-vecStr	Bot::splitCmds(std::string &input, const std::string &delimiter){
-	vecStr		result;
-	size_t		pos = 0;
-	size_t		prevPos = 0;
-	std::string	tmp;
-
-	while ((pos = input.find(delimiter, prevPos)) != std::string::npos && pos != input.size() - 2){
-		tmp = input.substr(prevPos, pos - prevPos);
-		if (!tmp.empty())
-			result.push_back(tmp);
-		prevPos = pos + 2;
-		tmp.clear();
+	if (args.size() != 1){
+		sendToClient("[BOT] I only need a number\r\n");
+		return ;
 	}
-	tmp = input.substr(prevPos, input.size() - prevPos - 2);
-	if (!tmp.empty())
-		result.push_back(tmp);
-	return (result);
+	apiCall(*args.begin());
 }
 
-void	Bot::signalHandler(int signal)
+int	Bot::apiCall(std::string &cmd)
 {
-	std::cout << std::endl << YELLOW << "[BOT] Signal received: " << signal << std::endl;
-	if (signal == SIGINT){
-		std::cout << "[BOT] Bye !" << DEFAULT << std::endl;
-		signalStatus = SIGINT;
+	std::string	nbr = cmd;
+	if (nbr.find_first_not_of("0123456789", 0) != std::string::npos){
+		sendToClient("[BOT]" + nbr + " not a valid argument\r\n");
+		return (1);
 	}
-	exit(EXIT_FAILURE);
-	return ;
+	std::string url = "curl --request GET --url 'https://numbersapi.p.rapidapi.com/" + nbr + \
+		"/trivia?notfound=floor' --header 'X-RapidAPI-Host: numbersapi.p.rapidapi.com' --header \
+		'X-RapidAPI-Key: 8811cec522mshe204decfbb38e0ep14fcdbjsne677ef174dcb'";
+	FILE*	pipe = popen(url.c_str(), "r");
+	if (pipe == NULL){
+		std::cerr << RED << "Error on popen()" << DEFAULT << std::endl;
+		return (1);
+	}
+	std::string result = "[BOT] ";
+	char buffer[1000];
+	while (fgets(buffer, 1000, pipe) != NULL) {
+		if (ferror(pipe)) {
+			std::cerr << RED << "Error on fgets()" << DEFAULT << std::endl;
+			pclose(pipe);
+			return (1);
+		}
+		result += buffer;
+	}
+	result += "\r\n";
+	pclose(pipe);
+	sendToClient(result);
+	return (0);
 }
 
 vecStr	Bot::split(std::string &input, const std::string &delimiter){
@@ -176,4 +168,10 @@ vecStr	Bot::split(std::string &input, const std::string &delimiter){
 	if (colonStr.size() > 0)
 		result.push_back(colonStr);
 	return (result);
+}
+
+void	Bot::sendToClient(const std::string &msg){
+	setBufferSend(msg);
+	send(_socket, getBufferSend().c_str(), getBufferSend().length(), MSG_NOSIGNAL);
+	setBufferSend("");
 }

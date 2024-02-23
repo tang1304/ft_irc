@@ -6,7 +6,7 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 11:05:27 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/23 15:00:46 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/23 15:44:34 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@
 # include <vector>
 # include <poll.h>
 # include <errno.h>
+# include <stdio.h>
 
 # define DEFAULT "\033[0m"
 # define RED "\033[31m"
@@ -37,12 +38,10 @@
 # define CYAN "\033[36m"
 
 # define USAGE "Error\nThere must be 2 arguments : ./bot <port> <password>"
-# define BUFFER_SIZE 1000
+# define BUFFER_SIZE 1024
 
 typedef std::vector<std::string>			vecStr;
 typedef std::vector<std::string>::iterator	itVecStr;
-typedef std::vector<vecStr>					vecVecStr;
-typedef std::vector<vecStr>::iterator		itVecVecStr;
 
 extern int	signalStatus;
 
@@ -60,12 +59,16 @@ public:
 	~Bot();
 
 	void				setBufferRead(const std::string &read, int i);
+	void				setBufferSend(const std::string& msg);
 	const std::string	&getBufferRead() const;
+	const std::string	&getBufferSend() const;
+	void				connection();
 	void				runningLoop();
 	void				parseInput(std::string &input);
-	vecStr				splitCmds(std::string &input, const std::string &delimiter);
+	int					apiCall(std::string &cmd);
 	vecStr				split(std::string &input, const std::string &delimiter);
 	static void			signalHandler(int signal);
+	void				sendToClient(const std::string &msg);
 };
 
 #endif

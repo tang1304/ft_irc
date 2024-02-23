@@ -6,7 +6,7 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 11:02:21 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/21 16:04:37 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/23 15:51:36 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,11 +36,11 @@ int	main(int argc, char **argv){
 	try{
 		int	port = checkArgs(argv[1], argv[2]);
 		Bot	bot(port, argv[2]);
-		std::string buff = "PASS abc\r\nNICK Bot\r\nUSER bot 0 * bot\r\n";
-		send(3, buff.c_str(), buff.size(), 0);
+		bot.connection();
 		bot.runningLoop();
 	}
 	catch(std::exception &e){
 		std::cerr << RED << e.what() << DEFAULT << std::endl;
 	}
+	return (0);
 }
