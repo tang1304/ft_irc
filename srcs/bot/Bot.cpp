@@ -6,7 +6,7 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 11:11:10 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/23 13:59:08 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/23 15:06:44 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,29 +25,12 @@ std::cout << "Socket: " << _socket << std::endl;
 	}
 	_servAddr.sin_family = AF_INET;
 	_servAddr.sin_port = htons(_port);
-	inet_aton("127.0.0.1", &_servAddr.sin_addr);
+	_servAddr.sin_addr.s_addr = inet_addr("127.0.0.1");
 
-	struct addrinfo	*servInfo;
-	struct addrinfo	add;
-	int				test;
-	std::memset(&add, 0, sizeof(add));
-	add.ai_socktype = SOCK_STREAM;
-	add.ai_family = AF_UNSPEC;
-	test = getaddrinfo("127.0.0.1", 0, &add, &servInfo);
-	_servAddr.sin_addr = ((struct sockaddr_in*)servInfo->ai_addr)->sin_addr;
-	// if (bind(_socket, (struct sockaddr*)&_servAddr, sizeof(_servAddr)) < 0){
-	// 	std::cout << RED << strerror(errno) << DEFAULT << std::endl;
-	// 	close(_socket);
-	// 	throw (std::runtime_error("Error: bind() failed"));
-	// }
 	if (connect(_socket, (struct sockaddr *)&_servAddr, sizeof(_servAddr)) == -1) {
 		close(_socket);
 		throw (std::runtime_error("Error: Bot connection failed"));
 	}
-	_pollFds.fd = _socket;
-	_pollFds.events = POLLIN;
-	_pollFds.revents = 0;
-	std::cout << BLUE << "Connected to server" << DEFAULT << std::endl;
 }
 
 Bot::~Bot(){}
@@ -66,68 +49,77 @@ const std::string	&Bot::getBufferRead() const{
 void	Bot::runningLoop(){
 	signal(SIGINT, Bot::signalHandler);
 	while (signalStatus == 0){
-		if (poll(&_pollFds, 1, -1) == -1 && !signalStatus)
-			throw (std::runtime_error("[BOT] Error: poll() failed"));
-		if (_pollFds.revents & POLLIN){
-			char	buffer[BUFFER_SIZE + 1];
-			int		bytesRead = 0;
+		char	buffer[BUFFER_SIZE + 1];
+		int		bytesRead = 0;
 
-			memset(&buffer, 0, BUFFER_SIZE);
-			bytesRead = recv(_socket, buffer, sizeof(buffer), 0);
-			if (bytesRead < 1)
-				throw (std::runtime_error("Error: Bot recv() failed"));
-			else{
-				std::string	buf(buffer);
+		memset(&buffer, 0, BUFFER_SIZE);
+		bytesRead = recv(_socket, buffer, sizeof(buffer), 0);
+		if (bytesRead < 1)
+			throw (std::runtime_error("Error: Bot recv() failed"));
+		else{
+			std::string	buf(buffer);
 std::cout << "Buffer: " << buf << std::endl;
-				setBufferRead(buf, 1);
-				if ((buf.empty() || buf == "\r\n") && getBufferRead().empty())
-					return ;
-				size_t pos = getBufferRead().find("\r\n");
-				if (pos != std::string::npos){
-					buf = getBufferRead();
-					// parseInput(buf);
-					send(_socket, "cool\r\n", 7, 0);
-					setBufferRead("", 0);
-				}
-			}
+			setBufferRead(buf, 1);
+			if (buf.find("PRIVMSG") != std::string::npos)
+				parseInput(buf);
+			// if ((buf.empty() || buf == "\r\n") && getBufferRead().empty())
+			// 	return ;
+			// size_t pos = getBufferRead().find("\r\n");
+			// if (pos != std::string::npos){
+			// 	buf = getBufferRead();
+			// 	parseInput(buf);
+			// 	setBufferRead("", 0);
+			// }
 		}
 	}
 }
 
 void	Bot:: parseInput(std::string &input){
-	std::string msg;
-	vecStr		command;
-	vecVecStr	vecCommand;
+	size_t		pos = 0;
+	size_t		colon = 0;
+	std::string	sub = "";
+	vecStr		args;
 
-	command = splitCmds(input, "\r\n");
-	vecCommand = splitCmd(command, " ");
-	if (vecCommand.empty() || vecCommand.begin()->empty())
-		return ;
-	itVecVecStr	itvv = vecCommand.begin();
-	for (; itvv != vecCommand.end(); itvv++)
-	{
-		if (*itvv->begin() != "PRIVMSG"){
-			std::string	err = "Sorry, I don't understand your request\r\n";
-			send(_socket, err.c_str(), err.size(), MSG_DONTWAIT + MSG_NOSIGNAL);
-		}
-		else {
-			send(_socket, "cool\r\n", 7, 0);
-		}
-		// itMapCmds	it = _commandsList.find(*itvv->begin());
-		// if (it != _commandsList.end() && (*itvv->begin() != "PASS" && *itvv->begin() != "USER" && *itvv->begin() != "NICK")\
-		// && !_clients[fd].getRegistered()){
-		// msg = "you may register first";
-		// 	_clients[fd].setBufferSend(ERROR(msg));
-		// 	return ;
-		// }
-		// if (it != _commandsList.end()){
-		// 	it->second(fd, *itvv, *this);
-		// }
-		// else if (*itvv->begin() != "CAP"){
-		// 	_clients[fd].setBufferSend(ERR_UNKNOWNCOMMAND(_clients[fd].getName(), *itvv->begin()));
-		// }
-	}
+	pos = input.find("PRIVMSG");
+	colon = input.find_first_of(':', pos);
+	sub = input.substr(colon);
+std::cout << sub << std::endl;
+	args = split(sub, " ");
 }
+
+// void	Bot:: parseInput(std::string &input){
+// 	std::string msg;
+// 	vecStr		command;
+// 	vecVecStr	vecCommand;
+
+// 	command = splitCmds(input, "\r\n");
+// 	vecCommand = splitCmd(command, " ");
+// 	if (vecCommand.empty() || vecCommand.begin()->empty())
+// 		return ;
+// 	itVecVecStr	itvv = vecCommand.begin();
+// 	for (; itvv != vecCommand.end(); itvv++)
+// 	{
+// 		if (*itvv->begin() != "PRIVMSG"){
+// 			continue ;
+// 		}
+// 		else {
+// 			send(_socket, "cool\r\n", 7, 0);
+// 		}
+// 		// itMapCmds	it = _commandsList.find(*itvv->begin());
+// 		// if (it != _commandsList.end() && (*itvv->begin() != "PASS" && *itvv->begin() != "USER" && *itvv->begin() != "NICK")\
+// 		// && !_clients[fd].getRegistered()){
+// 		// msg = "you may register first";
+// 		// 	_clients[fd].setBufferSend(ERROR(msg));
+// 		// 	return ;
+// 		// }
+// 		// if (it != _commandsList.end()){
+// 		// 	it->second(fd, *itvv, *this);
+// 		// }
+// 		// else if (*itvv->begin() != "CAP"){
+// 		// 	_clients[fd].setBufferSend(ERR_UNKNOWNCOMMAND(_clients[fd].getName(), *itvv->begin()));
+// 		// }
+// 	}
+// }
 
 vecStr	Bot::splitCmds(std::string &input, const std::string &delimiter){
 	vecStr		result;
@@ -148,44 +140,6 @@ vecStr	Bot::splitCmds(std::string &input, const std::string &delimiter){
 	return (result);
 }
 
-vecVecStr	Bot::splitCmd(vecStr &cmds, const std::string &delimiter){
-	vecVecStr	result;
-	vecStr		cmd;
-	std::string	tmp;
-	std::string	colonStr;
-	size_t		colonPos = 0;
-	size_t		pos = 0;
-	size_t		prevPos = 0;
-
-	itVecStr	it = cmds.begin();
-	for (; it != cmds.end(); it++)
-	{
-		colonPos = 0;
-		pos = 0;
-		prevPos = 0;
-		cmd.clear();
-		tmp.clear();
-		colonStr.clear();
-		if ((colonPos = it->find(':')) != std::string::npos && (it->c_str()[colonPos - 1] == ' ')){
-			colonStr = it->substr(colonPos , it->find("\r\n") - colonPos);
-			it->erase(colonPos - 1);
-		}
-		while ((pos = it->find(delimiter, prevPos)) != std::string::npos){
-			tmp = it->substr(prevPos, pos - prevPos);
-			if (!tmp.empty())
-				cmd.push_back(tmp);
-			prevPos = pos + 1;
-		}
-		tmp = it->substr(prevPos, it->find("\r\n") - prevPos);
-		if (!tmp.empty())
-			cmd.push_back(tmp);
-		if (colonStr.size() > 0)
-			cmd.push_back(colonStr);
-		result.push_back(cmd);
-	}
-	return (result);
-}
-
 void	Bot::signalHandler(int signal)
 {
 	std::cout << std::endl << YELLOW << "[BOT] Signal received: " << signal << std::endl;
@@ -195,4 +149,31 @@ void	Bot::signalHandler(int signal)
 	}
 	exit(EXIT_FAILURE);
 	return ;
+}
+
+vecStr	Bot::split(std::string &input, const std::string &delimiter){
+	vecStr		result;
+	size_t		colonPos = 0;
+	size_t		space = 0;
+	size_t		pos = 0;
+	size_t		prevPos = 0;
+	std::string	tmp;
+	std::string	colonStr;
+
+	if ((colonPos = input.find(':')) != std::string::npos && colonPos != 0 && (space = input[colonPos - 1]) == ' '){
+		colonStr = input.substr(colonPos + 1, input.find("\r\n") - colonPos);
+		input.erase(colonPos - 1);
+	}
+	while ((pos = input.find(delimiter, prevPos)) != std::string::npos){
+		tmp = input.substr(prevPos, pos - prevPos);
+		if (!tmp.empty())
+			result.push_back(tmp);
+		prevPos = pos + 1;
+	}
+	tmp = input.substr(prevPos, input.find("\r\n") - prevPos);
+	if (!tmp.empty())
+		result.push_back(tmp);
+	if (colonStr.size() > 0)
+		result.push_back(colonStr);
+	return (result);
 }

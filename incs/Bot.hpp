@@ -6,7 +6,7 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 11:05:27 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/23 13:57:08 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/23 15:00:46 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,6 @@ private:
 	std::string			_bufferRead;
 	std::string			_bufferSend;
 	struct sockaddr_in	_servAddr;
-	struct pollfd		_pollFds;
 
 public:
 	Bot(const int &port, const std::string &password);
@@ -65,7 +64,7 @@ public:
 	void				runningLoop();
 	void				parseInput(std::string &input);
 	vecStr				splitCmds(std::string &input, const std::string &delimiter);
-	vecVecStr			splitCmd(vecStr &cmds, const std::string &delimiter);
+	vecStr				split(std::string &input, const std::string &delimiter);
 	static void			signalHandler(int signal);
 };
 
