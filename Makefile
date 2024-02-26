@@ -22,35 +22,14 @@ SRCS =	main.cpp \
 		topic.cpp \
 		who.cpp \
 		mode.cpp \
-		bot.cpp \
 		list.cpp
-SRCS_B	=	bot.cpp \
-		Server_bonus.cpp \
-		main.cpp \
-		Client.cpp \
-		Channel.cpp \
-		utils.cpp \
-		pass.cpp \
-		nick.cpp \
-		user.cpp \
-		privmsg.cpp \
-		quit.cpp \
-		join.cpp \
-		motd.cpp \
-		part.cpp \
-		ping.cpp \
-		invite.cpp \
-		kick.cpp \
-		topic.cpp \
-		who.cpp \
-		mode.cpp \
-		list.cpp
+BOT	=	bot/Bot.cpp \
+		bot/main.cpp
 OBJ_DIR = objs/
-OBJB_DIR = objs_b/
 OBJ = ${SRCS:%.cpp=${OBJ_DIR}%.o}
-OBJB = ${SRCS_B:%.cpp=${OBJB_DIR}%.o}
+OBJB = ${BOT:%.cpp=${OBJ_DIR}%.o}
 NAME = ircserv
-NAMEB	=	bonus
+NAMEB	=	bot
 RM = rm -f
 HEADERS_DIR = ./incs/
 HEADERS_FILES = Server.hpp Client.hpp Channel.hpp irc.hpp config.hpp rpl.hpp
@@ -68,7 +47,7 @@ ${NAME} :	${OBJ}
 		${CC} ${CFLAGS} ${OBJ} -o ${NAME}
 		@echo "${_GREEN}### ${NAME} created ###${_NOC}\n"
 
-${NAMEB} :	${OBJB}
+${NAMEB} :	${NAME} ${OBJB}
 		${CC} ${CFLAGS} ${OBJB} -o ${NAMEB}
 		@echo "${_GREEN}### ${NAMEB} created ###${_NOC}\n"
 
@@ -76,15 +55,14 @@ ${OBJ}: ${OBJ_DIR}%.o :	${SRCS_DIR}%.cpp ${HEADERS}
 		@mkdir -p objs
 		${CC} ${CFLAGS} -I/usr/include -I ${HEADERS_DIR} -c $< -o $@
 
-${OBJB}: ${OBJB_DIR}%.o :	${SRCS_DIR}%.cpp ${HEADERS}
-		@mkdir -p objs_b
+${OBJB}: ${OBJ_DIR}%.o :	${SRCS_DIR}%.cpp ${HEADERS}
+		@mkdir -p ${OBJ_DIR}bot
 		${CC} ${CFLAGS} -I/usr/include -I ${HEADERS_DIR} -c $< -o $@
 
 all :	${NAME} ${NAMEB}
 
 clean :
 		${RM} -rf objs/
-		${RM} -rf objs_b/
 		@echo "${_RED}### Removed ${NAME} object files ###${_NOC}"
 
 fclean :	clean
