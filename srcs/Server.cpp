@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: rrebois <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:03:01 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/23 14:08:16 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/28 14:14:27 by rrebois          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 Server::~Server() { }
 
-Server::Server(const int &port, const std::string &password): _port(port), _password(password){
+Server::Server(const int &port, const std::string &password): _port(port), _fdBot(-1), _password(password){
 	// socket initiation;
 	struct sockaddr_in	servAddr;
 
@@ -63,6 +63,16 @@ void	Server::cmdInit(){
 	_commandsList["WHO"] = &whoCmd;
 	_commandsList["MODE"] = &modeCmd;
 	_commandsList["LIST"] = &listCmd;
+}
+
+void	Server::setFdBot(int fd)
+{
+	_fdBot = fd;
+}
+
+int Server::getFdBot() const
+{
+	return (_fdBot);
 }
 
 const std::string	&Server::getPassword() const
@@ -120,6 +130,8 @@ void	Server::signalHandler(int signal)
 }
 
 void	Server::runningLoop(){
+	std::string buf;
+
 	signal(SIGINT, Server::signalHandler);
 	while (signalStatus == 0)
 	{
@@ -223,6 +235,7 @@ void	Server::clientHandle(const int &fd){
 }
 
 void	Server:: parseInput(const int &fd, std::string &input){
+	Client	sender = getClient(fd);
 	std::string msg;
 	vecStr		command;
 	vecVecStr	vecCommand;
@@ -234,18 +247,42 @@ void	Server:: parseInput(const int &fd, std::string &input){
 	itVecVecStr	itvv = vecCommand.begin();
 	for (; itvv != vecCommand.end(); itvv++)
 	{
-		itMapCmds	it = _commandsList.find(*itvv->begin());
-		if (it != _commandsList.end() && (*itvv->begin() != "PASS" && *itvv->begin() != "USER" && *itvv->begin() != "NICK")\
-		&& !_clients[fd].getRegistered()){
-		msg = "you may register first";
+		itMapCmds it = _commandsList.find(*itvv->begin());
+		if (it != _commandsList.end() &&
+			(*itvv->begin() != "PASS" && *itvv->begin() != "USER" && *itvv->begin() != "NICK")\
+ && !_clients[fd].getRegistered())
+		{
+			msg = "you may register first";
 			_clients[fd].setBufferSend(ERROR(msg));
-			return ;
+			return;
 		}
-		if (it != _commandsList.end()){
+		if (it != _commandsList.end())
+		{
 			it->second(fd, *itvv, *this);
-		}
-		else if (*itvv->begin() != "CAP"){
+		} else if (*itvv->begin() != "CAP")
+		{
 			_clients[fd].setBufferSend(ERR_UNKNOWNCOMMAND(_clients[fd].getName(), *itvv->begin()));
+		}
+	}
+	itvv = vecCommand.begin();
+	itVecStr itv = itvv->begin();
+
+	if (*itv == "PRIVMSG")
+	{std::cout << "found lalala" << std::endl;std::cout << itvv->size() << std::endl;
+		itv++;
+		if (itv == itvv->end())
+			return ;
+		if (*itv == "Bot")
+		{std::cout << "found" << std::endl;
+			_fdBot = fd;
+		}
+	}
+	if (sender.getName() == "Bot")
+	{
+		if (_fdBot != -1)
+		{
+			Client		user = getClient(_fdBot);
+			sendToClient(user, input);
 		}
 	}
 }

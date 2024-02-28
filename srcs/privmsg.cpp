@@ -55,6 +55,5 @@ int	privmsgCmd(int fd, vecStr &cmd, Server &serv){
 		}
 		sendToClient(user, ERR_NOSUCHNICK(user.getName(), target));
 	}
-
 	return  (1);
 }

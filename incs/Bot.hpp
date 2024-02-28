@@ -6,7 +6,7 @@
 /*   By: rrebois <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 11:05:27 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/26 13:17:28 by rrebois          ###   ########.fr       */
+/*   Updated: 2024/02/28 14:02:18 by rrebois          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,8 @@
 # include <poll.h>
 # include <errno.h>
 # include <stdio.h>
+# include <fcntl.h>
+
 
 # define DEFAULT "\033[0m"
 # define RED "\033[31m"

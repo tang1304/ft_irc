@@ -6,10 +6,11 @@
 /*   By: rrebois <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 11:11:10 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/26 13:34:54 by rrebois          ###   ########.fr       */
+/*   Updated: 2024/02/28 14:16:22 by rrebois          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+//https://www.bogotobogo.com/cplusplus/sockets_server_client.php
 # include "../../incs/Bot.hpp"
 
 Bot::Bot(const int &port, const std::string &password): _port(port), _password(password){
@@ -30,6 +31,7 @@ Bot::Bot(const int &port, const std::string &password): _port(port), _password(p
 		close(_socket);
 		throw (std::runtime_error("Error: Bot connection failed"));
 	}
+//	fcntl(_socket, F_SETFL, O_NONBLOCK);
 }
 
 Bot::~Bot(){}
@@ -78,16 +80,19 @@ void	Bot::runningLoop(){
 		int		bytesRead = 0;
 
 		std::memset(&buffer, 0, BUFFER_SIZE);
-		bytesRead = recv(_socket, buffer, sizeof(buffer), 0);
+		fcntl(_socket, F_SETFL, O_NONBLOCK);
+//		bytesRead = recv(_socket, buffer, BUFFER_SIZE, MSG_PEEK);
+		bytesRead = recv(_socket, buffer, BUFFER_SIZE, 0);
 		buffer[BUFFER_SIZE] = 0;
-		if (bytesRead < 1)
-			throw (std::runtime_error("Error: Bot recv() failed"));
-		else{
-			std::string	buf(buffer);
+//		if (bytesRead == -1)
+//			throw (std::runtime_error("Error: Bot recv() failed"));
+//		else
+//		{
+			std::string buf(buffer);
 			setBufferRead(buf, 1);
 			if (buf.find("PRIVMSG") != std::string::npos)
 				parseInput(buf);
-		}
+//		}
 		setBufferRead("", 0);
 		setBufferSend("");
 	}
