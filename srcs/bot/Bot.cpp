@@ -6,7 +6,7 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 11:11:10 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/29 09:14:32 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/29 14:22:36 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ void	Bot::signalHandler(int signal)
 }
 
 void	Bot::connection(){
-	sendToClient("PASS abc\r\nNICK Bot\r\nUSER bot 0 * bot\r\n");
+	sendToClient("PASS " + _password + "\r\nNICK Bot\r\nUSER bot 0 * bot\r\n");
 }
 
 void	Bot::runningLoop(){
