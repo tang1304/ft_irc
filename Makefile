@@ -33,7 +33,10 @@ NAMEB	=	bot
 RM = rm -f
 HEADERS_DIR = ./incs/
 HEADERS_FILES = Server.hpp Client.hpp Channel.hpp irc.hpp config.hpp rpl.hpp
+HEADERSB_DIR = ./incs/bot/
+HEADERSB_FILES = Bot.hpp
 HEADERS = $(addprefix ${HEADERS_DIR}/, ${HEADERS_FILES})
+HEADERSB = $(addprefix ${HEADERSB_DIR}/, ${HEADERSB_FILES})
 
 # --- COLORS --- #
 
@@ -55,9 +58,9 @@ ${OBJ}: ${OBJ_DIR}%.o :	${SRCS_DIR}%.cpp ${HEADERS}
 		@mkdir -p objs
 		${CC} ${CFLAGS} -I/usr/include -I ${HEADERS_DIR} -c $< -o $@
 
-${OBJB}: ${OBJ_DIR}%.o :	${SRCS_DIR}%.cpp ${HEADERS}
+${OBJB}: ${OBJ_DIR}%.o :	${SRCS_DIR}%.cpp ${HEADERSB}
 		@mkdir -p ${OBJ_DIR}bot
-		${CC} ${CFLAGS} -I/usr/include -I ${HEADERS_DIR} -c $< -o $@
+		${CC} ${CFLAGS} -I/usr/include -I ${HEADERSB_DIR} -c $< -o $@
 
 all :	${NAME} ${NAMEB}
 

@@ -3,15 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   Bot.cpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rrebois <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 11:11:10 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/28 14:16:22 by rrebois          ###   ########.fr       */
+/*   Updated: 2024/02/29 09:14:32 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
-//https://www.bogotobogo.com/cplusplus/sockets_server_client.php
-# include "../../incs/Bot.hpp"
+# include "Bot.hpp"
 
 Bot::Bot(const int &port, const std::string &password): _port(port), _password(password){
 	_socket = socket(AF_INET, SOCK_STREAM, 0);
@@ -31,7 +30,6 @@ Bot::Bot(const int &port, const std::string &password): _port(port), _password(p
 		close(_socket);
 		throw (std::runtime_error("Error: Bot connection failed"));
 	}
-//	fcntl(_socket, F_SETFL, O_NONBLOCK);
 }
 
 Bot::~Bot(){}
@@ -80,19 +78,12 @@ void	Bot::runningLoop(){
 		int		bytesRead = 0;
 
 		std::memset(&buffer, 0, BUFFER_SIZE);
-		fcntl(_socket, F_SETFL, O_NONBLOCK);
-//		bytesRead = recv(_socket, buffer, BUFFER_SIZE, MSG_PEEK);
-		bytesRead = recv(_socket, buffer, BUFFER_SIZE, 0);
+		bytesRead = recv(_socket, buffer, BUFFER_SIZE, MSG_DONTWAIT);
 		buffer[BUFFER_SIZE] = 0;
-//		if (bytesRead == -1)
-//			throw (std::runtime_error("Error: Bot recv() failed"));
-//		else
-//		{
-			std::string buf(buffer);
-			setBufferRead(buf, 1);
-			if (buf.find("PRIVMSG") != std::string::npos)
-				parseInput(buf);
-//		}
+		std::string buf(buffer);
+		setBufferRead(buf, 1);
+		if (buf.find("PRIVMSG") != std::string::npos)
+			parseInput(buf);
 		setBufferRead("", 0);
 		setBufferSend("");
 	}

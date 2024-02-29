@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rrebois <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:03:01 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/28 14:14:27 by rrebois          ###   ########.fr       */
+/*   Updated: 2024/02/29 09:05:19 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -250,7 +250,7 @@ void	Server:: parseInput(const int &fd, std::string &input){
 		itMapCmds it = _commandsList.find(*itvv->begin());
 		if (it != _commandsList.end() &&
 			(*itvv->begin() != "PASS" && *itvv->begin() != "USER" && *itvv->begin() != "NICK")\
- && !_clients[fd].getRegistered())
+			&& !_clients[fd].getRegistered())
 		{
 			msg = "you may register first";
 			_clients[fd].setBufferSend(ERROR(msg));
@@ -268,12 +268,12 @@ void	Server:: parseInput(const int &fd, std::string &input){
 	itVecStr itv = itvv->begin();
 
 	if (*itv == "PRIVMSG")
-	{std::cout << "found lalala" << std::endl;std::cout << itvv->size() << std::endl;
+	{
 		itv++;
 		if (itv == itvv->end())
 			return ;
 		if (*itv == "Bot")
-		{std::cout << "found" << std::endl;
+		{
 			_fdBot = fd;
 		}
 	}

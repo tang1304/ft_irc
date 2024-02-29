@@ -6,7 +6,7 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/17 15:45:59 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/23 11:40:08 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/29 08:52:35 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,6 @@
 # define YELLOW "\033[33m"
 # define BLUE "\033[34m"
 # define PURPLE "\033[35m"
-//# define CYAN "\033[36m"
 
 # define SERVERNAME std::string("Ft_Irc")
 # define LOCALHOST std::string("127.0.0.1")

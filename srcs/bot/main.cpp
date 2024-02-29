@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rrebois <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 11:02:21 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/26 11:23:35 by rrebois          ###   ########.fr       */
+/*   Updated: 2024/02/29 09:14:00 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "../../incs/Bot.hpp"
+# include "Bot.hpp"
 
 int	signalStatus = 0;
 
