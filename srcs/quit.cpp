@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   quit.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rrebois <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/29 10:41:49 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/21 15:16:40 by rrebois          ###   ########.fr       */
+/*   Updated: 2024/02/29 09:23:51 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "../incs/irc.hpp"
+# include "irc.hpp"
 
 int	quitCmd(int fd, vecStr &cmd, Server &serv){
 	Client		user = serv.getClient(fd);

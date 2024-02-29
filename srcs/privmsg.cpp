@@ -6,11 +6,11 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 14:03:30 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/19 16:02:50 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/29 09:23:51 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../incs/irc.hpp"
+#include "irc.hpp"
 
 int	privmsgCmd(int fd, vecStr &cmd, Server &serv){
 	Client	user = serv.getClientMap()[fd];

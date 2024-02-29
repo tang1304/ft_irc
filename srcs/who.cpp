@@ -6,11 +6,11 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/09 12:00:25 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/13 09:44:26 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/29 09:23:51 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../incs/irc.hpp"
+#include "irc.hpp"
 
 static void	noMask(Client &user, Server &serv){
 	itClientMap	itClientServ;

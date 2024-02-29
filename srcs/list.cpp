@@ -6,11 +6,11 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/12 11:31:31 by rrebois           #+#    #+#             */
-/*   Updated: 2024/02/15 10:13:09 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/29 09:23:51 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../incs/irc.hpp"
+#include "irc.hpp"
 
 int			listCmd(int fd, vecStr &cmd, Server &serv)
 {

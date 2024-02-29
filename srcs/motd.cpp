@@ -6,11 +6,11 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/06 08:38:22 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/07 09:28:36 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/29 09:23:51 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../incs/irc.hpp"
+#include "irc.hpp"
 
 int	motdCmd(int fd, vecStr& cmd, Server &serv){
 	(void)cmd;

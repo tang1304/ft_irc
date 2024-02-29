@@ -6,11 +6,11 @@
 /*   By: tgellon <tgellon@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 15:06:34 by tgellon           #+#    #+#             */
-/*   Updated: 2024/02/13 14:13:20 by tgellon          ###   ########lyon.fr   */
+/*   Updated: 2024/02/29 09:23:51 by tgellon          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../incs/irc.hpp"
+#include "irc.hpp"
 
 int	pingCmd(int fd, vecStr &cmd, Server &serv){
 	Client	user = serv.getClientMap()[fd];

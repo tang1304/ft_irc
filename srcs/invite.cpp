@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../incs/irc.hpp"
+#include "irc.hpp"
 
 int	inviteCmd(int fd, vecStr &cmd, Server &serv)
 {
